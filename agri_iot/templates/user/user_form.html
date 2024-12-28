@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %} User Register Form {{ block.super }}{% endblock %}
+{% block content %}
+<h1>ユーザ登録画面</h1>
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <table>
+        {{user_form.as_table}}
+        {{profile_form.as_table}}
+      </table>
+      <input class="button" type="submit" value="登録" />
+    </form>
+{% endblock %}

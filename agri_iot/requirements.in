@@ -1,0 +1,16 @@
+black
+cryptography
+django>=4.2,<4.3
+django[argon2]
+django-debug-toolbar
+gunicorn
+jsonschema
+pdf2image
+psycopg2-binary
+pycryptodome
+PyJWT
+pysaml2
+python-json-logger
+pyyaml
+redis
+tzdata

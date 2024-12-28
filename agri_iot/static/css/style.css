@@ -1,0 +1,61 @@
+/* @import url(sanitize.css); */
+.name-class {
+  width: 70%;
+  color: blue;
+}
+
+div.main-content {
+  /* background-color: silver; */
+  width: 600px;
+  margin: 10px auto;
+  border: 3px outset silver;
+  padding: 3px;
+
+}
+
+label[for="id_name"]{
+  color: green;
+}
+
+input {
+  border: none;
+  border-bottom: 1px solid silver;
+}
+
+td {
+  padding: 8px;
+}
+
+input.button {
+  width: 100%;
+  background-color: rgb(128, 128, 128);
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 15px;
+  box-shadow: 0 0 8px rgb(0, 0, 0, .4);
+}
+
+h1 {
+  background-color: silver;
+  font-size: 20px;
+  padding: 5px;
+  color: green;
+}
+
+span.required {
+  color: yellow;
+  font-weight: bold;
+}
+
+p {
+  color: green;
+}
+
+#id_job{
+  list-style: none;
+}
+
+.hobbies_class{
+  list-style: none;
+}
