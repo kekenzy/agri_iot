@@ -1,0 +1,462 @@
+# python3 manage.py loaddata 01_initial.yaml
+
+# 最初のユーザを作成する
+- model: app.People
+  pk: 1
+  fields:
+    name: Admin
+    email: east_managed_lan@example.com
+    person_type: 2
+
+- model: app.People
+  pk: 2
+  fields:
+    name: customer-A
+    email: customer@example.com
+    person_type: 1
+
+- model: app.People
+  pk: 3
+  fields:
+    name: OPERATOR_01
+    email: east_managed_lan+op-01@example.com
+    person_type: 2
+
+#　最初のポータルを作成する
+- model: app.Portals
+  pk: 1
+  fields:
+    name: AdminPortal
+    organization_name: admin_portal1
+    secret_key: secret_key_1
+    x509_certificate: x509_certificate_1
+    eml_portal_id: portal1
+    consumer_url: consumer_url_1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Portals
+  pk: 2
+  fields:
+    name: 株式会社A
+    organization_id: 716072340751912163
+    organization_name: A
+    eml_portal_id: portal2
+    secret_key: "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDduzF2sLsAJw6O\nWlCEGOv8eIOfQBhjg5saCUf9ySZCzTLbpbjiixz7U8uwKXwawKzJgr+aWp+8E2QU\n0CjN+HHqDO+3CroNNdf2d71A/+4Reifa06A5Xm3XXp9i8VY3m8+tPzifN/bbBF6G\nBTfiiC71fzxz/2W9WWPWDTQXVZxL5en4U9Wru9Ou9ofBBB7AhIrf65tubxVYx942\n1BD+ELvegtZY1xI3LnDw84Fa/UwqaYPJcbY25KdP/5lqlUx65ZhF3fO9Nw0GLDU5\niOZ4Ckvu37kgULxKgYpGGTRevb3tQ+jK6wrzQ1aNELOF0TJvplAoqtbKMfJk5zhg\nwwExS3c3AgMBAAECggEANEDboMl4YEpUA1ckV2UaI/bwqdRsivMmV6XtSdEgC6kY\n/atZ3UWEcHQocdzs6s8SSTDfX4xQzX1SXhdKLnQIwGwJB/1mqBtSyDoipxFJNOQx\nRUAPJ8Xpo9IgRKx0MYmuEPlvqhIBwk6Oyg2rxF5slp1EDWAYRV2uCfE1n/Qkb7wQ\nICWvoSt2xULwoe1a6qSUIZX5EONX7a1mVFQdLo0xZiPi3GTfzhW5sww6yGTdciF0\npRIRuEH7SA3QplKgQLBYnrdoFdWt5xokDsqan26oJyOrOdaTB74Pv8LkuYKSgIYM\nrSc0GT/o/TXLI7ojYRiufqCDO0dtPjZvznwfGFel/QKBgQDl4EZ2V9wlwUepdjJ8\nqJH2vSpG1bryEGgXjFUtcuIKtGha+f7rWTVPk2OpbS9ieuSUda0RxP5NFLlfzGY3\n2+fd9LUdDS1iD3UWkEJ45zYTwNaSukOxBxYPECYSXL1h+hOrG3M/36FtZpQzib8m\nn5GY4EYjJEeubdPy6/QBV50KIwKBgQD27fZA1uSg0EITsT9MlKc9EgECzH7Izhui\nVkjtXKYYJpOQ1uFMVi2UJ4kIpGfaGtBhw47TQ+ZG+GHi3AwdAuXv1pVacS/8hMqT\npNBJpWT/H0L77IGa3jmbFpyGtJjnMu/XhwJaENsd91MMEm0cLV3g7G63Nx0aJJSN\nK+CvIvld3QKBgEGnorheM7Rc1bji11yfUMEmGhMNLE3Cvdgr7pAChekEyeFiEZrq\nab2GnSpg0u3Pp8V3Lq0qlG8zghaIbJF7r2fHYosfnlypiYmePj4F234cz6wsovTG\nz1gSBq2r6zM2l7OBLZOKrbJvX9iwePXxEUaWl7GlxQtetvBkz9YqTeH9AoGACw73\nI0o8bPNGskkS06QopTSENRLhbq7EUA3bMD4g9h3sJ+Vnq5qEagknOurZ98uRn385\niz6UNoNzJszCAh6aG5aZk7ZT9tQfmmMcLOAqWL6Wql+aIkxnegmWMvYtjtUaJqXW\nNiBhH8NuxbChkEx70tHj13Kxa/VNbdEUO+OuFUUCgYAWwLRZjkAcqKEnAEbgBTMP\n90nGfWMU8zvUfQ4D5/t184gzTKVo63UPAJqfPYgtKJvqwqmB+ixl+CbaBODpPRp0\noquU4or30gZbg1wXgNb9cIL6dDSXSsRI4ZzvwZSXdFqmt67bQ93MSDiCCOvAN3j0\nBe41Jxd0+qs9mY7BPnVdsw==\n-----END PRIVATE KEY-----\n"
+    x509_certificate: "-----BEGIN CERTIFICATE-----\nMIICfDCCAWSgAwIBAgICA+gwDQYJKoZIhvcNAQELBQAwADAgFw0yMzA1MjgwNTUz\nNTNaGA8yMDkxMDUxMTA1NTM1M1owADCCASIwDQYJKoZIhvcNAQEBBQADggEPADCC\nAQoCggEBAN27MXawuwAnDo5aUIQY6/x4g59AGGODmxoJR/3JJkLNMtuluOKLHPtT\ny7ApfBrArMmCv5pan7wTZBTQKM34ceoM77cKug011/Z3vUD/7hF6J9rToDlebdde\nn2LxVjebz60/OJ839tsEXoYFN+KILvV/PHP/Zb1ZY9YNNBdVnEvl6fhT1au70672\nh8EEHsCEit/rm25vFVjH3jbUEP4Qu96C1ljXEjcucPDzgVr9TCppg8lxtjbkp0//\nmWqVTHrlmEXd8703DQYsNTmI5ngKS+7fuSBQvEqBikYZNF69ve1D6MrrCvNDVo0Q\ns4XRMm+mUCiq1sox8mTnOGDDATFLdzcCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEA\nWluodWWtsrRgg7yIn/Wv9TwKztQYPgMD0o38AaDMBDQY24QNe4ybJzBlJ/MwUJN/\nXxAAfxwK45npVMOz5w1cSslF5XDPSSOf6+3LW2T0/k4FEiAP79RCUpTq9u2UsLPy\njqUWh4J8csY+QaH3Nwp7bfgaJE99+NEqPXTlwrYf2sRoRRiAh8ZXHxnXI/bCYjfi\n00hkKf77eapFr5KnXNPnvyg/lnefbCxiyDvmDbIyrEanNmJNuKWWoPo43x27dK+f\nWohp/FcdJygDY0oBXVeu/a/C1g0TpWsxusNG3lvaxJI2qMzL9muiGUKiO9tLfeL+\n+v2e1HrDhVh/bOr5Nb1gBQ==\n-----END CERTIFICATE-----"
+    consumer_url: https://n272.meraki.com/saml/login/OB9ANaqe/9h9BOdikcwcc
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.CustomerPortalUsers
+  pk: 1
+  fields:
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+    person: 2
+    portal: 2
+
+- model: app.OperatorPortalUsers
+  pk: 1
+  fields:
+    person: 1
+    name_code: 1010111123
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.CustomerPortalUserSessions
+  pk: 1
+  fields:
+    customer_portal_user: 1
+    session_key: GdCQJpKcrzPBeneqT89bXMJWUsyn0vI9TkSdMhjDJn4nnk7tXkvaNZVtqCJxovXQ
+    is_read_only: false
+    login_at: 2023-05-01T12:35:44+09:00
+    last_used_at: 2023-05-01T12:35:44+09:00
+
+- model: app.ServiceGroups
+  pk: 1
+  fields:
+    portal: 2
+    eml_service_group_id: "G000000001"
+    name: 拠点1
+    network_id: network_id_1
+    network_name: network_1
+    description: 拠点の説明欄です
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.ServiceGroups
+  pk: 2
+  fields:
+    portal: 2
+    eml_service_group_id: "G000000002"
+    name: 拠点2
+    network_id: network_id_2
+    network_name: network_2
+    description: 拠点の説明欄です
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+
+- model: app.ServiceGroupLinks
+  pk: 1
+  fields:
+    service_group: 1
+    service: 1
+
+- model: app.ServiceGroupLinks
+  pk: 2
+  fields:
+    service_group: 2
+    service: 2
+
+- model: app.ServiceGroupLinks
+  pk: 3
+  fields:
+    service_group: 2
+    service: 3
+
+- model: app.ServiceGroupLinks
+  pk: 4
+  fields:
+    service_group: 2
+    service: 4
+
+- model: app.ServiceGroupLinks
+  pk: 5
+  fields:
+    service_group: 2
+    service: 5
+
+- model: app.ServiceGroupLinks
+  pk: 6
+  fields:
+    service_group: 2
+    service: 6
+
+- model: app.ServiceGroupLinks
+  pk: 7
+  fields:
+    service_group: 2
+    service: 7
+
+- model: app.Services
+  pk: 1
+  fields:
+    service_type: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Services
+  pk: 2
+  fields:
+    service_type: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Services
+  pk: 3
+  fields:
+    service_type: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Services
+  pk: 4
+  fields:
+    service_type: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Services
+  pk: 5
+  fields:
+    service_type: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Services
+  pk: 6
+  fields:
+    service_type: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Services
+  pk: 7
+  fields:
+    service_type: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.NgnFletsContracts
+  pk: 1
+  fields:
+    service: 1
+    contract_id: "CAF0123456789"
+    location_address: "東京都渋谷区西渋谷５丁目４１番地１９号"
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.NgnFletsContracts
+  pk: 2
+  fields:
+    service: 2
+    contract_id: "CAF0000002"
+    location_address: "東京都渋谷区西渋谷1丁目１番地１号"
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.NgnFletsContracts
+  pk: 3
+  fields:
+    service: 3
+    contract_id: "CAF0000003"
+    location_address: "東京都渋谷区西渋谷1丁目１番地１号"
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.NgnFletsContracts
+  pk: 4
+  fields:
+    service: 4
+    contract_id: "CAF0000004"
+    location_address: "東京都渋谷区西渋谷1丁目１番地１号"
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.NgnFletsContracts
+  pk: 5
+  fields:
+    service: 5
+    contract_id: "CAF0000005"
+    location_address: "東京都渋谷区西渋谷1丁目１番地１号"
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.NgnFletsContracts
+  pk: 6
+  fields:
+    service: 6
+    contract_id: "CAF0000001"
+    location_address: "東京都渋谷区西渋谷1丁目１番地１号"
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.NgnFletsContracts
+  pk: 7
+  fields:
+    service: 7
+    contract_id: "CAF0000022"
+    location_address: "東京都渋谷区西渋谷1丁目１番地１号"
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+
+- model: app.AdditionalServices
+  pk: 1
+  fields:
+    additional_service_id: FPW11111
+    ngn_flets_contract: 1
+    additional_service_menu_plan_code: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.AdditionalServices
+  pk: 2
+  fields:
+    additional_service_id: FPW11112
+    ngn_flets_contract: 2
+    additional_service_menu_plan_code: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.AdditionalServices
+  pk: 3
+  fields:
+    additional_service_id: FPW000003
+    ngn_flets_contract: 3
+    additional_service_menu_plan_code: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.AdditionalServices
+  pk: 4
+  fields:
+    additional_service_id: FPW000004
+    ngn_flets_contract: 4
+    additional_service_menu_plan_code: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.AdditionalServices
+  pk: 5
+  fields:
+    additional_service_id: FPW000005
+    ngn_flets_contract: 5
+    additional_service_menu_plan_code: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.AdditionalServices
+  pk: 6
+  fields:
+    additional_service_id: FPW0000006
+    ngn_flets_contract: 6
+    additional_service_menu_plan_code: 14
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.AdditionalServices
+  pk: 7
+  fields:
+    additional_service_id: FPW0000007
+    ngn_flets_contract: 7
+    additional_service_menu_plan_code: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+# 問い合わせデータ登録
+- model: app.Inquiries
+  pk: 1
+  fields:
+    title: ユーザー登録について
+    ngn_flets_contract: 2
+    additional_service_name: 1
+    content: ユーザー登録の方法が分かりません。
+    inquiry_status: 1
+    inquiry_category: 1
+    contact_phone_number: 09012345678
+    created_by: 2
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Inquiries
+  pk: 2
+  fields:
+    title: サービスが使えない件について
+    ngn_flets_contract: 3
+    additional_service_name: 1
+    content: サービスが使えません。
+    inquiry_status: 2
+    inquiry_category: 2
+    contact_phone_number: 09012345678
+    created_by: 2
+    created_at: 2023-05-05T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-05T12:35:44+09:00
+
+- model: app.Inquiries
+  pk: 3
+  fields:
+    title: エラーが発生する件について
+    ngn_flets_contract: 4
+    additional_service_name: 1
+    content: エラーが発生しました。
+    inquiry_status: 1
+    inquiry_category: 1
+    contact_phone_number: 09012345678
+    created_by: 1
+    created_at: 2023-05-05T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-05T12:35:44+09:00
+
+- model: app.InquiryComments
+  pk: 1
+  fields:
+    inquiry: 1
+    comment: 問い合わせへのコメント
+    created_by: 1
+    created_at: 2023-04-04T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-04-05T12:35:44+09:00
+
+- model: app.InquiryComments
+  pk: 2
+  fields:
+    inquiry: 1
+    comment: 問い合わせへのコメント2
+    created_by: 1
+    created_at: 2023-04-04T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-04-05T12:35:44+09:00

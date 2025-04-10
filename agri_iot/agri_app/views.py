@@ -10,11 +10,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 
-# from famischeapp.model.dao.user import UserDao
-# from famischeapp.model.dao.family import FamilyDao
-# from famischeapp.model.form.user_form import UserInfo
-# from famischeapp.model.form.family_form import FamilyInfo
-# from famischeapp.model.form.login_user_form import UserForm, UserProfileForm, LoginForm
+from agri_app.model.dao.user import UserDao
+# from agri_app.model.dao.family import FamilyDao
+from agri_app.model.form.user_form import UserInfo
+# from agri_app.model.form.family_form import FamilyInfo
+from agri_app.model.form.login_user_form import UserForm, UserProfileForm, LoginForm
 
 # Create your views here.
 
@@ -62,8 +62,8 @@ def index(request):
 #             "status": status,
 #             },
 #    )
-# def home(request):
-#     return render(request, "home.html")
+def home(request):
+    return render(request, "home.html")
 
 # def families(request):
 #     # family_list = get_list_or_404(FamilyDao, pk__gt=10)
@@ -79,9 +79,9 @@ def index(request):
 #     #     family = get_object_or_404(FamilyDao, pk=id)
 #     #     # family = FamilyDao.get_family_by_id(id)
 #     # except Exception as e:
-#     #     url = reverse("famischeapp:families")
+#     #     url = reverse("agri_app:families")
 #     #     return HttpResponseRedirect(url)
-#     #     # return redirect("famischeapp:families")
+#     #     # return redirect("agri_app:families")
 
 #     user_list = list()
 #     try:
@@ -110,7 +110,7 @@ def index(request):
 #             # print(
 #             #     f"fir'st_name: {form.cleaned_data['name']}"
 #             # )
-#             url = reverse("famischeapp:families")
+#             url = reverse("agri_app:families")
 #             return HttpResponseRedirect(url)
 #     else:
 #         form = FamilyInfo()
@@ -128,7 +128,7 @@ def index(request):
 #             # print(
 #             #     f"first_name: {form.cleaned_data['first_name']}, last_name {form.cleaned_data['last_name']}"
 #             # )
-#             url = reverse("famischeapp:family", kwargs={"id": id})
+#             url = reverse("agri_app:family", kwargs={"id": id})
 #             return HttpResponseRedirect(url)
 #     else:
 #         # inital_values={'first_name': 'mt', 'last_name': family.name, 'email': 'dd'}
@@ -147,36 +147,36 @@ def index(request):
 #         'country': country
 #     })
 
-# def page_not_found(request, exception):
-#     return render(request, '404.html', status=404)
+def page_not_found(request, exception):
+    return render(request, '404.html', status=404)
 
-# def server_error(request):
-#     print("server error")
-#     return render(request, '500.html', status=500)
+def server_error(request):
+    print("server error")
+    return render(request, '500.html', status=500)
 
-# def user_login(request):
-#     login_form = LoginForm(request.POST or None)
-#     if login_form.is_valid():
-#         username = login_form.cleaned_data.get('username')
-#         password = login_form.cleaned_data.get('password')
-#         print(username)
-#         print(password)
-#         user = authenticate(username=username, password=password)
-#         if user:
-       
-#             if user.is_active:
-#                 login(request, user)
-#                 return redirect('famischeapp:home')
-#             else:
-#                 return HttpResponse('アカウントがアクティブではないです')
-#         else:
-#             return HttpResponse('ユーザもしくはパスワードが間違っています')
+def user_login(request):
+    login_form = LoginForm(request.POST or None)
+    if login_form.is_valid():
+        username = login_form.cleaned_data.get('username')
+        password = login_form.cleaned_data.get('password')
+        print(username)
+        print(password)
+        user = authenticate(username=username, password=password)
+        if user:
+            if user.is_active:
+                login(request, user)
+                print("is active")
+                return redirect('agri_app:home')
+            else:
+                return HttpResponse('アカウントがアクティブではないです')
+        else:
+            return HttpResponse('ユーザもしくはパスワードが間違っています')
 
-#     return render(request, 'user/login.html', context={
-#         'login_form': login_form
-#     })
+    return render(request, 'user/login.html', context={
+        'login_form': login_form
+    })
 
 # @login_required
-# def user_logout(request):
-#     logout(request)
-#     return redirect('famischeapp:user_login')
+def user_logout(request):
+    logout(request)
+    return redirect('agri_app:user_login')

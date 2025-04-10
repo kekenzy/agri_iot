@@ -1,0 +1,336 @@
+- model: app.AdditionalServices
+  pk: 2
+  fields:
+    additional_service_id: FPW11112
+    ngn_flets_contract: 1
+    additional_service_menu_plan_code: 150
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.AdditionalServices
+  pk: 3
+  fields:
+    additional_service_id: FPW11113
+    ngn_flets_contract: 1
+    additional_service_menu_plan_code: 151
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.AdditionalServices
+  pk: 4
+  fields:
+    additional_service_id: FPW11114
+    ngn_flets_contract: 1
+    additional_service_menu_plan_code: 2
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.AdditionalServices
+  pk: 5
+  fields:
+    additional_service_id: FPW11115
+    ngn_flets_contract: 1
+    additional_service_menu_plan_code: 2
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.InformationTypes
+  pk: 1
+  fields:
+    name: アラート
+
+- model: app.InformationTypes
+  pk: 2
+  fields:
+    name: お知らせ
+
+- model: app.InformationTypes
+  pk: 3
+  fields:
+    name: 工事・故障情報
+
+- model: app.Information
+  pk: 1
+  fields:
+    information_type: 1
+    occur_at: "2023/5/23 12:22:01"
+    large_class: ギガらくＷｉ-Ｆｉ
+    middle_class: APオフライン
+    minor_class: "シリアル: ****のオフライン"
+    priority: 3
+    service_group: 3
+    url: "https://news.google.com/home?hl=ja&gl=JP&ceid=JP:ja"
+    is_active: True
+    created_by: 1
+    created_at: 2023-04-21T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Information
+  pk: 2
+  fields:
+    information_type: 1
+    occur_at: "2023/5/23 12:22:01"
+    large_class: ギガらくＷｉ-Ｆｉ
+    middle_class: APオフライン
+    minor_class: "シリアル: ****のオフライン"
+    priority: 3
+    service_group: 3
+    url: "https://news.google.com/home?hl=ja&gl=JP&ceid=JP:ja"
+    is_active: True
+    created_by: 1
+    created_at: 2023-04-21T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Information
+  pk: 3
+  fields:
+    information_type: 1
+    occur_at: "2023/5/23 12:22:01"
+    large_class: ギガらくＷｉ-Ｆｉ
+    middle_class: APオフライン
+    minor_class: "シリアル: ****のオフライン"
+    priority: 3
+    service_group: 4
+    url: "https://news.google.com/home?hl=ja&gl=JP&ceid=JP:ja"
+    is_active: True
+    created_by: 1
+    created_at: 2023-04-10T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Information
+  pk: 4
+  fields:
+    information_type: 1
+    occur_at: "2023/5/23 12:22:01"
+    large_class: ギガらくＷｉ-Ｆｉ
+    middle_class: APオフライン
+    minor_class: "シリアル: ****のオフライン"
+    priority: 2
+    service_group: 5
+    url: "https://news.google.com/home?hl=ja&gl=JP&ceid=JP:ja"
+    is_active: True
+    created_by: 1
+    created_at: 2023-04-25T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Information
+  pk: 5
+  fields:
+    information_type: 1
+    occur_at: "2023/5/23 12:22:01"
+    large_class: ギガらくＷｉ-Ｆｉ
+    middle_class: APオフライン
+    minor_class: "シリアル: ****のオフライン"
+    priority: 2
+    service_group: 6
+    url: "https://news.google.com/home?hl=ja&gl=JP&ceid=JP:ja"
+    is_active: True
+    created_by: 1
+    created_at: 2023-04-10T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Information
+  pk: 6
+  fields:
+    information_type: 1
+    occur_at: "2023/5/23 12:22:01"
+    large_class: ギガらくＷｉ-Ｆｉ
+    middle_class: APオフライン
+    minor_class: "シリアル: ****のオフライン"
+    priority: 1
+    service_group: 7
+    url: "https://news.google.com/home?hl=ja&gl=JP&ceid=JP:ja"
+    is_active: True
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Information
+  pk: 7
+  fields:
+    information_type: 1
+    occur_at: "2023/5/23 12:22:01"
+    large_class: ギガらくＷｉ-Ｆｉ
+    middle_class: APオフライン
+    minor_class: "シリアル: ****のオフライン"
+    priority: 4
+    service_group: 8
+    url: "https://news.google.com/home?hl=ja&gl=JP&ceid=JP:ja"
+    is_active: True
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Information
+  pk: 8
+  fields:
+    information_type: 1
+    occur_at: "2023/5/23 12:22:01"
+    large_class: ギガらくＷｉ-Ｆｉ
+    middle_class: APオフライン
+    minor_class: "シリアル: ****のオフライン"
+    priority: 4
+    service_group: 1
+    url: "https://news.google.com/home?hl=ja&gl=JP&ceid=JP:ja"
+    is_active: True
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.ReadCustomerPortalUserInformation
+  pk: 1
+  fields:
+    customer_portal_user: 1
+    information: 1
+
+- model: app.ReadCustomerPortalUserInformation
+  pk: 2
+  fields:
+    customer_portal_user: 1
+    information: 2
+
+- model: app.ReadCustomerPortalUserInformation
+  pk: 3
+  fields:
+    customer_portal_user: 1
+    information: 3
+
+- model: app.ReadCustomerPortalUserInformation
+  pk: 4
+  fields:
+    customer_portal_user: 1
+    information: 4
+
+- model: app.ReadCustomerPortalUserInformation
+  pk: 5
+  fields:
+    customer_portal_user: 1
+    information: 5
+
+- model: app.ReadCustomerPortalUserInformation
+  pk: 6
+  fields:
+    customer_portal_user: 1
+    information: 6
+
+- model: app.ReadCustomerPortalUserInformation
+  pk: 7
+  fields:
+    customer_portal_user: 1
+    information: 7
+
+- model: app.ReadCustomerPortalUserInformation
+  pk: 8
+  fields:
+    customer_portal_user: 1
+    information: 8
+
+- model: app.ServiceGroups
+  pk: 3
+  fields:
+    portal: 2
+    eml_service_group_id: "G000000003"
+    name: 拠点3
+    network_id: NW00000003
+    network_name: network_3
+    description: 拠点の説明欄です
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.ServiceGroups
+  pk: 4
+  fields:
+    portal: 2
+    eml_service_group_id: "G000000004"
+    name: 拠点4
+    network_id: NW00000004
+    network_name: network_4
+    description: 拠点の説明欄です
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.ServiceGroups
+  pk: 5
+  fields:
+    portal: 2
+    eml_service_group_id: "G000000005"
+    name: 拠点5
+    network_id: NW00000005
+    network_name: network_5
+    description: 拠点の説明欄です
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.ServiceGroups
+  pk: 6
+  fields:
+    portal: 2
+    eml_service_group_id: "G000000006"
+    name: 拠点6
+    network_id: NW00000006
+    network_name: network_6
+    description: 拠点の説明欄です
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.ServiceGroups
+  pk: 7
+  fields:
+    portal: 2
+    eml_service_group_id: "G000000007"
+    name: 拠点7
+    network_id: NW00000007
+    network_name: network_7
+    description: 拠点の説明欄です
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.ServiceGroups
+  pk: 8
+  fields:
+    portal: 1
+    eml_service_group_id: "G000000008"
+    name: 拠点8
+    network_id: NW00000008
+    network_name: network_8
+    description: 拠点の説明欄です
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00

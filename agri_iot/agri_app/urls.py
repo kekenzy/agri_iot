@@ -8,9 +8,7 @@ app_name = "agri_app"
 
 urlpatterns = [
     path("", views.index, name="index"),
+    path("user_login", views.user_login, name="user_login"),
+    path("user_logout", views.user_logout, name="user_logout"),
+    path("home", views.home, name="home"),
 ]
-
-if settings.DEBUG:
-    urlpatterns += [
-        re_path(r'^__debug__/', include(debug_toolbar.urls)),
-    ]

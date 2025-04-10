@@ -1,0 +1,1098 @@
+# python3 manage.py loaddata 01_initial.yaml
+# 上記コマンドでデータの追加可能
+
+- model: app.PersonTypes
+  pk: 1
+  fields:
+    name: 一般
+
+- model: app.PersonTypes
+  pk: 2
+  fields:
+    name: オペレーター
+
+# people
+- model: app.People
+  pk: 1
+  fields:
+    name: オペレーター山田
+    email: east_managed_lan1@example.com
+    person_type: 2
+
+- model: app.People
+  pk: 2
+  fields:
+    name: オペレーター鈴木
+    email: east_managed_lan2@example.com
+    person_type: 2
+
+- model: app.People
+  pk: 3
+  fields:
+    name: ユーザー山田
+    email: customer1@example.com
+    person_type: 1
+
+- model: app.People
+  pk: 4
+  fields:
+    name: ユーザー鈴木
+    email: kyohei.nitta@globalway.co.jp
+    person_type: 1
+
+- model: app.People
+  pk: 5
+  fields:
+    name: ユーザー佐藤(削除済み)
+    email: customer@globalway.co.jp_deleted_5
+    person_type: 1
+
+#　最初のポータルを作成する
+- model: app.Portals
+  pk: 1
+  fields:
+    name: AdminPortal
+    organization_id: 716072340751912160
+    organization_name: admin_portal_1
+    secret_key: secret_key_1
+    x509_certificate: x509_certificate_1
+    eml_portal_id: portal_1
+    consumer_url: consumer_url_1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Portals
+  pk: 2
+  fields:
+    name: 株式会社A
+    organization_id: 716072340751912163
+    organization_name: admin_portal_A
+    secret_key: secret_key_A
+    x509_certificate: x509_certificate_A
+    eml_portal_id: portal_A
+    consumer_url: consumer_url_A
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Portals
+  pk: 3
+  fields:
+    name: 株式会社B
+    organization_id: 716072340751912164
+    organization_name: admin_portal_B
+    secret_key: secret_key_B
+    x509_certificate: x509_certificate_B
+    eml_portal_id: portal_B
+    consumer_url: consumer_url_B
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+# CustomerPortalUsers
+- model: app.CustomerPortalUsers
+  pk: 1
+  fields:
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+    person: 3
+    portal: 2
+
+- model: app.CustomerPortalUsers
+  pk: 2
+  fields:
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+    person: 4
+    portal: 3
+
+# OperatorPortalUsers
+- model: app.OperatorPortalUsers
+  pk: 1
+  fields:
+    person: 1
+    name_code: 1010111123
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.OperatorPortalUsers
+  pk: 2
+  fields:
+    person: 2
+    name_code: 1010111124
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+# CustomerPortalUserSessions
+- model: app.CustomerPortalUserSessions
+  pk: 1
+  fields:
+    customer_portal_user: 1
+    session_key: session_cp1
+    is_read_only: false
+    login_at: 2023-05-01T12:35:44+09:00
+    last_used_at: 2023-05-01T12:35:44+09:00
+
+- model: app.CustomerPortalUserSessions
+  pk: 2
+  fields:
+    customer_portal_user: 2
+    session_key: session_cp2
+    is_read_only: false
+    login_at: 2023-05-01T12:35:44+09:00
+    last_used_at: 2023-05-01T12:35:44+09:00
+
+# OperatorPortalUserSessions
+- model: app.OperatorPortalUserSessions
+  pk: 1
+  fields:
+    operator_portal_user: 1
+    session_key: session_op1
+    is_read_only: false
+    login_at: 2023-05-01T12:35:44+09:00
+    last_used_at: 2023-05-01T12:35:44+09:00
+
+- model: app.OperatorPortalUserSessions
+  pk: 2
+  fields:
+    operator_portal_user: 2
+    session_key: session_op2
+    is_read_only: false
+    login_at: 2023-05-01T12:35:44+09:00
+    last_used_at: 2023-05-01T12:35:44+09:00
+
+- model: app.ServiceGroups
+  pk: 1
+  fields:
+    portal: 2
+    eml_service_group_id: "MANAGED_LAN_SERVICE_GROUP_ID"
+    name: 拠点1
+    network_id: network_id_1
+    network_name: ネットワーク名
+    description: 拠点の説明欄です
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.ServiceGroups
+  pk: 2
+  fields:
+    portal: 3
+    eml_service_group_id: "MANAGED_LAN_SERVICE_GROUP_ID2"
+    name: 拠点2
+    network_id: network_id_2
+    network_name: ネットワーク名
+    description: 拠点の説明欄です
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.ServiceTypes
+  pk: 1
+  fields:
+    name: ギガらくＷｉ-Ｆｉ
+
+- model: app.ServiceTypes
+  pk: 2
+  fields:
+    name: ギガらくＶＰＮ
+
+- model: app.ServiceTypes
+  pk: 3
+  fields:
+    name: ギガらくスイッチ
+
+- model: app.ServiceTypes
+  pk: 4
+  fields:
+    name: マネージドLAN(プロアク)
+
+- model: app.ServiceTypes
+  pk: 5
+  fields:
+    name: マネージドLAN(LAN構築)
+
+- model: app.ServiceGroupLinks
+  pk: 1
+  fields:
+    service_group: 1
+    service: 1
+
+- model: app.ServiceGroupLinks
+  pk: 2
+  fields:
+    service_group: 1
+    service: 2
+
+- model: app.ServiceGroupLinks
+  pk: 3
+  fields:
+    service_group: 2
+    service: 3
+
+- model: app.ServiceGroupLinks
+  pk: 4
+  fields:
+    service_group: 2
+    service: 4
+
+- model: app.ServiceGroupLinks
+  pk: 5
+  fields:
+    service_group: 2
+    service: 5
+
+- model: app.ServiceGroupLinks
+  pk: 6
+  fields:
+    service_group: 2
+    service: 6
+
+- model: app.ServiceGroupLinks
+  pk: 7
+  fields:
+    service_group: 2
+    service: 7
+
+- model: app.ServiceGroupLinks
+  pk: 8
+  fields:
+    service_group: 2
+    service: 8
+
+- model: app.ServiceGroupLinks
+  pk: 9
+  fields:
+    service_group: 2
+    service: 9
+
+- model: app.ServiceGroupLinks
+  pk: 10
+  fields:
+    service_group: 2
+    service: 10
+
+- model: app.ServiceGroupLinks
+  pk: 11
+  fields:
+    service_group: 2
+    service: 11
+
+- model: app.ServiceGroupLinks
+  pk: 12
+  fields:
+    service_group: 2
+    service: 12
+
+- model: app.ServiceGroupLinks
+  pk: 13
+  fields:
+    service_group: 2
+    service: 13
+
+- model: app.Services
+  pk: 1
+  fields:
+    service_type: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Services
+  pk: 2
+  fields:
+    service_type: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Services
+  pk: 3
+  fields:
+    service_type: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Services
+  pk: 4
+  fields:
+    service_type: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Services
+  pk: 5
+  fields:
+    service_type: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Services
+  pk: 6
+  fields:
+    service_type: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Services
+  pk: 7
+  fields:
+    service_type: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Services
+  pk: 8
+  fields:
+    service_type: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Services
+  pk: 9
+  fields:
+    service_type: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Services
+  pk: 10
+  fields:
+    service_type: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Services
+  pk: 11
+  fields:
+    service_type: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Services
+  pk: 12
+  fields:
+    service_type: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.Services
+  pk: 13
+  fields:
+    service_type: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.NgnFletsContracts
+  pk: 1
+  fields:
+    service: 1
+    contract_id: "CAF0000001"
+    location_address: "東京都渋谷区西渋谷５丁目４１番地１９号"
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.NgnFletsContracts
+  pk: 2
+  fields:
+    service: 2
+    contract_id: "CAF0000002"
+    location_address: "東京都渋谷区西渋谷1丁目１番地１号"
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.NgnFletsContracts
+  pk: 3
+  fields:
+    service: 3
+    contract_id: "CAF0000003"
+    location_address: "東京都渋谷区西渋谷1丁目１番地１号"
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.NgnFletsContracts
+  pk: 4
+  fields:
+    service: 4
+    contract_id: "CAF0000004"
+    location_address: "東京都渋谷区西渋谷1丁目１番地１号"
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.NgnFletsContracts
+  pk: 5
+  fields:
+    service: 5
+    contract_id: "CAF0000005"
+    location_address: "東京都渋谷区西渋谷1丁目１番地１号"
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.NgnFletsContracts
+  pk: 6
+  fields:
+    service: 6
+    contract_id: "CAF0000006"
+    location_address: "東京都渋谷区西渋谷1丁目１番地１号"
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.NgnFletsContracts
+  pk: 7
+  fields:
+    service: 7
+    contract_id: "CAF0000007"
+    location_address: "東京都渋谷区西渋谷1丁目１番地１号"
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.NgnFletsContracts
+  pk: 8
+  fields:
+    service: 8
+    contract_id: "CAF0000008"
+    location_address: "東京都渋谷区西渋谷1丁目１番地１号"
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.NgnFletsContracts
+  pk: 9
+  fields:
+    service: 9
+    contract_id: "CAF0000009"
+    location_address: "東京都渋谷区西渋谷1丁目１番地１号"
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.NgnFletsContracts
+  pk: 10
+  fields:
+    service: 10
+    contract_id: "CAF0000010"
+    location_address: "東京都渋谷区西渋谷1丁目１番地１号"
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.NgnFletsContracts
+  pk: 11
+  fields:
+    service: 11
+    contract_id: "CAF0000011"
+    location_address: "東京都渋谷区西渋谷1丁目１番地１号"
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.NgnFletsContracts
+  pk: 12
+  fields:
+    service: 12
+    contract_id: "CAF0000012"
+    location_address: "東京都渋谷区西渋谷1丁目１番地１号"
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.NgnFletsContracts
+  pk: 13
+  fields:
+    service: 13
+    contract_id: "CAF0000013"
+    location_address: "東京都渋谷区西渋谷1丁目１番地１号"
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.AdditionalServiceMenuCodes
+  pk: 1
+  fields:
+    name: ギガらくＷｉ-Ｆｉ
+    code: 200000
+
+- model: app.AdditionalServiceMenuCodes
+  pk: 2
+  fields:
+    name: ギガらくＷｉ-Ｆｉ(回線契約型)
+    code: 119000
+
+- model: app.AdditionalServiceMenuCodes
+  pk: 3
+  fields:
+    name: 個別契約　ギガらくＷｉ-Ｆｉ
+    code: 216000
+
+- model: app.AdditionalServiceMenuCodes
+  pk: 4
+  fields:
+    name: ギガらくルーター・スイッチ（回線非契約）
+    code: 247000
+
+- model: app.AdditionalServiceMenuCodes
+  pk: 5
+  fields:
+    name: ギガらくルーター・スイッチ（回線契約型）
+    code: 143000
+
+- model: app.AdditionalServiceMenuCodes
+  pk: 6
+  fields:
+    name: ギガらくＶＰＮ・スイッチ（相対）
+    code: 259000
+
+- model: app.AdditionalServiceMenuCodes
+  pk: 7
+  fields:
+    name: マネージドＬＡＮ(回線契約型)
+    code: 157000
+
+- model: app.AdditionalServiceMenuCodes
+  pk: 8
+  fields:
+    name: マネージドＬＡＮ(回線非契約型)
+    code: 280000
+
+
+
+
+- model: app.AdditionalServiceNames
+  pk: 1
+  fields:
+    name: ギガらくＷｉ-Ｆｉ
+
+- model: app.AdditionalServiceNames
+  pk: 2
+  fields:
+    name: ギガらくＶＰＮ
+
+- model: app.AdditionalServiceNames
+  pk: 3
+  fields:
+    name: ギガらくスイッチ
+
+- model: app.AdditionalServiceNames
+  pk: 4
+  fields:
+    name: マネージドＬＡＮ
+
+- model: app.AdditionalServicePlanNames
+  pk: 1
+  fields:
+    name: ベーシックプラン
+
+- model: app.AdditionalServicePlanNames
+  pk: 2
+  fields:
+    name: ベーシックプラン（APお買上げタイプ）
+
+- model: app.AdditionalServicePlanNames
+  pk: 3
+  fields:
+    name: ハイエンドプラン
+
+- model: app.AdditionalServicePlanNames
+  pk: 4
+  fields:
+    name: ハイエンドプラン Type-D
+
+- model: app.AdditionalServicePlanNames
+  pk: 5
+  fields:
+    name: ハイエンドプラン Type-D お買上げ
+
+- model: app.AdditionalServicePlanNames
+  pk: 6
+  fields:
+    name: ハイエンドプラン（APお買上げタイプ）
+
+- model: app.AdditionalServicePlanNames
+  pk: 7
+  fields:
+    name: ハイエンドプランお買上げ
+
+- model: app.AdditionalServicePlanNames
+  pk: 8
+  fields:
+    name: ハイエンド６プラン
+
+- model: app.AdditionalServicePlanNames
+  pk: 9
+  fields:
+    name: ハイエンド６プラン（APお買上げタイプ）
+
+- model: app.AdditionalServicePlanNames
+  pk: 10
+  fields:
+    name: ハイエンドExプラン（２年タイプ）
+
+- model: app.AdditionalServicePlanNames
+  pk: 11
+  fields:
+    name: ハイエンドExプラン（５年タイプ）
+
+- model: app.AdditionalServicePlanNames
+  pk: 12
+  fields:
+    name: ハイエンドExプラン（APお買上げタイプ）
+
+- model: app.AdditionalServicePlanNames
+  pk: 13
+  fields:
+    name: ハイエンドLTEプラン
+
+- model: app.AdditionalServicePlanNames
+  pk: 14
+  fields:
+    name: ハイエンドLTEプランお買上げ
+
+- model: app.AdditionalServicePlanNames
+  pk: 15
+  fields:
+    name: エンタープライズプラン
+
+- model: app.AdditionalServicePlanNames
+  pk: 16
+  fields:
+    name: エンタープライズプラン Type-D
+
+- model: app.AdditionalServicePlanNames
+  pk: 17
+  fields:
+    name: エンタープライズプラン Type-D お買上げ
+
+- model: app.AdditionalServicePlanNames
+  pk: 18
+  fields:
+    name: エンタープライズプランお買上げ
+
+- model: app.AdditionalServicePlanNames
+  pk: 19
+  fields:
+    name: ライトプラン
+
+- model: app.AdditionalServicePlanNames
+  pk: 20
+  fields:
+    name: リモートアクセスオプション
+
+- model: app.AdditionalServicePlanNames
+  pk: 21
+  fields:
+    name: 24ポートプラン
+
+- model: app.AdditionalServicePlanNames
+  pk: 22
+  fields:
+    name: 8ポート給電プラン
+
+- model: app.AdditionalServicePlanNames
+  pk: 23
+  fields:
+    name: ＬＡＮ構築メニュー
+
+- model: app.AdditionalServicePlanNames
+  pk: 24
+  fields:
+    name: プロアクティブサポートメニュー
+
+
+
+
+- model: app.AdditionalServiceMenuPlanCodes
+  pk: 1
+  fields:
+    additional_service_menu_code: 1
+    additional_service_name: 1
+    additional_service_plan_name: 1
+    code: 01
+    code_name: ベーシックプラン（２年タイプ）
+
+- model: app.AdditionalServiceMenuPlanCodes
+  pk: 2
+  fields:
+    additional_service_menu_code: 1
+    additional_service_name: 1
+    additional_service_plan_name: 3
+    code: 02
+    code_name: ハイエンドプラン（２年タイプ）
+
+- model: app.AdditionalServiceMenuPlanCodes
+  pk: 3
+  fields:
+    additional_service_menu_code: 1
+    additional_service_name: 1
+    additional_service_plan_name: 6
+    code: 05
+    code_name: ハイエンドプラン（APお買上げタイプ）月額
+
+- model: app.AdditionalServiceMenuPlanCodes
+  pk: 4
+  fields:
+    additional_service_menu_code: 4
+    additional_service_name: 2
+    additional_service_plan_name: 3
+    code: 01
+    code_name: ｷﾞｶﾞらくVPN　ﾊｲｴﾝﾄﾞﾌﾟﾗﾝ
+
+- model: app.AdditionalServiceMenuPlanCodes
+  pk: 5
+  fields:
+    additional_service_menu_code: 4
+    additional_service_name: 2
+    additional_service_plan_name: 13
+    code: 02
+    code_name: ｷﾞｶﾞらくVPN　ﾊｲｴﾝﾄﾞLTEﾌﾟﾗﾝ
+
+- model: app.AdditionalServiceMenuPlanCodes
+  pk: 6
+  fields:
+    additional_service_menu_code: 4
+    additional_service_name: 2
+    additional_service_plan_name: 15
+    code: 03
+    code_name: ｷﾞｶﾞらくVPN　ｴﾝﾀｰﾌﾟﾗｲｽﾞﾌﾟﾗﾝ
+
+- model: app.AdditionalServiceMenuPlanCodes
+  pk: 7
+  fields:
+    additional_service_menu_code: 4
+    additional_service_name: 3
+    additional_service_plan_name: 22
+    code: 04
+    code_name: ｷﾞｶﾞらくｽｲｯﾁ８ﾎﾟｰﾄ給電ﾌﾟﾗﾝ
+
+- model: app.AdditionalServiceMenuPlanCodes
+  pk: 8
+  fields:
+    additional_service_menu_code: 4
+    additional_service_name: 3
+    additional_service_plan_name: 21
+    code: 05
+    code_name: ｷﾞｶﾞらくｽｲｯﾁ24ﾎﾟｰﾄﾌﾟﾗﾝ
+
+- model: app.AdditionalServiceMenuPlanCodes
+  pk: 9
+  fields:
+    additional_service_menu_code: 5
+    additional_service_name: 3
+    additional_service_plan_name: 22
+    code: 04
+    code_name: ｷﾞｶﾞらくｽｲｯﾁ８ﾎﾟｰﾄ給電ﾌﾟﾗﾝ
+
+- model: app.AdditionalServiceMenuPlanCodes
+  pk: 10
+  fields:
+    additional_service_menu_code: 7
+    additional_service_name: 4
+    additional_service_plan_name: 23
+    code: 01
+    code_name: LAN構築メニュー
+
+- model: app.AdditionalServiceMenuPlanCodes
+  pk: 11
+  fields:
+    additional_service_menu_code: 7
+    additional_service_name: 4
+    additional_service_plan_name: 24
+    code: 02
+    code_name: プロアクティブサポートメニュー
+
+- model: app.AdditionalServiceMenuPlanCodes
+  pk: 12
+  fields:
+    additional_service_menu_code: 8
+    additional_service_name: 4
+    additional_service_plan_name: 23
+    code: 01
+    code_name: LAN構築メニュー
+
+- model: app.AdditionalServiceMenuPlanCodes
+  pk: 13
+  fields:
+    additional_service_menu_code: 8
+    additional_service_name: 4
+    additional_service_plan_name: 24
+    code: 02
+    code_name: プロアクティブサポートメニュー
+
+- model: app.AdditionalServices
+  pk: 1
+  fields:
+    additional_service_id: FPW11111
+    ngn_flets_contract: 1
+    additional_service_menu_plan_code: 1
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.AdditionalServices
+  pk: 2
+  fields:
+    additional_service_id: FPW11112
+    ngn_flets_contract: 2
+    additional_service_menu_plan_code: 2
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.AdditionalServices
+  pk: 3
+  fields:
+    additional_service_id: FPW000003
+    ngn_flets_contract: 3
+    additional_service_menu_plan_code: 3
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.AdditionalServices
+  pk: 4
+  fields:
+    additional_service_id: FPW000004
+    ngn_flets_contract: 4
+    additional_service_menu_plan_code: 4
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.AdditionalServices
+  pk: 5
+  fields:
+    additional_service_id: FPW000005
+    ngn_flets_contract: 5
+    additional_service_menu_plan_code: 5
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.AdditionalServices
+  pk: 6
+  fields:
+    additional_service_id: FPW0000006
+    ngn_flets_contract: 6
+    additional_service_menu_plan_code: 6
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.AdditionalServices
+  pk: 7
+  fields:
+    additional_service_id: FPW0000007
+    ngn_flets_contract: 7
+    additional_service_menu_plan_code: 7
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.AdditionalServices
+  pk: 8
+  fields:
+    additional_service_id: FPW0000008
+    ngn_flets_contract: 8
+    additional_service_menu_plan_code: 8
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.AdditionalServices
+  pk: 9
+  fields:
+    additional_service_id: FPW0000009
+    ngn_flets_contract: 9
+    additional_service_menu_plan_code: 9
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.AdditionalServices
+  pk: 10
+  fields:
+    additional_service_id: FPW0000010
+    ngn_flets_contract: 10
+    additional_service_menu_plan_code: 10
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.AdditionalServices
+  pk: 11
+  fields:
+    additional_service_id: FPW0000011
+    ngn_flets_contract: 11
+    additional_service_menu_plan_code: 11
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.AdditionalServices
+  pk: 12
+  fields:
+    additional_service_id: FPW0000012
+    ngn_flets_contract: 12
+    additional_service_menu_plan_code: 12
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.AdditionalServices
+  pk: 13
+  fields:
+    additional_service_id: FPW0000013
+    ngn_flets_contract: 13
+    additional_service_menu_plan_code: 13
+    is_active: true
+    created_by: 1
+    created_at: 2023-05-01T12:35:44+09:00
+    last_update_by: 1
+    last_update_at: 2023-05-01T12:35:44+09:00
+
+- model: app.InquiryStatuses
+  pk: 1
+  fields:
+    name: オープン
+
+- model: app.InquiryStatuses
+  pk: 2
+  fields:
+    name: クローズ
+
+- model: app.InquiryCategories
+  pk: 1
+  fields:
+    name: サービス
+
+- model: app.InquiryCategories
+  pk: 2
+  fields:
+    name: 故障
+
+- model: app.InquiryCategories
+  pk: 3
+  fields:
+    name: 設定変更
+
+- model: app.ServiceGroupDiagramTypes
+  pk: 1
+  fields:
+    name: 論理
+
+- model: app.ServiceGroupDiagramTypes
+  pk: 2
+  fields:
+    name: 物理

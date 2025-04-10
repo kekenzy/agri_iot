@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 
 import os
 from pathlib import Path
-from agri_app.utils.debug_toolbar_util import show_debug_toolbar
+# from agri_app.utils.debug_toolbar_util import show_debug_toolbar
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -166,45 +166,45 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ログ
-# LOG_LEVEL = "INFO"
-# LOG_DIR = "/var/log/customer_portal"
-# if not os.path.isdir(LOG_DIR):
-#     os.makedirs(LOG_DIR)
+LOG_LEVEL = "DEBUG"
+LOG_DIR = "/var/log/customer_portal"
+if not os.path.isdir(LOG_DIR):
+    os.makedirs(LOG_DIR)
 
-# LOGGING = {
-#     "version": 1,
-#     "filters": {
-#         "session_id": {"()": "agri_app.utils.logging_util.SessionIdFilter"},
-#         "request_id": {"()": "agri_app.utils.logging_util.RequestIdFilter"},
-#     },
-#     "formatters": {
-#         "verbose": {
-#             "()": "agri_app.utils.logging_util.CustomFormatter",
-#             "format": "[%(asctime)s][sid:%(session_id)s][rid:%(request_id)s][%(levelname)s][%(filename)s:%(lineno)d] %(message)s",
-#         },
-#     },
-#     "handlers": {
-#         "console": {
-#             "filters": ["session_id", "request_id"],
-#             "class": "logging.StreamHandler",
-#             "formatter": "verbose",
-#         },
-#         "file": {
-#             "filters": ["session_id", "request_id"],
-#             "class": "logging.FileHandler",
-#             "formatter": "verbose",
-#             "filename": LOG_DIR + "/customer_portal.log",
-#         },
-#     },
-#     "loggers": {
-#         "django.db.backends": {
-#             "handlers": ["console"],
-#             "level": LOG_LEVEL,
-#         },
-#         "application": {
-#             "handlers": ["console", "file"],
-#             "level": LOG_LEVEL,
-#             "propagate": True,
-#         },
-#     },
-# }
+LOGGING = {
+    "version": 1,
+    "filters": {
+        "session_id": {"()": "agri_app.utils.logging_util.SessionIdFilter"},
+        "request_id": {"()": "agri_app.utils.logging_util.RequestIdFilter"},
+    },
+    "formatters": {
+        "verbose": {
+            "()": "agri_app.utils.logging_util.CustomFormatter",
+            "format": "[%(asctime)s][sid:%(session_id)s][rid:%(request_id)s][%(levelname)s][%(filename)s:%(lineno)d] %(message)s",
+        },
+    },
+    "handlers": {
+        "console": {
+            "filters": ["session_id", "request_id"],
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+        "file": {
+            "filters": ["session_id", "request_id"],
+            "class": "logging.FileHandler",
+            "formatter": "verbose",
+            "filename": LOG_DIR + "/customer_portal.log",
+        },
+    },
+    "loggers": {
+        "django.db.backends": {
+            "handlers": ["console"],
+            "level": LOG_LEVEL,
+        },
+        "application": {
+            "handlers": ["console", "file"],
+            "level": LOG_LEVEL,
+            "propagate": True,
+        },
+    },
+}

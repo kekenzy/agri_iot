@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %} User Form {{ block.super }}{% endblock %}
+{% block content %}
+    <form method="POST">
+      {% csrf_token %}
+      {{ family_name }}
+      <table>
+        {{profile_form.as_table}}
+      </table>
+      <input type="submit" value="送信" />
+    </form>
+{% endblock %}
