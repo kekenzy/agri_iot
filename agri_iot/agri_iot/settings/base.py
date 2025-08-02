@@ -167,9 +167,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ログ
 LOG_LEVEL = "DEBUG"
-LOG_DIR = "/var/log/customer_portal"
+LOG_DIR = os.environ.get('LOG_DIR', "/var/log/customer_portal")
 if not os.path.isdir(LOG_DIR):
-    os.makedirs(LOG_DIR)
+    try:
+        os.makedirs(LOG_DIR)
+    except PermissionError:
+        # 権限がない場合は/tmpを使用
+        LOG_DIR = "/tmp"
+        if not os.path.isdir(LOG_DIR):
+            os.makedirs(LOG_DIR)
 
 LOGGING = {
     "version": 1,
@@ -208,3 +214,16 @@ LOGGING = {
         },
     },
 }
+
+# メール設定
+# 開発環境ではコンソールに出力、本番環境ではSMTPを使用
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # 開発用
+DEFAULT_FROM_EMAIL = 'noreply@agri-iot.com'
+
+# 本番環境用のSMTP設定（必要に応じて有効化）
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'  # Gmailの場合
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'your-email@gmail.com'
+# EMAIL_HOST_PASSWORD = 'your-app-password'

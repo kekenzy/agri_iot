@@ -1,0 +1,308 @@
+{% extends "base.html" %}
+{% block title %}ユーザー削除確認{% endblock %}
+
+{% block content %}
+<div class="delete-confirm-container">
+    <div class="confirm-card">
+        <div class="confirm-header">
+            <h1 class="page-title">ユーザー削除確認</h1>
+            <a href="{% url 'agri_app:user_detail' user_detail.id %}" class="btn-back">← 詳細に戻る</a>
+        </div>
+
+        <div class="confirm-content">
+            <div class="warning-message">
+                <div class="warning-icon">⚠️</div>
+                <h3>この操作は取り消せません</h3>
+                <p>以下のユーザーを削除しようとしています。この操作は取り消すことができません。</p>
+            </div>
+
+            <div class="user-info">
+                <h3 class="section-title">削除対象ユーザー</h3>
+                <div class="user-detail">
+                    <div class="user-item">
+                        <label class="user-label">ユーザー名</label>
+                        <div class="user-value">{{ user_detail.username }}</div>
+                    </div>
+                    
+                    <div class="user-item">
+                        <label class="user-label">氏名</label>
+                        <div class="user-value">{{ user_detail.first_name|default:"未設定" }}</div>
+                    </div>
+                    
+                    <div class="user-item">
+                        <label class="user-label">メールアドレス</label>
+                        <div class="user-value">{{ user_detail.email|default:"未設定" }}</div>
+                    </div>
+                    
+                    <div class="user-item">
+                        <label class="user-label">権限</label>
+                        <div class="user-value">
+                            {% if user_detail.is_superuser %}
+                                <span class="badge badge-superuser">スーパーユーザー</span>
+                            {% elif user_detail.is_staff %}
+                                <span class="badge badge-admin">管理者</span>
+                            {% else %}
+                                <span class="badge badge-user">一般</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="user-item">
+                        <label class="user-label">登録日</label>
+                        <div class="user-value">{{ user_detail.date_joined|date:"Y年m月d日 H:i" }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="delete-impact">
+                <h3 class="section-title">削除による影響</h3>
+                <ul class="impact-list">
+                    <li>ユーザーのすべてのデータが完全に削除されます</li>
+                    <li>このユーザーで作成されたコンテンツは保持されます</li>
+                    <li>削除されたユーザーは復元できません</li>
+                    <li>このユーザーでログインすることはできなくなります</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="confirm-actions">
+            <form method="POST" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn-danger">削除を実行</button>
+            </form>
+            <a href="{% url 'agri_app:user_detail' user_detail.id %}" class="btn-secondary">キャンセル</a>
+            <a href="{% url 'agri_app:user_list' %}" class="btn-back">一覧に戻る</a>
+        </div>
+    </div>
+</div>
+
+<style>
+.delete-confirm-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.confirm-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.confirm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 300;
+    color: #333;
+    margin: 0;
+    letter-spacing: 0.05em;
+}
+
+.btn-back {
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.btn-back:hover {
+    color: #333;
+}
+
+.confirm-content {
+    margin-bottom: 40px;
+}
+
+.warning-message {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.warning-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.warning-message h3 {
+    color: #856404;
+    margin: 0 0 10px 0;
+    font-size: 1.3rem;
+}
+
+.warning-message p {
+    color: #856404;
+    margin: 0;
+    font-size: 16px;
+}
+
+.user-info {
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.user-detail {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.user-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.user-item:last-child {
+    border-bottom: none;
+}
+
+.user-label {
+    font-weight: 500;
+    color: #666;
+    font-size: 14px;
+    min-width: 120px;
+}
+
+.user-value {
+    font-size: 16px;
+    color: #333;
+    text-align: right;
+}
+
+.badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: inline-block;
+}
+
+.badge-superuser {
+    background: #dc3545;
+    color: #fff;
+}
+
+.badge-admin {
+    background: #fd7e14;
+    color: #fff;
+}
+
+.badge-user {
+    background: #28a745;
+    color: #fff;
+}
+
+.delete-impact {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.impact-list {
+    margin: 0;
+    padding-left: 20px;
+    color: #666;
+    line-height: 1.6;
+}
+
+.impact-list li {
+    margin-bottom: 8px;
+}
+
+.confirm-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    padding-top: 30px;
+    border-top: 1px solid #e5e5e5;
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    letter-spacing: 0.05em;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: #fff;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 400;
+    transition: background-color 0.3s ease;
+    letter-spacing: 0.05em;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+@media (max-width: 768px) {
+    .delete-confirm-container {
+        padding: 10px;
+    }
+    
+    .confirm-card {
+        padding: 30px 20px;
+    }
+    
+    .confirm-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+    
+    .user-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .user-value {
+        text-align: left;
+    }
+    
+    .confirm-actions {
+        flex-direction: column;
+    }
+}
+</style>
+{% endblock %} 

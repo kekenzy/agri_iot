@@ -1,12 +1,165 @@
 {% extends "base.html" %}
 {% block title %} Login {{ block.super }}{% endblock %}
 {% block content %}
-<h1>Login画面</h1>
-    <form method="POST">
-      {% csrf_token %}
-      <table>
-        {{login_form.as_table}}
-      </table>
-      <input class="button" type="submit" value="ログイン" />
-    </form>
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h1 class="site-title">未来農園</h1>
+            <p class="site-subtitle">農業IoTシステム</p>
+        </div>
+        <h2 class="page-title">ログイン</h2>
+        <form method="POST" class="login-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="{{ login_form.username.id_for_label }}" class="form-label">ユーザー名</label>
+                {{ login_form.username }}
+            </div>
+            <div class="form-group">
+                <label for="{{ login_form.password.id_for_label }}" class="form-label">パスワード</label>
+                {{ login_form.password }}
+            </div>
+            <button type="submit" class="form-btn login-btn">ログイン</button>
+        </form>
+        
+        <div class="login-footer">
+            <a href="{% url 'agri_app:password_reset' %}" class="password-reset-link">
+                <span class="link-icon">🔑</span>
+                パスワードを忘れた方はこちら
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    padding: 40px 0;
+}
+
+.login-card {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.site-title {
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: #333;
+    margin-bottom: 5px;
+    letter-spacing: 0.1em;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.site-subtitle {
+    font-size: 1rem;
+    color: #666;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    margin: 0;
+}
+
+.page-title {
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+    letter-spacing: 0.05em;
+}
+
+.login-form {
+    margin-top: 30px;
+}
+
+.login-form .form-group {
+    margin-bottom: 25px;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+    width: 100%;
+    padding: 15px 20px;
+    border: 2px solid #e5e5e5;
+    border-radius: 8px;
+    font-size: 16px;
+    background: #fff;
+    transition: border-color 0.3s ease;
+}
+
+.login-form input[type="text"]:focus,
+.login-form input[type="password"]:focus {
+    outline: none;
+    border-color: #333;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.login-footer {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e5e5;
+    text-align: center;
+}
+
+.password-reset-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #667eea;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 8px 16px;
+    border-radius: 6px;
+}
+
+.password-reset-link:hover {
+    color: #764ba2;
+    background: #f8f9fa;
+    transform: translateY(-1px);
+}
+
+.link-icon {
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        padding: 20px;
+    }
+    
+    .login-card {
+        padding: 30px 20px;
+    }
+    
+    .site-title {
+        font-size: 2rem;
+    }
+    
+    .page-title {
+        font-size: 1.5rem;
+    }
+}
+</style>
 {% endblock %}

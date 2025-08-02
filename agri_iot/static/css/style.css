@@ -40,7 +40,7 @@ h1 {
   background-color: silver;
   font-size: 20px;
   padding: 5px;
-  color: green;
+  color: blue;
 }
 
 span.required {
@@ -58,4 +58,19 @@ p {
 
 .hobbies_class{
   list-style: none;
+}
+
+/* S3ファイル削除ボタンのスタイル */
+button[name="delete"] {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+button[name="delete"]:hover {
+  background-color: #c82333;
 }

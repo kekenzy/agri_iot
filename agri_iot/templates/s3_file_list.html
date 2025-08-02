@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}S3 ファイル一覧{% endblock %}
+
+{% block content %}
+<div class="s3-file-list-container">
+    <header class="page-header fade-in">
+        <h1 class="page-title">S3 ファイル一覧</h1>
+        <p class="page-subtitle">クラウドストレージのファイルを管理</p>
+    </header>
+
+    <main class="main-content">
+        <section class="section upload-section fade-in">
+            <h2 class="section-title">ファイルアップロード</h2>
+            <form method="post" enctype="multipart/form-data" class="upload-form">
+                {% csrf_token %}
+                <div class="file-input-wrapper">
+                    {{ form.file }}
+                </div>
+                <button type="submit" name="upload" class="upload-btn">アップロード</button>
+            </form>
+        </section>
+
+        <section class="section files-section fade-in">
+            <h2 class="section-title">ファイル一覧</h2>
+            <table id="s3-files-table" class="files-table display">
+                <thead>
+                    <tr>
+                        <th>サムネイル</th>
+                        <th>ファイル名</th>
+                        <th>サイズ (KB)</th>
+                        <th>更新日</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for file in files %}
+                        <tr>
+                            <td>
+                                <a href="{{ file.url }}" target="_blank">
+                                    <img src="{{ file.url }}" alt="{{ file.key }}" class="thumbnail" />
+                                </a>
+                            </td>
+                            <td class="file-name">{{ file.key }}</td>
+                            <td class="file-size">{{ file.size|floatformat:-2 }}</td>
+                            <td class="file-date">{{ file.last_modified|date:"Y-m-d H:i:s" }}</td>
+                            <td>
+                                <form method="post" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="file_key" value="{{ file.key }}">
+                                    <button type="submit" name="delete" class="delete-btn">削除</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+</div>
+
+<!-- DataTables CSS and JS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<script>
+$(document).ready(function () {
+    $('#s3-files-table').DataTable({
+        language: {
+            url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/ja.json"
+        },
+        pageLength: 10,
+        order: [[3, 'desc']], // 更新日時（4列目、0から数えて3）を降順でソート
+        responsive: true
+    });
+});
+</script>
+{% endblock %}

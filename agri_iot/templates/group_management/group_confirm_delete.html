@@ -1,0 +1,338 @@
+{% extends "base.html" %}
+{% block title %}グループ削除確認 - {{ group.name }}{% endblock %}
+
+{% block content %}
+<div class="delete-confirm-container">
+    <div class="page-header">
+        <div class="header-content">
+            <div class="breadcrumb">
+                <a href="{% url 'agri_app:group_list' %}" class="breadcrumb-link">グループ管理</a>
+                <span class="breadcrumb-separator">›</span>
+                <a href="{% url 'agri_app:group_detail' group.id %}" class="breadcrumb-link">{{ group.name }}</a>
+                <span class="breadcrumb-separator">›</span>
+                <span class="breadcrumb-current">削除確認</span>
+            </div>
+            <h1 class="page-title">🗑️ グループ削除確認</h1>
+            <p class="page-subtitle">この操作は取り消すことができません</p>
+        </div>
+    </div>
+
+    <div class="confirm-container">
+        <div class="warning-section">
+            <div class="warning-icon">⚠️</div>
+            <h2 class="warning-title">削除の確認</h2>
+            <p class="warning-message">
+                グループ「<strong>{{ group.name }}</strong>」を削除しようとしています。
+                この操作は取り消すことができません。
+            </p>
+        </div>
+
+        <div class="group-info">
+            <h3>削除されるグループの情報</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">グループ名:</span>
+                    <span class="info-value">{{ group.name }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">メンバー数:</span>
+                    <span class="info-value">{{ group.user_set.count }}人</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">権限数:</span>
+                    <span class="info-value">{{ group.permissions.count }}個</span>
+                </div>
+                {% if group.groupprofile.description %}
+                <div class="info-item full-width">
+                    <span class="info-label">説明:</span>
+                    <span class="info-value">{{ group.groupprofile.description }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="impact-section">
+            <h3>削除による影響</h3>
+            <ul class="impact-list">
+                <li>グループに所属するユーザーは自動的にグループから削除されます</li>
+                <li>グループに設定された権限は削除されます</li>
+                <li>グループの設定情報（説明、カラー等）は削除されます</li>
+                <li>この操作は取り消すことができません</li>
+            </ul>
+        </div>
+
+        <form method="POST" class="delete-form">
+            {% csrf_token %}
+            <div class="form-actions">
+                <button type="submit" class="btn-delete">
+                    <span class="btn-icon">🗑️</span>
+                    削除を実行
+                </button>
+                <a href="{% url 'agri_app:group_detail' group.id %}" class="btn-cancel">
+                    <span class="btn-icon">❌</span>
+                    キャンセル
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.delete-confirm-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.page-header {
+    margin-bottom: 30px;
+    padding: 25px 30px;
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(220, 53, 69, 0.2);
+    color: #fff;
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.breadcrumb-link {
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.breadcrumb-link:hover {
+    color: #fff;
+}
+
+.breadcrumb-separator {
+    color: rgba(255,255,255,0.6);
+}
+
+.breadcrumb-current {
+    color: #fff;
+    font-weight: 500;
+}
+
+.page-title {
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0 0 8px 0;
+    letter-spacing: 0.05em;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.page-subtitle {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.9);
+    margin: 0;
+    font-weight: 300;
+}
+
+.confirm-container {
+    background: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.warning-section {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 30px;
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    border-radius: 12px;
+    border: 2px solid #ffc107;
+}
+
+.warning-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.warning-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #856404;
+    margin: 0 0 15px 0;
+}
+
+.warning-message {
+    font-size: 1.1rem;
+    color: #856404;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.group-info {
+    margin-bottom: 30px;
+    padding: 25px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+}
+
+.group-info h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 20px 0;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-item.full-width {
+    grid-column: 1 / -1;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.info-label {
+    font-weight: 500;
+    color: #666;
+    font-size: 14px;
+}
+
+.info-value {
+    font-weight: 500;
+    color: #333;
+}
+
+.impact-section {
+    margin-bottom: 30px;
+    padding: 25px;
+    background: #f8d7da;
+    border-radius: 12px;
+    border: 1px solid #f5c6cb;
+}
+
+.impact-section h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #721c24;
+    margin: 0 0 15px 0;
+}
+
+.impact-list {
+    margin: 0;
+    padding-left: 20px;
+    color: #721c24;
+}
+
+.impact-list li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.impact-list li:last-child {
+    margin-bottom: 0;
+}
+
+.delete-form {
+    margin: 0;
+}
+
+.form-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 2px solid #f0f0f0;
+}
+
+.btn-delete, .btn-cancel {
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-delete {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.btn-delete:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4);
+}
+
+.btn-cancel {
+    background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+
+.btn-cancel:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(108, 117, 125, 0.4);
+}
+
+.btn-icon {
+    font-size: 16px;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .delete-confirm-container {
+        padding: 10px;
+    }
+    
+    .confirm-container {
+        padding: 20px;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+}
+</style>
+{% endblock %} 

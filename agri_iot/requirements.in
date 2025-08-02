@@ -3,6 +3,7 @@ cryptography
 django>=4.2,<4.3
 django[argon2]
 django-debug-toolbar
+boto3>=1.34
 gunicorn
 jsonschema
 pdf2image

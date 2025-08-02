@@ -1,0 +1,537 @@
+{% extends "base.html" %}
+{% block title %}グループ一覧{% endblock %}
+
+{% block content %}
+<div class="group-management-container">
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">グループ管理</h1>
+            <p class="page-subtitle">ユーザーグループの管理と設定</p>
+        </div>
+        <div class="header-actions">
+            <a href="{% url 'agri_app:group_create' %}" class="btn-primary">
+                <span class="btn-icon">➕</span>
+                新規グループ作成
+            </a>
+        </div>
+    </div>
+
+    <!-- 検索フォーム -->
+    <div class="search-section">
+        <div class="search-header">
+            <h3 class="search-title">🔍 グループ検索</h3>
+            <p class="search-description">条件を指定してグループを絞り込み</p>
+        </div>
+        <form method="GET" class="search-form">
+            <div class="search-grid">
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="label-icon">🏷️</span>
+                        {{ search_form.name.label }}
+                    </label>
+                    {{ search_form.name }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="label-icon">📊</span>
+                        {{ search_form.is_active.label }}
+                    </label>
+                    {{ search_form.is_active }}
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-secondary">
+                        <span class="btn-icon">🔍</span>
+                        検索
+                    </button>
+                    <a href="{% url 'agri_app:group_list' %}" class="btn-clear">
+                        <span class="btn-icon">🔄</span>
+                        クリア
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- グループ一覧テーブル -->
+    <div class="table-section">
+        <table class="group-table">
+            <thead>
+                <tr>
+                    <th>グループ名</th>
+                    <th>説明</th>
+                    <th>メンバー数</th>
+                    <th>ステータス</th>
+                    <th>作成日</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for group in groups %}
+                <tr>
+                    <td>
+                        <div class="group-name">
+                            <span class="group-color" style="background-color: {{ group.groupprofile.color|default:'#667eea' }}"></span>
+                            {{ group.name }}
+                        </div>
+                    </td>
+                    <td>
+                        {% if group.groupprofile.description %}
+                            {{ group.groupprofile.description|truncatechars:50 }}
+                        {% else %}
+                            <span class="text-muted">-</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="member-count">{{ group.user_set.count }}人</span>
+                    </td>
+                    <td>
+                        {% if group.groupprofile.is_active %}
+                            <span class="badge badge-active">アクティブ</span>
+                        {% else %}
+                            <span class="badge badge-inactive">非アクティブ</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ group.groupprofile.create_at|date:"Y/m/d" }}</td>
+                    <td class="action-buttons">
+                        <a href="{% url 'agri_app:group_detail' group.id %}" class="btn-detail">
+                            <span class="btn-icon">👁️</span>
+                            詳細
+                        </a>
+                        <a href="{% url 'agri_app:group_edit' group.id %}" class="btn-edit">
+                            <span class="btn-icon">✏️</span>
+                            編集
+                        </a>
+                        <a href="{% url 'agri_app:group_members' group.id %}" class="btn-members">
+                            <span class="btn-icon">👥</span>
+                            メンバー
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="no-data">グループが見つかりません</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ページネーション -->
+    {% if groups.has_other_pages %}
+    <div class="pagination-section">
+        <nav class="pagination">
+            {% if groups.has_previous %}
+                <a href="?page={{ groups.previous_page_number }}" class="page-link">← 前へ</a>
+            {% endif %}
+            
+            <span class="page-info">
+                {{ groups.number }} / {{ groups.paginator.num_pages }}
+            </span>
+            
+            {% if groups.has_next %}
+                <a href="?page={{ groups.next_page_number }}" class="page-link">次へ →</a>
+            {% endif %}
+        </nav>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.group-management-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 25px 30px;
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(40, 167, 69, 0.2);
+    color: #fff;
+}
+
+.header-content {
+    flex: 1;
+}
+
+.page-title {
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0 0 8px 0;
+    letter-spacing: 0.05em;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.page-subtitle {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.9);
+    margin: 0;
+    font-weight: 300;
+}
+
+.header-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-primary {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    text-decoration: none;
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 0.05em;
+    border: 2px solid rgba(255,255,255,0.3);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary:hover {
+    background: rgba(255,255,255,0.3);
+    border-color: rgba(255,255,255,0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.btn-icon {
+    font-size: 14px;
+}
+
+.search-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 25px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border: 1px solid rgba(255,255,255,0.8);
+}
+
+.search-header {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.search-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 8px 0;
+}
+
+.search-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+}
+
+.search-form {
+    margin: 0;
+}
+
+.search-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    align-items: end;
+}
+
+.form-group {
+    margin: 0;
+}
+
+.form-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
+    font-size: 14px;
+}
+
+.label-icon {
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+.form-input, .form-select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e5e5e5;
+    border-radius: 10px;
+    font-size: 14px;
+    background: #fff;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.form-input:focus, .form-select:focus {
+    outline: none;
+    border-color: #28a745;
+    box-shadow: 0 4px 16px rgba(40, 167, 69, 0.15);
+    transform: translateY(-1px);
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+}
+
+.btn-clear {
+    background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+    color: #fff;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+
+.btn-clear:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(108, 117, 125, 0.4);
+}
+
+.table-section {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.group-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.group-table thead th {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    color: #333;
+    font-weight: 500;
+    padding: 15px 12px;
+    text-align: left;
+    border-bottom: 2px solid #e5e5e5;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+}
+
+.group-table tbody td {
+    padding: 15px 12px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: middle;
+}
+
+.group-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+.group-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.group-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.member-count {
+    font-weight: 500;
+    color: #28a745;
+}
+
+.text-muted {
+    color: #6c757d;
+    font-style: italic;
+}
+
+.badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.badge-active {
+    background: #28a745;
+    color: #fff;
+}
+
+.badge-inactive {
+    background: #6c757d;
+    color: #fff;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn-detail, .btn-edit, .btn-members {
+    padding: 6px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-detail {
+    background: #17a2b8;
+    color: #fff;
+}
+
+.btn-detail:hover {
+    background: #138496;
+    transform: translateY(-1px);
+}
+
+.btn-edit {
+    background: #ffc107;
+    color: #212529;
+}
+
+.btn-edit:hover {
+    background: #e0a800;
+    transform: translateY(-1px);
+}
+
+.btn-members {
+    background: #6f42c1;
+    color: #fff;
+}
+
+.btn-members:hover {
+    background: #5a32a3;
+    transform: translateY(-1px);
+}
+
+.no-data {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+    padding: 40px;
+}
+
+.pagination-section {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #fff;
+    padding: 15px 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.page-link {
+    color: #28a745;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.page-link:hover {
+    color: #1e7e34;
+}
+
+.page-info {
+    font-weight: 500;
+    color: #333;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .group-management-container {
+        padding: 10px;
+    }
+    
+    .page-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+    
+    .search-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .group-table {
+        font-size: 14px;
+    }
+    
+    .group-table thead th,
+    .group-table tbody td {
+        padding: 10px 8px;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        gap: 4px;
+    }
+}
+</style>
+{% endblock %} 

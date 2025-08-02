@@ -1,28 +1,158 @@
 <!DOCTYPE html>
 {% load static %}
-<html>
+<html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>{% block title %}Agri App{% endblock %}</title>
-    {% comment %} <link rel="stylesheet" href="{% static 'css/sanitize.css' %}"> {% endcomment %}
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/kuuma-style.css' %}?v=2.1&t={{ request.GET.t|default:'aligned' }}">
+    <link rel="stylesheet" href="{% static 'css/base-style.css' %}?v=2.1&t={{ request.GET.t|default:'aligned' }}">
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <a class="navbar-brand" href="{% url 'admin:index' %}">管理画面</a>
-      {% if user.is_authenticated %}
-        {% comment %} <a class="navbar-brand" href="{% url 'agri_app:index' %}">ホーム</a>
-        <a class="navbar-brand" href="{% url 'agri_app:register' %}">ユーザ登録画面</a>
-        <a class="navbar-brand" href="{% url 'agri_app:families' %}">family list</a> {% endcomment %}
-        <a class="navbar-brand" href="{% url 'agri_app:user_logout' %}">ログアウト</a>
-      {% else %}
-        <a class="navbar-brand" href="{% url 'agri_app:user_login' %}">ログイン</a>
-      {% endif %}
+    <nav class="navbar">
+      <div class="container">
+        <div class="nav-content">
+          <div class="nav-left">
+            {% if user.is_authenticated %}
+              {% if user.is_superuser %}
+                <!-- スーパーユーザー: 全てのメニューを表示 -->
+                <a class="nav-link" href="{% url 'admin:index' %}">管理画面</a>
+                <a class="nav-link" href="{% url 'agri_app:home' %}">ホーム</a>
+                <a class="nav-link" href="{% url 'agri_app:s3_file_list' %}">写真一覧</a>
+                <a class="nav-link" href="{% url 'agri_app:user_list' %}">ユーザー管理</a>
+                <a class="nav-link" href="{% url 'agri_app:group_list' %}">グループ管理</a>
+              {% elif user.is_staff %}
+                <!-- 管理者: 管理画面以外のメニューを表示 -->
+                <a class="nav-link" href="{% url 'agri_app:home' %}">ホーム</a>
+                <a class="nav-link" href="{% url 'agri_app:s3_file_list' %}">写真一覧</a>
+                <a class="nav-link" href="{% url 'agri_app:user_list' %}">ユーザー管理</a>
+                <a class="nav-link" href="{% url 'agri_app:group_list' %}">グループ管理</a>
+              {% else %}
+                <!-- 一般ユーザー: ホームと写真一覧のみ表示 -->
+                <a class="nav-link" href="{% url 'agri_app:home' %}">ホーム</a>
+                <a class="nav-link" href="{% url 'agri_app:s3_file_list' %}">写真一覧</a>
+              {% endif %}
+            {% else %}
+              <a class="nav-link" href="{% url 'agri_app:user_login' %}">ログイン</a>
+            {% endif %}
+          </div>
+          
+          {% if user.is_authenticated %}
+          <div class="nav-right">
+            <div class="profile-dropdown">
+              <button class="profile-toggle" onclick="toggleProfileMenu()">
+                <span class="profile-avatar">{{ user.first_name|default:user.username|first|upper }}</span>
+                <span class="profile-name">{{ user.first_name|default:user.username }}</span>
+                <span class="dropdown-arrow">▼</span>
+              </button>
+              <div class="profile-menu" id="profileMenu">
+                <a href="{% url 'agri_app:profile' %}" class="profile-menu-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+                  <span class="menu-icon">👤</span>
+                  プロフィール
+                </a>
+                <a href="{% url 'agri_app:profile_edit' %}" class="profile-menu-item {% if request.resolver_match.url_name == 'profile_edit' %}active{% endif %}">
+                  <span class="menu-icon">✏️</span>
+                  プロフィール編集
+                </a>
+                <a href="{% url 'agri_app:password_change' %}" class="profile-menu-item {% if request.resolver_match.url_name == 'password_change' %}active{% endif %}">
+                  <span class="menu-icon">🔐</span>
+                  パスワード変更
+                </a>
+                {% if user.is_authenticated and user.is_staff %}
+                <div class="profile-menu-divider"></div>
+                <a href="{% url 'agri_app:user_list' %}" class="profile-menu-item {% if request.resolver_match.url_name in 'user_list,user_create,user_detail,user_edit,user_delete' %}active{% endif %}">
+                  <span class="menu-icon">👥</span>
+                  ユーザー管理
+                </a>
+                <a href="{% url 'agri_app:group_list' %}" class="profile-menu-item {% if request.resolver_match.url_name in 'group_list,group_create,group_detail,group_edit,group_delete,group_members' %}active{% endif %}">
+                  <span class="menu-icon">🏷️</span>
+                  グループ管理
+                </a>
+                {% endif %}
+                <div class="profile-menu-divider"></div>
+                <a href="{% url 'agri_app:user_logout' %}" class="profile-menu-item">
+                  <span class="menu-icon">🚪</span>
+                  ログアウト
+                </a>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
     </nav>
-    <div class="container">
-    {% block content %}{% endblock %}
+    
+    <!-- メッセージ表示 -->
+    {% if messages %}
+    <div class="messages-container">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+          {{ message }}
+        </div>
+      {% endfor %}
     </div>
+    {% endif %}
+    
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+
+    <script>
+    // キャッシュクリア機能
+    function clearCache() {
+        if ('caches' in window) {
+            caches.keys().then(function(names) {
+                for (let name of names) {
+                    caches.delete(name);
+                }
+            });
+        }
+    }
+    
+    // ページ読み込み時にキャッシュクリア
+    window.addEventListener('load', function() {
+        clearCache();
+    });
+    
+    function toggleProfileMenu() {
+        const menu = document.getElementById('profileMenu');
+        const arrow = document.querySelector('.dropdown-arrow');
+        
+        menu.classList.toggle('show');
+        
+        // 矢印の回転
+        if (menu.classList.contains('show')) {
+            arrow.style.transform = 'rotate(180deg)';
+        } else {
+            arrow.style.transform = 'rotate(0deg)';
+        }
+    }
+
+    // メニュー外をクリックしたら閉じる
+    document.addEventListener('click', function(event) {
+        const dropdown = document.querySelector('.profile-dropdown');
+        const menu = document.getElementById('profileMenu');
+        const arrow = document.querySelector('.dropdown-arrow');
+        
+        if (!dropdown.contains(event.target)) {
+            menu.classList.remove('show');
+            arrow.style.transform = 'rotate(0deg)';
+        }
+    });
+
+    // ESCキーでメニューを閉じる
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            const menu = document.getElementById('profileMenu');
+            const arrow = document.querySelector('.dropdown-arrow');
+            
+            menu.classList.remove('show');
+            arrow.style.transform = 'rotate(0deg)';
+        }
+    });
+    </script>
   </body>
 </html>

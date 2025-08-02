@@ -1,6 +1,63 @@
 {% extends "base.html" %}
 {% block title %} Home {{ block.super }}{% endblock %}
 {% block content %}
-<p> PukuPuku　にようこそ！！!</p>
-{% comment %} <a href="{% url 'agri_app:to_google' %}">google</a> {% endcomment %}
+<div class="fullscreen-menu">
+    <div class="menu-container">
+        <div class="welcome-section">
+            <h1 class="welcome-title">未来農園</h1>
+            <p class="welcome-subtitle">にようこそ！！</p>
+        </div>
+        
+        <div class="menu-grid">
+            <a href="{% url 'agri_app:s3_file_list' %}" class="menu-item-link">
+                <div class="menu-item">
+                    <div class="menu-icon">📁</div>
+                    <h3 class="menu-title">写真一覧</h3>
+                    <p class="menu-description">S3に保存された写真を管理</p>
+                </div>
+            </a>
+            
+            {% if user.is_superuser %}
+            <a href="{% url 'admin:index' %}" class="menu-item-link">
+                <div class="menu-item">
+                    <div class="menu-icon">⚙️</div>
+                    <h3 class="menu-title">管理画面</h3>
+                    <p class="menu-description">システムの管理と設定</p>
+                </div>
+            </a>
+            {% endif %}
+            
+            {% if user.is_staff %}
+            <a href="{% url 'agri_app:user_list' %}" class="menu-item-link">
+                <div class="menu-item">
+                    <div class="menu-icon">👤</div>
+                    <h3 class="menu-title">ユーザー管理</h3>
+                    <p class="menu-description">アカウント情報の管理</p>
+                </div>
+            </a>
+            
+            <a href="{% url 'agri_app:group_list' %}" class="menu-item-link">
+                <div class="menu-item">
+                    <div class="menu-icon">🏷️</div>
+                    <h3 class="menu-title">グループ管理</h3>
+                    <p class="menu-description">ユーザーグループの管理</p>
+                </div>
+            </a>
+            {% endif %}
+            
+            <div class="menu-item disabled">
+                <div class="menu-icon">📊</div>
+                <h3 class="menu-title">データ分析</h3>
+                <p class="menu-description">統計とレポート</p>
+                <div class="coming-soon">準備中</div>
+            </div>
+        </div>
+        
+        <div class="menu-footer">
+            <p class="footer-text">農業IoTシステム - データ管理プラットフォーム</p>
+        </div>
+    </div>
+</div>
+
+
 {% endblock %}

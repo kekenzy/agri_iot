@@ -1,0 +1,325 @@
+{% extends "base.html" %}
+{% block title %}プロフィール{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-card">
+        <div class="profile-header">
+            <h1 class="page-title">プロフィール</h1>
+            <a href="{% url 'agri_app:profile_edit' %}" class="btn-edit">編集</a>
+        </div>
+
+        <div class="profile-content">
+            <div class="profile-avatar-large">
+                <span class="avatar-text">{{ user.first_name|default:user.username|first|upper }}</span>
+            </div>
+
+            <div class="profile-info">
+                <div class="info-section">
+                    <h3 class="section-title">基本情報</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label class="info-label">ユーザー名</label>
+                            <div class="info-value">{{ user.username }}</div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <label class="info-label">氏名</label>
+                            <div class="info-value">{{ user.first_name|default:"未設定" }}</div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <label class="info-label">メールアドレス</label>
+                            <div class="info-value">{{ user.email|default:"未設定" }}</div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <label class="info-label">登録日</label>
+                            <div class="info-value">{{ user.date_joined|date:"Y年m月d日 H:i" }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3 class="section-title">権限・ステータス</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label class="info-label">権限</label>
+                            <div class="info-value">
+                                {% if user.is_superuser %}
+                                    <span class="badge badge-superuser">スーパーユーザー</span>
+                                {% elif user.is_staff %}
+                                    <span class="badge badge-admin">管理者</span>
+                                {% else %}
+                                    <span class="badge badge-user">一般</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <label class="info-label">ステータス</label>
+                            <div class="info-value">
+                                {% if user.is_active %}
+                                    <span class="badge badge-active">アクティブ</span>
+                                {% else %}
+                                    <span class="badge badge-inactive">非アクティブ</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <label class="info-label">最終ログイン</label>
+                            <div class="info-value">
+                                {% if user.last_login %}
+                                    {{ user.last_login|date:"Y年m月d日 H:i" }}
+                                {% else %}
+                                    未ログイン
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-actions">
+            <a href="{% url 'agri_app:profile_edit' %}" class="btn-primary">プロフィール編集</a>
+            <a href="{% url 'agri_app:password_change' %}" class="btn-secondary">パスワード変更</a>
+            <a href="{% url 'agri_app:home' %}" class="btn-back">ホームに戻る</a>
+        </div>
+    </div>
+</div>
+
+<style>
+.profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.profile-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 300;
+    color: #333;
+    margin: 0;
+    letter-spacing: 0.05em;
+}
+
+.btn-edit {
+    background: #ffc107;
+    color: #212529;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.btn-edit:hover {
+    background: #e0a800;
+}
+
+.profile-content {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.profile-avatar-large {
+    flex-shrink: 0;
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+}
+
+.avatar-text {
+    color: #fff;
+    font-size: 3rem;
+    font-weight: 600;
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.info-section {
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.info-label {
+    font-weight: 500;
+    color: #666;
+    font-size: 14px;
+}
+
+.info-value {
+    font-size: 16px;
+    color: #333;
+    padding: 8px 0;
+}
+
+.badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: inline-block;
+}
+
+.badge-superuser {
+    background: #dc3545;
+    color: #fff;
+}
+
+.badge-admin {
+    background: #fd7e14;
+    color: #fff;
+}
+
+.badge-user {
+    background: #28a745;
+    color: #fff;
+}
+
+.badge-active {
+    background: #28a745;
+    color: #fff;
+}
+
+.badge-inactive {
+    background: #6c757d;
+    color: #fff;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    padding-top: 30px;
+    border-top: 1px solid #e5e5e5;
+}
+
+.btn-primary {
+    background: #333;
+    color: #fff;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 400;
+    transition: background-color 0.3s ease;
+    letter-spacing: 0.05em;
+}
+
+.btn-primary:hover {
+    background: #555;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: #fff;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 400;
+    transition: background-color 0.3s ease;
+    letter-spacing: 0.05em;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+.btn-back {
+    background: #e9ecef;
+    color: #6c757d;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 400;
+    transition: background-color 0.3s ease;
+    letter-spacing: 0.05em;
+}
+
+.btn-back:hover {
+    background: #dee2e6;
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 10px;
+    }
+    
+    .profile-card {
+        padding: 30px 20px;
+    }
+    
+    .profile-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+    
+    .profile-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .profile-actions {
+        flex-direction: column;
+    }
+}
+</style>
+{% endblock %} 

@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Permission
 # from django.contrib.auth.models import (
 #   BaseUserManager, AbstractBaseUser, PermissionsMixin
 # )
@@ -27,3 +28,24 @@ class UserProfile(BaseMeta):
   def __str__(self):
       # return self.name
       return self.user.username
+
+class GroupProfile(BaseMeta):
+    group = models.OneToOneField(Group, on_delete=models.CASCADE)
+    description = models.TextField(blank=True, null=True, verbose_name='説明')
+    is_active = models.BooleanField(default=True, verbose_name='アクティブ')
+    color = models.CharField(max_length=7, default='#667eea', verbose_name='グループカラー')
+    
+    class Meta:
+        db_table = 'group_profile'
+        db_table_comment = 'グループプロフィール'
+        verbose_name = 'グループプロフィール'
+        verbose_name_plural = 'グループプロフィール'
+    
+    def __str__(self):
+        return self.group.name
+    
+    def get_member_count(self):
+        return self.group.user_set.count()
+    
+    def get_permissions_display(self):
+        return ', '.join([perm.name for perm in self.group.permissions.all()[:5]])

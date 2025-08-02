@@ -1,0 +1,569 @@
+{% extends "base.html" %}
+{% block title %}グループ詳細 - {{ group.name }}{% endblock %}
+
+{% block content %}
+<div class="group-detail-container">
+    <div class="page-header">
+        <div class="header-content">
+            <div class="breadcrumb">
+                <a href="{% url 'agri_app:group_list' %}" class="breadcrumb-link">グループ管理</a>
+                <span class="breadcrumb-separator">›</span>
+                <span class="breadcrumb-current">{{ group.name }}</span>
+            </div>
+            <h1 class="page-title">
+                <span class="group-color" style="background-color: {{ profile.color|default:'#667eea' }}"></span>
+                {{ group.name }}
+            </h1>
+            <p class="page-subtitle">グループの詳細情報</p>
+        </div>
+        <div class="header-actions">
+            <a href="{% url 'agri_app:group_edit' group.id %}" class="btn-primary">
+                <span class="btn-icon">✏️</span>
+                編集
+            </a>
+            <a href="{% url 'agri_app:group_members' group.id %}" class="btn-secondary">
+                <span class="btn-icon">👥</span>
+                メンバー管理
+            </a>
+        </div>
+    </div>
+
+    <div class="detail-grid">
+        <!-- 基本情報 -->
+        <div class="detail-card">
+            <div class="card-header">
+                <h3 class="card-title">📋 基本情報</h3>
+            </div>
+            <div class="card-content">
+                <div class="info-row">
+                    <span class="info-label">グループ名:</span>
+                    <span class="info-value">{{ group.name }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">説明:</span>
+                    <span class="info-value">
+                        {% if profile.description %}
+                            {{ profile.description }}
+                        {% else %}
+                            <span class="text-muted">説明がありません</span>
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">ステータス:</span>
+                    <span class="info-value">
+                        {% if profile.is_active %}
+                            <span class="badge badge-active">アクティブ</span>
+                        {% else %}
+                            <span class="badge badge-inactive">非アクティブ</span>
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">グループカラー:</span>
+                    <span class="info-value">
+                        <span class="color-preview" style="background-color: {{ profile.color|default:'#667eea' }}"></span>
+                        {{ profile.color|default:'#667eea' }}
+                    </span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">作成日:</span>
+                    <span class="info-value">{{ profile.create_at|date:"Y年m月d日 H:i" }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">更新日:</span>
+                    <span class="info-value">{{ profile.update_at|date:"Y年m月d日 H:i" }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- メンバー情報 -->
+        <div class="detail-card">
+            <div class="card-header">
+                <h3 class="card-title">👥 メンバー情報</h3>
+            </div>
+            <div class="card-content">
+                <div class="info-row">
+                    <span class="info-label">メンバー数:</span>
+                    <span class="info-value">
+                        <span class="member-count">{{ member_count }}人</span>
+                    </span>
+                </div>
+                <div class="member-list">
+                    <h4>メンバー一覧</h4>
+                    {% if group.user_set.all %}
+                        <div class="member-grid">
+                            {% for user in group.user_set.all %}
+                            <div class="member-item">
+                                <div class="member-avatar">{{ user.first_name|default:user.username|first|upper }}</div>
+                                <div class="member-info">
+                                    <div class="member-name">{{ user.first_name|default:user.username }}</div>
+                                    <div class="member-username">@{{ user.username }}</div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">メンバーが登録されていません</p>
+                    {% endif %}
+                </div>
+                <div class="card-actions">
+                    <a href="{% url 'agri_app:group_members' group.id %}" class="btn-link">
+                        <span class="btn-icon">👥</span>
+                        メンバーを管理
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 権限情報 -->
+        <div class="detail-card">
+            <div class="card-header">
+                <h3 class="card-title">🔐 権限情報</h3>
+            </div>
+            <div class="card-content">
+                <div class="info-row">
+                    <span class="info-label">権限数:</span>
+                    <span class="info-value">{{ permissions.count }}個</span>
+                </div>
+                <div class="permission-list">
+                    <h4>権限一覧</h4>
+                    {% if permissions %}
+                        <div class="permission-grid">
+                            {% for permission in permissions %}
+                            <div class="permission-item">
+                                <span class="permission-name">{{ permission.name }}</span>
+                                <span class="permission-codename">{{ permission.codename }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">権限が設定されていません</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- アクション -->
+    <div class="action-section">
+        <div class="action-buttons">
+            <a href="{% url 'agri_app:group_edit' group.id %}" class="btn-edit">
+                <span class="btn-icon">✏️</span>
+                グループを編集
+            </a>
+            <a href="{% url 'agri_app:group_members' group.id %}" class="btn-members">
+                <span class="btn-icon">👥</span>
+                メンバーを管理
+            </a>
+            <a href="{% url 'agri_app:group_delete' group.id %}" class="btn-delete">
+                <span class="btn-icon">🗑️</span>
+                グループを削除
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+.group-detail-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    padding: 25px 30px;
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(40, 167, 69, 0.2);
+    color: #fff;
+}
+
+.header-content {
+    flex: 1;
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.breadcrumb-link {
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.breadcrumb-link:hover {
+    color: #fff;
+}
+
+.breadcrumb-separator {
+    color: rgba(255,255,255,0.6);
+}
+
+.breadcrumb-current {
+    color: #fff;
+    font-weight: 500;
+}
+
+.page-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0 0 8px 0;
+    letter-spacing: 0.05em;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.group-color {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.3);
+}
+
+.page-subtitle {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.9);
+    margin: 0;
+    font-weight: 300;
+}
+
+.header-actions {
+    display: flex;
+    gap: 12px;
+    flex-direction: column;
+}
+
+.btn-primary, .btn-secondary {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 0.05em;
+    border: 2px solid rgba(255,255,255,0.3);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+}
+
+.btn-primary:hover, .btn-secondary:hover {
+    background: rgba(255,255,255,0.3);
+    border-color: rgba(255,255,255,0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.btn-icon {
+    font-size: 14px;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.detail-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.detail-card:hover {
+    transform: translateY(-2px);
+}
+
+.card-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 20px 25px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.card-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.card-content {
+    padding: 25px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 500;
+    color: #666;
+    font-size: 14px;
+}
+
+.info-value {
+    font-weight: 500;
+    color: #333;
+    text-align: right;
+}
+
+.text-muted {
+    color: #6c757d;
+    font-style: italic;
+}
+
+.badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.badge-active {
+    background: #28a745;
+    color: #fff;
+}
+
+.badge-inactive {
+    background: #6c757d;
+    color: #fff;
+}
+
+.color-preview {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    margin-right: 8px;
+    border: 1px solid #ddd;
+}
+
+.member-count {
+    font-weight: 600;
+    color: #28a745;
+    font-size: 1.1em;
+}
+
+.member-list h4, .permission-list h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+    margin: 20px 0 15px 0;
+}
+
+.member-grid {
+    display: grid;
+    gap: 12px;
+}
+
+.member-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.member-item:hover {
+    background: #e9ecef;
+}
+
+.member-avatar {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.member-info {
+    flex: 1;
+}
+
+.member-name {
+    font-weight: 500;
+    color: #333;
+    font-size: 14px;
+}
+
+.member-username {
+    font-size: 12px;
+    color: #666;
+}
+
+.permission-grid {
+    display: grid;
+    gap: 8px;
+}
+
+.permission-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.permission-name {
+    font-weight: 500;
+    color: #333;
+}
+
+.permission-codename {
+    color: #666;
+    font-family: monospace;
+    font-size: 12px;
+}
+
+.card-actions {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.btn-link {
+    color: #28a745;
+    text-decoration: none;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.3s ease;
+}
+
+.btn-link:hover {
+    color: #1e7e34;
+}
+
+.action-section {
+    background: #fff;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-edit, .btn-members, .btn-delete {
+    padding: 12px 24px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-edit {
+    background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+    color: #212529;
+}
+
+.btn-edit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 193, 7, 0.3);
+}
+
+.btn-members {
+    background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%);
+    color: #fff;
+}
+
+.btn-members:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(111, 66, 193, 0.3);
+}
+
+.btn-delete {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: #fff;
+}
+
+.btn-delete:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(220, 53, 69, 0.3);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .group-detail-container {
+        padding: 10px;
+    }
+    
+    .page-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+    
+    .header-actions {
+        flex-direction: row;
+        justify-content: center;
+    }
+    
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+}
+</style>
+{% endblock %} 

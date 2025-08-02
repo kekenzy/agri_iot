@@ -49,9 +49,9 @@ class UserProfileForm(forms.ModelForm):
 
 class LoginForm(forms.Form):
     username = forms.CharField(
-        label='名前',
+        label='ユーザー名またはメールアドレス',
         max_length=30,
-        widget=forms.TextInput(attrs={'class': 'name-class'})
+        widget=forms.TextInput(attrs={'class': 'name-class', 'placeholder': 'ユーザー名またはメールアドレスを入力'})
     )
     password = forms.CharField(
         label='パスワード',
