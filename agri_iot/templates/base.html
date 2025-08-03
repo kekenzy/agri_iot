@@ -8,8 +8,23 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <title>{% block title %}Agri App{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/kuuma-style.css' %}?v=2.1&t={{ request.GET.t|default:'aligned' }}">
-    <link rel="stylesheet" href="{% static 'css/base-style.css' %}?v=2.1&t={{ request.GET.t|default:'aligned' }}">
+    {% load static %}
+    {% load style_tags %}
+    {% get_active_style as active_style %}
+    
+    <!-- 共通スタイル -->
+    <link rel="stylesheet" href="{% static 'css/common-style.css' %}?v=2.2">
+    
+    <!-- テーマ固有スタイル -->
+    {% if active_style == 'dark' %}
+        <link rel="stylesheet" href="{% static 'css/dark-style.css' %}?v=2.2">
+    {% elif active_style == 'colorful' %}
+        <link rel="stylesheet" href="{% static 'css/colorful-style.css' %}?v=2.2">
+    {% elif active_style == 'kuuma' %}
+        <link rel="stylesheet" href="{% static 'css/kuuma-style.css' %}?v=2.2">
+    {% else %}
+        <link rel="stylesheet" href="{% static 'css/base-style.css' %}?v=2.2">
+    {% endif %}
   </head>
   <body>
     <nav class="navbar">
@@ -70,6 +85,13 @@
                 <a href="{% url 'agri_app:group_list' %}" class="profile-menu-item {% if request.resolver_match.url_name in 'group_list,group_create,group_detail,group_edit,group_delete,group_members' %}active{% endif %}">
                   <span class="menu-icon">🏷️</span>
                   グループ管理
+                </a>
+                {% endif %}
+                
+                {% if user.is_authenticated and user.is_superuser %}
+                <a href="{% url 'agri_app:style_settings' %}" class="profile-menu-item {% if request.resolver_match.url_name == 'style_settings' %}active{% endif %}">
+                  <span class="menu-icon">🎨</span>
+                  スタイル設定
                 </a>
                 {% endif %}
                 <div class="profile-menu-divider"></div>

@@ -1,44 +1,20 @@
-/* ベーステンプレート用スタイル - KUUMA風ナビゲーション - Updated: 2025-08-02 21:45 - ALIGNED */
+/* ベーステーマ固有スタイル - 明るく清潔なデザイン */
+
+/* ベース設定 */
+body {
+    color: #333;
+    background-color: #fff;
+}
 
 /* ナビゲーション */
 .navbar {
     background: #fff;
     border-bottom: 1px solid #e5e5e5;
-    padding: 0;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-.nav-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 0;
-    flex-wrap: wrap;
-}
-
-.nav-left {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-    flex-wrap: wrap;
-}
-
-.nav-right {
-    display: flex;
-    align-items: center;
 }
 
 .nav-link {
     color: #333;
-    text-decoration: none;
-    font-weight: 400;
-    font-size: 16px;
-    transition: color 0.3s ease;
-    letter-spacing: 0.05em;
-    position: relative;
 }
 
 .nav-link:hover {
@@ -46,38 +22,24 @@
 }
 
 .nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 0;
-    height: 2px;
     background: #333;
-    transition: width 0.3s ease;
-}
-
-.nav-link:hover::after {
-    width: 100%;
 }
 
 /* プロフィールドロップダウン */
-.profile-dropdown {
-    position: relative;
+.profile-toggle {
+    color: #333;
 }
 
-.profile-toggle {
-    background: none;
-    border: none;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    font-size: 14px;
-    color: #333;
-    border: 1px solid transparent;
+/* プロファイルメニューアイコンの統一 */
+.profile-menu-item .menu-icon {
+    font-size: 14px !important;
+    width: 16px !important;
+    height: 16px !important;
+    line-height: 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
 }
 
 .profile-toggle:hover {
@@ -88,675 +50,261 @@
 }
 
 .profile-avatar {
-    width: 32px;
-    height: 32px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: #fff;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 16px;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-    transition: all 0.3s ease;
 }
 
 .profile-toggle:hover .profile-avatar {
     transform: scale(1.05);
-    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
 }
 
 .profile-name {
-    font-weight: 500;
-    max-width: 120px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    color: #495057;
-    font-size: 14px;
+    color: #333;
 }
 
 .dropdown-arrow {
-    font-size: 12px;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    color: #6c757d;
+    color: #333;
 }
 
 .profile-toggle:hover .dropdown-arrow {
     transform: rotate(180deg);
-    color: #495057;
 }
 
 .profile-menu {
-    position: absolute;
-    top: calc(100% + 8px);
-    right: 0;
     background: #fff;
-    border: 1px solid #e9ecef;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08);
-    min-width: 160px;
-    max-width: 200px;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-8px) scale(0.95);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1000;
-    backdrop-filter: blur(10px);
-    overflow: hidden;
-}
-
-.profile-menu.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0) scale(1);
+    border: 1px solid #e5e5e5;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
 }
 
 .profile-menu-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 4px 8px;
-    color: #495057;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 400;
-    transition: all 0.3s ease;
-    border-bottom: 1px solid #f8f9fa;
-    position: relative;
-    overflow: hidden;
-    min-height: 28px;
-    line-height: 1;
-}
-
-.profile-menu-item:last-child {
-    border-bottom: none;
+    color: #333;
+    border-bottom-color: #f8f9fa;
 }
 
 .profile-menu-item::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 0;
-    height: 100%;
-    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-    transition: width 0.3s ease;
-    z-index: -1;
+    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
 }
 
 .profile-menu-item:hover {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    background: #f8f9fa;
     color: #333;
     transform: translateX(4px);
 }
 
-.profile-menu-item:hover::before {
-    width: 4px;
-}
-
-.menu-icon {
-    font-size: 16px;
-    width: 16px;
-    height: 16px;
-    text-align: center;
-    transition: transform 0.3s ease;
-    filter: grayscale(0.3);
-    flex-shrink: 0;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.profile-menu-item:hover .menu-icon {
-    transform: scale(1.05);
-    filter: grayscale(0);
-}
-
-/* アイコンサイズの強制調整 */
-.profile-menu-item .menu-icon {
-    font-size: 16px !important;
-    width: 16px !important;
-    height: 16px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-
-.profile-menu-divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent 0%, #e9ecef 50%, transparent 100%);
-    margin: 1px 8px;
-}
-
-/* メニューアイテムのアクティブ状態 */
 .profile-menu-item.active {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #fff;
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea;
 }
 
 .profile-menu-item.active .menu-icon {
-    filter: brightness(1.2);
+    color: #667eea;
 }
 
-/* メニューのアニメーション改善 */
-.profile-menu {
-    transform-origin: top right;
-}
-
-.profile-menu.show {
-    animation: menuSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@keyframes menuSlideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px) scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+.profile-menu-divider {
+    background: #e5e5e5;
 }
 
 /* メッセージ表示 */
-.messages-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.alert {
-    padding: 15px 20px;
-    border-radius: 6px;
-    margin-bottom: 20px;
-    font-weight: 400;
-}
-
 .alert-success {
     background: #d4edda;
+    border-color: #c3e6cb;
     color: #155724;
-    border: 1px solid #c3e6cb;
 }
 
 .alert-error {
     background: #f8d7da;
+    border-color: #f5c6cb;
     color: #721c24;
-    border: 1px solid #f5c6cb;
 }
 
 .alert-info {
     background: #d1ecf1;
+    border-color: #bee5eb;
     color: #0c5460;
-    border: 1px solid #bee5eb;
 }
 
-/* レスポンシブナビゲーション */
-@media (max-width: 768px) {
-    .nav-content {
-        gap: 20px;
-        padding: 15px 0;
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .nav-left {
-        justify-content: center;
-        gap: 20px;
-    }
-    
-    .nav-right {
-        justify-content: center;
-    }
-    
-    .nav-link {
-        font-size: 14px;
-    }
-    
-    .profile-name {
-        display: block;
-        max-width: 100px;
-    }
-    
-    .profile-menu {
-        right: auto;
-        left: 50%;
-        transform: translateX(-50%) translateY(-8px) scale(0.95);
-        min-width: 220px;
-        max-width: 280px;
-    }
-    
-    .profile-menu.show {
-        transform: translateX(-50%) translateY(0) scale(1);
-    }
+/* お知らせエリア */
+.announcements-section {
+    background: rgba(255, 255, 255, 0.1);
 }
 
-@media (max-width: 480px) {
-    .nav-content {
-        padding: 10px 0;
-    }
-    
-    .nav-left {
-        gap: 15px;
-    }
-    
-    .nav-link {
-        font-size: 13px;
-    }
-    
-    .profile-toggle {
-        padding: 8px 12px;
-        gap: 8px;
-    }
-    
-    .profile-avatar {
-        width: 32px;
-        height: 32px;
-        font-size: 14px;
-    }
-    
-    .profile-name {
-        max-width: 80px;
-        font-size: 13px;
-    }
-    
-    .profile-menu {
-        min-width: 200px;
-        max-width: 240px;
-    }
-    
-    .profile-menu-item {
-        padding: 3px 12px;
-        font-size: 11px;
-        gap: 6px;
-        min-height: 24px;
-    }
-    
-    .menu-icon {
-        font-size: 10px;
-        width: 10px;
-    }
+.announcements-title {
+    color: #333;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* メインコンテンツエリア */
-.container {
-    padding-top: 40px;
+.announcement-card {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* ホーム画面スタイル */
+.announcement-card.priority-urgent {
+    border-left: 5px solid #dc3545;
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.1), rgba(255, 255, 255, 0.9));
+}
+
+.announcement-card.priority-high {
+    border-left: 5px solid #fd7e14;
+    background: linear-gradient(135deg, rgba(253, 126, 20, 0.1), rgba(255, 255, 255, 0.9));
+}
+
+.announcement-card.priority-normal {
+    border-left: 5px solid #17a2b8;
+    background: linear-gradient(135deg, rgba(23, 162, 184, 0.1), rgba(255, 255, 255, 0.9));
+}
+
+.announcement-card.priority-low {
+    border-left: 5px solid #6c757d;
+    background: linear-gradient(135deg, rgba(108, 117, 125, 0.1), rgba(255, 255, 255, 0.9));
+}
+
+.announcement-title {
+    color: #333;
+}
+
+.announcement-priority {
+    background: #f8f9fa;
+    color: #6c757d;
+}
+
+.announcement-content {
+    color: #666;
+}
+
+.announcement-date {
+    color: #999;
+}
+
+/* スクロールバー */
+.announcements-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.announcements-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.announcements-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* ホーム画面 */
 .fullscreen-menu {
-    min-height: 100vh;
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-.menu-container {
-    max-width: 1000px;
-    width: 100%;
-    text-align: center;
-}
-
-.welcome-section {
-    margin-bottom: 60px;
-    animation: fadeInUp 0.8s ease-out;
 }
 
 .welcome-title {
-    font-size: 4rem;
-    font-weight: 300;
     color: #333;
-    margin-bottom: 10px;
-    letter-spacing: 0.1em;
     text-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .welcome-subtitle {
-    font-size: 1.5rem;
     color: #666;
-    font-weight: 300;
-    letter-spacing: 0.05em;
-}
-
-.menu-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 25px;
-    margin-bottom: 60px;
-}
-
-.menu-item-link {
-    text-decoration: none;
-    color: inherit;
-    display: block;
 }
 
 .menu-item {
     background: #fff;
-    border-radius: 16px;
-    padding: 35px 25px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    animation: fadeInUp 0.8s ease-out;
-    animation-fill-mode: both;
-    cursor: pointer;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
 }
 
 .menu-item::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
     background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    border-radius: 16px;
 }
-
-.menu-item-link:nth-child(1) .menu-item { animation-delay: 0.1s; }
-.menu-item-link:nth-child(2) .menu-item { animation-delay: 0.2s; }
-.menu-item-link:nth-child(3) .menu-item { animation-delay: 0.3s; }
-.menu-item:nth-child(4) { animation-delay: 0.4s; }
 
 .menu-item:hover {
     transform: translateY(-12px) scale(1.02);
     box-shadow: 0 20px 60px rgba(0,0,0,0.2);
 }
 
-.menu-item:hover::before {
-    opacity: 1;
-}
-
 .menu-item:active {
     transform: translateY(-8px) scale(1.01);
-    transition: all 0.1s ease;
 }
 
 .menu-item.disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
     background: #f8f9fa;
-}
-
-.menu-item.disabled:hover {
-    transform: none;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-}
-
-.menu-item.disabled::before {
-    display: none;
-}
-
-.menu-icon {
-    font-size: 3.5rem;
-    margin-bottom: 20px;
-    display: block;
-    transition: transform 0.3s ease;
-    position: relative;
-    z-index: 1;
-}
-
-.menu-item:hover .menu-icon {
-    transform: scale(1.1);
-}
-
-.menu-title {
-    font-size: 1.4rem;
-    font-weight: 500;
-    color: #333;
-    margin-bottom: 12px;
-    letter-spacing: 0.05em;
-    position: relative;
-    z-index: 1;
-}
-
-.menu-description {
-    color: #666;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    font-weight: 300;
-    position: relative;
-    z-index: 1;
-}
-
-.coming-soon {
-    background: #e9ecef;
     color: #6c757d;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 400;
-    margin-top: 20px;
-    display: inline-block;
-    position: relative;
-    z-index: 1;
 }
 
-.menu-footer {
-    animation: fadeInUp 0.8s ease-out;
-    animation-delay: 0.5s;
-    animation-fill-mode: both;
+.menu-item.disabled .coming-soon {
+    background: rgba(108, 117, 125, 0.2);
+    color: #6c757d;
 }
 
 .footer-text {
     color: #666;
-    font-size: 1rem;
-    font-weight: 300;
-    letter-spacing: 0.05em;
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* ホーム画面レスポンシブ対応 */
-@media (max-width: 768px) {
-    .fullscreen-menu {
-        padding: 10px;
-    }
-    
-    .welcome-title {
-        font-size: 2.5rem;
-    }
-    
-    .welcome-subtitle {
-        font-size: 1.2rem;
-    }
-    
-    .menu-grid {
-        grid-template-columns: 1fr;
-        gap: 18px;
-    }
-    
-    .menu-item {
-        padding: 25px 18px;
-    }
-    
-    .menu-icon {
-        font-size: 3rem;
-    }
-    
-    .menu-title {
-        font-size: 1.3rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .welcome-title {
-        font-size: 2rem;
-    }
-    
-    .menu-item {
-        padding: 20px 15px;
-    }
-    
-    .menu-icon {
-        font-size: 2.8rem;
-    }
-}
-
-/* S3ファイルリスト画面スタイル */
-.s3-file-list-container {
-    padding: 20px 0;
-    min-height: calc(100vh - 80px);
-}
-
+/* 写真一覧ページのテーマ固有スタイル */
 .page-header {
-    text-align: center;
-    margin-bottom: 40px;
-    padding: 40px 0;
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    border-radius: 16px;
-    margin-bottom: 40px;
 }
 
 .page-title {
-    font-size: 2.5rem;
-    font-weight: 300;
     color: #333;
-    margin-bottom: 10px;
-    letter-spacing: 0.1em;
     text-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .page-subtitle {
-    font-size: 1.2rem;
     color: #666;
-    font-weight: 300;
-    letter-spacing: 0.05em;
-}
-
-.main-content {
-    max-width: 1200px;
-    margin: 0 auto;
 }
 
 .section {
     background: #fff;
-    border-radius: 16px;
-    padding: 30px;
-    margin-bottom: 30px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-    transition: all 0.4s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 
 .section:hover {
-    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
 
 .section-title {
-    font-size: 1.8rem;
-    font-weight: 500;
     color: #333;
-    margin-bottom: 25px;
-    letter-spacing: 0.05em;
-    border-bottom: 2px solid #e9ecef;
-    padding-bottom: 15px;
-}
-
-.upload-form {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.file-input-wrapper {
-    flex: 1;
-    min-width: 200px;
 }
 
 .file-input {
-    width: 100%;
-    padding: 14px 16px;
-    border: 2px solid #e9ecef;
-    border-radius: 8px;
-    font-size: 16px;
     background: #fff;
-    transition: all 0.3s ease;
-    color: #495057;
+    border: 2px solid #e5e5e5;
+    color: #333;
 }
 
 .file-input:focus {
-    outline: none;
     border-color: #667eea;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    transform: translateY(-1px);
 }
 
 .file-input.readonly {
     background: #f8f9fa;
     color: #6c757d;
-    cursor: not-allowed;
-    border-color: #dee2e6;
 }
 
 .file-input.readonly:focus {
-    transform: none;
+    border-color: #e5e5e5;
     box-shadow: none;
 }
 
 .upload-btn {
-    padding: 14px 24px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    color: #fff;
 }
 
 .upload-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-}
-
-.upload-btn:active {
-    transform: translateY(0);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
 }
 
 .files-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+    background: #fff;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 
 .files-table th {
     background: #f8f9fa;
-    padding: 15px 12px;
-    text-align: left;
-    font-weight: 600;
     color: #333;
-    border-bottom: 2px solid #dee2e6;
+    border-bottom: 2px solid #e5e5e5;
 }
 
 .files-table td {
-    padding: 12px;
-    border-bottom: 1px solid #e9ecef;
-    vertical-align: middle;
+    border-bottom: 1px solid #f8f9fa;
+    color: #333;
 }
 
 .files-table tbody tr:hover {
@@ -764,150 +312,41 @@
 }
 
 .thumbnail {
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 8px;
-    border: 2px solid #e9ecef;
-    transition: all 0.3s ease;
+    border: 2px solid #e5e5e5;
 }
 
 .thumbnail:hover {
-    transform: scale(1.1);
     border-color: #667eea;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .file-name {
-    font-weight: 500;
     color: #333;
-    max-width: 200px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+}
+
+.file-name:hover {
+    color: #667eea;
 }
 
 .file-size {
     color: #666;
-    font-family: monospace;
 }
 
 .file-date {
-    color: #666;
-    font-size: 0.9rem;
+    color: #999;
 }
 
 .delete-btn {
-    padding: 8px 16px;
     background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    color: #fff;
 }
 
 .delete-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(220,53,69,0.3);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
 }
 
-.delete-btn:active {
-    transform: translateY(0);
-}
-
-.fade-in {
-    animation: fadeInUp 0.8s ease-out;
-    animation-fill-mode: both;
-}
-
-.upload-section { animation-delay: 0.1s; }
-.files-section { animation-delay: 0.2s; }
-
-/* S3ファイルリスト画面レスポンシブ対応 */
-@media (max-width: 768px) {
-    .s3-file-list-container {
-        padding: 10px 0;
-    }
-    
-    .page-header {
-        padding: 30px 20px;
-        margin-bottom: 30px;
-    }
-    
-    .page-title {
-        font-size: 2rem;
-    }
-    
-    .page-subtitle {
-        font-size: 1rem;
-    }
-    
-    .section {
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-    
-    .section-title {
-        font-size: 1.5rem;
-    }
-    
-    .upload-form {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .file-input-wrapper {
-        min-width: auto;
-    }
-    
-    .upload-btn {
-        width: 100%;
-    }
-    
-    .files-table {
-        font-size: 0.9rem;
-    }
-    
-    .thumbnail {
-        width: 50px;
-        height: 50px;
-    }
-    
-    .file-name {
-        max-width: 150px;
-    }
-}
-
-@media (max-width: 480px) {
-    .page-title {
-        font-size: 1.8rem;
-    }
-    
-    .section {
-        padding: 15px;
-    }
-    
-    .files-table th,
-    .files-table td {
-        padding: 8px 6px;
-    }
-    
-    .thumbnail {
-        width: 40px;
-        height: 40px;
-    }
-    
-    .file-name {
-        max-width: 100px;
-    }
-}
-
-/* プロフィール編集画面スタイル */
+/* プロフィール編集ページ */
 .profile-edit-container {
-    padding: 20px 0;
-    min-height: calc(100vh - 80px);
+    padding-top: 40px;
 }
 
 .edit-card {
@@ -915,41 +354,39 @@
     border-radius: 16px;
     padding: 40px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-    transition: all 0.4s ease;
+    transition: transform 0.3s ease;
 }
 
 .edit-card:hover {
-    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    transform: translateY(-4px);
 }
 
 .edit-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 40px;
+    gap: 20px;
+    margin-bottom: 30px;
     padding-bottom: 20px;
-    border-bottom: 2px solid #e9ecef;
+    border-bottom: 2px solid #f8f9fa;
 }
 
 .btn-back {
+    background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     gap: 8px;
-    color: #666;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    padding: 8px 16px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    border: 1px solid transparent;
 }
 
 .btn-back:hover {
-    color: #333;
-    background: #f8f9fa;
-    border-color: #dee2e6;
-    transform: translateX(-2px);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
 }
 
 .back-icon {
@@ -962,42 +399,40 @@
 }
 
 .profile-edit-form {
-    margin: 0;
+    max-width: 600px;
 }
 
 .form-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 25px;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 .form-group {
-    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .form-label {
+    font-weight: 500;
+    color: #333;
+    font-size: 14px;
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 10px;
-    font-weight: 500;
-    color: #333;
-    font-size: 15px;
 }
 
 .label-icon {
     font-size: 16px;
-    opacity: 0.7;
 }
 
 .help-text {
-    color: #6c757d;
-    font-size: 13px;
-    margin-top: 8px;
-    line-height: 1.4;
-    padding-left: 24px;
+    font-size: 12px;
+    color: #666;
     position: relative;
+    padding-left: 16px;
 }
 
 .help-text::before {
@@ -1009,164 +444,103 @@
 }
 
 .error-message {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    color: #721c24;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-top: 10px;
     display: flex;
     align-items: center;
-    gap: 6px;
-    color: #dc3545;
-    font-size: 13px;
-    margin-top: 8px;
-    padding: 8px 12px;
-    background: #f8d7da;
-    border-radius: 6px;
-    border-left: 3px solid #dc3545;
+    gap: 8px;
+    border-left: 4px solid #dc3545;
 }
 
 .error-icon {
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .form-actions {
     display: flex;
     gap: 15px;
     justify-content: flex-end;
-    padding-top: 30px;
-    border-top: 2px solid #e9ecef;
+    padding-top: 20px;
+    border-top: 2px solid #f8f9fa;
 }
 
 .btn-primary, .btn-secondary {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 14px 24px;
+    padding: 12px 24px;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
-    text-decoration: none;
     cursor: pointer;
     transition: all 0.3s ease;
     border: none;
-    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .btn-primary {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: #fff;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 .btn-secondary {
     background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
     color: #fff;
-    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
 }
 
 .btn-secondary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(108, 117, 125, 0.4);
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
 }
 
 .btn-icon {
-    font-size: 14px;
-}
-
-/* プロフィール編集画面レスポンシブ対応 */
-@media (max-width: 768px) {
-    .profile-edit-container {
-        padding: 10px 0;
-    }
-    
-    .edit-card {
-        padding: 30px 20px;
-    }
-    
-    .edit-header {
-        flex-direction: column;
-        gap: 15px;
-        align-items: stretch;
-    }
-    
-    .section-title {
-        font-size: 1.5rem;
-    }
-    
-    .form-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-    
-    .form-actions {
-        flex-direction: column;
-    }
-    
-    .btn-primary, .btn-secondary {
-        width: 100%;
-        justify-content: center;
-    }
-}
-
-@media (max-width: 480px) {
-    .edit-card {
-        padding: 25px 15px;
-    }
-    
-    .form-input {
-        padding: 12px 14px;
-        font-size: 15px;
-    }
-    
-    .btn-primary, .btn-secondary {
-        padding: 12px 20px;
-        font-size: 15px;
-    }
-}
-
-/* ページタイトル */
-.page-title {
-    font-size: 2.5rem;
-    font-weight: 300;
-    color: #333;
-    margin-bottom: 20px;
-    text-align: center;
-    letter-spacing: 0.05em;
+    font-size: 16px;
 }
 
 /* DataTables カスタマイズ */
 .dataTables_wrapper .dataTables_length,
-.dataTables_wrapper .dataTables_filter {
-    margin-bottom: 20px;
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    margin: 20px 0;
+    color: #666;
+    font-size: 14px;
 }
 
 .dataTables_wrapper .dataTables_length select,
 .dataTables_wrapper .dataTables_filter input {
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
     padding: 8px 12px;
+    margin-left: 8px;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button {
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 8px 12px;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
     margin: 0 2px;
+    padding: 8px 12px;
     background: #fff;
     color: #333;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-    background: #667eea;
-    color: white;
+    background: #f8f9fa;
     border-color: #667eea;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.current {
     background: #667eea;
-    color: white;
     border-color: #667eea;
+    color: #fff;
 }
 
 /* フォーム要素 */
@@ -1185,48 +559,195 @@
     width: 100%;
     padding: 12px 16px;
     border: 2px solid #e5e5e5;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 16px;
-    background: #fff;
-    transition: border-color 0.3s ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .form-input:focus {
     outline: none;
-    border-color: #333;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .form-btn {
-    background: #333;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: #fff;
     border: none;
     padding: 12px 24px;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 16px;
-    font-weight: 400;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    letter-spacing: 0.05em;
+    transition: all 0.3s ease;
 }
 
 .form-btn:hover {
-    background: #555;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 /* カード */
 .card {
     background: #fff;
-    border: 1px solid #e5e5e5;
-    border-radius: 8px;
-    padding: 30px;
-    margin-bottom: 30px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
 
 .card-title {
     font-size: 1.5rem;
-    font-weight: 400;
+    font-weight: 500;
     color: #333;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     letter-spacing: 0.05em;
+}
+
+/* 優先度表示 */
+.priority-urgent {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+.priority-high {
+    color: #fd7e14;
+    font-weight: 600;
+}
+
+.priority-normal {
+    color: #17a2b8;
+    font-weight: 600;
+}
+
+.priority-low {
+    color: #6c757d;
+    font-weight: 600;
+}
+
+/* レスポンシブ調整 */
+@media (max-width: 768px) {
+    .s3-file-list-container {
+        padding: 20px 0;
+    }
+    
+    .page-header {
+        padding: 30px 0;
+    }
+    
+    .page-title {
+        font-size: 2rem;
+    }
+    
+    .page-subtitle {
+        font-size: 1rem;
+    }
+    
+    .section {
+        padding: 20px;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+    }
+    
+    .upload-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .file-input-wrapper {
+        min-width: auto;
+    }
+    
+    .upload-btn {
+        align-self: flex-start;
+    }
+    
+    .files-table {
+        font-size: 14px;
+    }
+    
+    .thumbnail {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .file-name {
+        font-size: 14px;
+    }
+    
+    .profile-edit-container {
+        padding: 20px 0;
+    }
+    
+    .edit-card {
+        padding: 25px;
+    }
+    
+    .edit-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .section-title {
+        font-size: 1.3rem;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .btn-primary, .btn-secondary {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-title {
+        font-size: 1.8rem;
+    }
+    
+    .section {
+        padding: 15px;
+    }
+    
+    .files-table th,
+    .files-table td {
+        padding: 10px 8px;
+    }
+    
+    .thumbnail {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .file-name {
+        font-size: 13px;
+    }
+    
+    .edit-card {
+        padding: 20px;
+    }
+    
+    .form-input {
+        font-size: 14px;
+    }
+    
+    .btn-primary, .btn-secondary {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
 } 

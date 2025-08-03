@@ -1,8 +1,6 @@
-from django.urls import path, include, re_path
+from django.urls import path
 
 from . import views
-from django.conf import settings
-import debug_toolbar  # 追加
 
 app_name = "agri_app"
 
@@ -12,7 +10,6 @@ urlpatterns = [
     path("user_logout", views.user_logout, name="user_logout"),
     path("home", views.home, name="home"),
     path("s3_file_list", views.s3_file_list_view, name="s3_file_list"),
-    # path('', views.s3_file_list_view, name='s3_file_list'),
     
     # ユーザー管理機能
     path("users", views.user_list, name="user_list"),
@@ -39,4 +36,14 @@ urlpatterns = [
     path("groups/<int:group_id>/edit", views.group_edit, name="group_edit"),
     path("groups/<int:group_id>/delete", views.group_delete, name="group_delete"),
     path("groups/<int:group_id>/members", views.group_members, name="group_members"),
+    
+    # お知らせ管理機能
+    path("announcements", views.announcement_list, name="announcement_list"),
+    path("announcements/create", views.announcement_create, name="announcement_create"),
+    path("announcements/<int:announcement_id>", views.announcement_detail, name="announcement_detail"),
+    path("announcements/<int:announcement_id>/edit", views.announcement_edit, name="announcement_edit"),
+    path("announcements/<int:announcement_id>/delete", views.announcement_delete, name="announcement_delete"),
+    
+    # スタイル設定管理機能
+    path("style_settings", views.style_settings, name="style_settings"),
 ]

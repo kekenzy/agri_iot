@@ -1,4 +1,5 @@
 black
+coverage
 cryptography
 django>=4.2,<4.3
 django[argon2]
@@ -15,3 +16,4 @@ python-json-logger
 pyyaml
 redis
 tzdata
+woothee

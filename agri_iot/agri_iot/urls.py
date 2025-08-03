@@ -19,13 +19,11 @@ from django.urls import path, include
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from agri_app import views
 from django.conf import settings
-import debug_toolbar  # 追加
-
+import debug_toolbar
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("agri_app/", include("agri_app.urls")),
-    # path("__debug__/", include("debug_toolbar.urls")),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
@@ -33,8 +31,6 @@ urlpatterns += staticfiles_urlpatterns()
 handler404 = views.page_not_found
 handler500 = views.server_error
 
-# 追加  '__debug__/'は他のURLに影響を及ぼさないならなんでも良い
+# デバッグツールバー
 if settings.DEBUG:
-    # デバッグツールバー
-    print('debug true')
     urlpatterns += [path('__debug__/', include(debug_toolbar.urls))]

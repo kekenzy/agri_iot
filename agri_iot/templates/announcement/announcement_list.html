@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}お知らせ管理{% endblock %}
+
+{% block content %}
+<div class="management-container">
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">お知らせ管理</h1>
+            <p class="page-subtitle">お知らせの作成、編集、削除を行います</p>
+        </div>
+        <div class="header-actions">
+            <a href="{% url 'agri_app:announcement_create' %}" class="btn-primary">
+                <span class="btn-icon">➕</span>
+                新規作成
+            </a>
+        </div>
+    </div>
+
+    <div class="search-section">
+        <div class="search-header">
+            <h2 class="search-title">検索条件</h2>
+            <p class="search-description">お知らせを絞り込んで表示します</p>
+        </div>
+        <form method="get" class="search-form">
+            <div class="search-grid">
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="label-icon">📝</span>
+                        タイトル
+                    </label>
+                    {{ search_form.title }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="label-icon">🏷️</span>
+                        優先度
+                    </label>
+                    {{ search_form.priority }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="label-icon">📅</span>
+                        開始日
+                    </label>
+                    {{ search_form.start_date }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="label-icon">📅</span>
+                        終了日
+                    </label>
+                    {{ search_form.end_date }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="label-icon">👥</span>
+                        対象グループ
+                    </label>
+                    {{ search_form.target_type }}
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-secondary">
+                        <span class="btn-icon">🔍</span>
+                        検索
+                    </button>
+                    <a href="{% url 'agri_app:announcement_list' %}" class="btn-secondary">
+                        <span class="btn-icon">🔄</span>
+                        リセット
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="card">
+        <div class="card-title">お知らせ一覧</div>
+        {% if announcements %}
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>タイトル</th>
+                    <th>優先度</th>
+                    <th>表示期間</th>
+                    <th>対象グループ</th>
+                    <th>ステータス</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for announcement in announcements %}
+                <tr>
+                    <td>
+                        <strong>{{ announcement.title }}</strong>
+                        {% if announcement.content|length > 50 %}
+                            <br><small>{{ announcement.content|truncatechars:50 }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if announcement.priority == 'urgent' %}
+                            <span class="badge badge-urgent">緊急</span>
+                        {% elif announcement.priority == 'high' %}
+                            <span class="badge badge-high">高</span>
+                        {% elif announcement.priority == 'normal' %}
+                            <span class="badge badge-normal">通常</span>
+                        {% elif announcement.priority == 'low' %}
+                            <span class="badge badge-low">低</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ announcement.start_date|date:"Y/m/d" }} ～ {{ announcement.end_date|date:"Y/m/d" }}
+                    </td>
+                    <td>
+                        {% if announcement.is_all_groups %}
+                            <span class="badge badge-all-groups">全てのグループ</span>
+                        {% elif announcement.target_groups.all %}
+                            {% for group in announcement.target_groups.all %}
+                                <span class="badge badge-group">{{ group.name }}</span>
+                            {% endfor %}
+                        {% else %}
+                            <span class="badge badge-inactive">指定なし</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if announcement.is_active %}
+                            <span class="badge badge-active">有効</span>
+                        {% else %}
+                            <span class="badge badge-inactive">無効</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="{% url 'agri_app:announcement_detail' announcement.id %}" class="btn-detail">
+                                <span class="btn-icon">👁️</span>
+                                詳細
+                            </a>
+                            <a href="{% url 'agri_app:announcement_edit' announcement.id %}" class="btn-edit">
+                                <span class="btn-icon">✏️</span>
+                                編集
+                            </a>
+                            <a href="{% url 'agri_app:announcement_delete' announcement.id %}" class="btn-delete">
+                                <span class="btn-icon">🗑️</span>
+                                削除
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if is_paginated %}
+        <div class="pagination-section">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1{% if request.GET.title %}&title={{ request.GET.title }}{% endif %}{% if request.GET.priority %}&priority={{ request.GET.priority }}{% endif %}{% if request.GET.start_date %}&start_date={{ request.GET.start_date }}{% endif %}{% if request.GET.end_date %}&end_date={{ request.GET.end_date }}{% endif %}{% if request.GET.target_type %}&target_type={{ request.GET.target_type }}{% endif %}">« 最初</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.title %}&title={{ request.GET.title }}{% endif %}{% if request.GET.priority %}&priority={{ request.GET.priority }}{% endif %}{% if request.GET.start_date %}&start_date={{ request.GET.start_date }}{% endif %}{% if request.GET.end_date %}&end_date={{ request.GET.end_date }}{% endif %}{% if request.GET.target_type %}&target_type={{ request.GET.target_type }}{% endif %}">‹ 前へ</a>
+                    </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <li class="page-item">
+                            <span class="page-link current">{{ num }}</span>
+                        </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}{% if request.GET.title %}&title={{ request.GET.title }}{% endif %}{% if request.GET.priority %}&priority={{ request.GET.priority }}{% endif %}{% if request.GET.start_date %}&start_date={{ request.GET.start_date }}{% endif %}{% if request.GET.end_date %}&end_date={{ request.GET.end_date }}{% endif %}{% if request.GET.target_type %}&target_type={{ request.GET.target_type }}{% endif %}">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.title %}&title={{ request.GET.title }}{% endif %}{% if request.GET.priority %}&priority={{ request.GET.priority }}{% endif %}{% if request.GET.start_date %}&start_date={{ request.GET.start_date }}{% endif %}{% if request.GET.end_date %}&end_date={{ request.GET.end_date }}{% endif %}{% if request.GET.target_type %}&target_type={{ request.GET.target_type }}{% endif %}">次へ ›</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.title %}&title={{ request.GET.title }}{% endif %}{% if request.GET.priority %}&priority={{ request.GET.priority }}{% endif %}{% if request.GET.start_date %}&start_date={{ request.GET.start_date }}{% endif %}{% if request.GET.end_date %}&end_date={{ request.GET.end_date }}{% endif %}{% if request.GET.target_type %}&target_type={{ request.GET.target_type }}{% endif %}">最後 »</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+        {% endif %}
+        {% else %}
+        <div class="no-data">
+            <p>お知らせがありません。</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

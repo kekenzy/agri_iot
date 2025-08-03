@@ -8,39 +8,42 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 # ALLOWED_HOSTS += ['127.0.0.1', 'localhost']
 
-INSTALLED_APPS += [
-  'debug_toolbar',
-]
+# Debug Toolbar設定
+import sys
+if 'test' not in sys.argv:
+    # テスト実行時以外はDebug Toolbarを有効化
+    INSTALLED_APPS += [
+        'debug_toolbar',
+    ]
 
-# 以下有効にすると、500エラーなる
-MIDDLEWARE += [
-  'debug_toolbar.middleware.DebugToolbarMiddleware',
-]
+    # 以下有効にすると、500エラーなる
+    MIDDLEWARE += [
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    ]
 
-DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK': lambda x: True,
-    'SHOW_TEMPLATE_CONTEXT': True,
-    'IS_RUNNING_TESTS': True,
-}
-
+    DEBUG_TOOLBAR_CONFIG = {
+        'SHOW_TOOLBAR_CALLBACK': lambda x: True,
+        'SHOW_TEMPLATE_CONTEXT': True,
+        'IS_RUNNING_TESTS': True,
+    }
+else:
+    # テスト実行時はDebug Toolbarを完全に無効化
+    DEBUG_TOOLBAR_CONFIG = {
+        'IS_RUNNING_TESTS': True,
+    }
 
 # 追加
-if DEBUG:
+if DEBUG and 'test' not in sys.argv:
   INTERNAL_IPS = ['127.0.0.1', 'localhost']
 
-  DEBUG_TOOLBAR_CONFIG = {
-    "SHOW_TOOLBAR_CALLBACK" : lambda request: True,
-    'IS_RUNNING_TESTS': True,
-  }
-
-# 開発環境用メール設定（Gmail SMTP）
+# 開発環境用メール設定（MailHog）
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'your-email@gmail.com')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'your-app-password')
-DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'your-email@gmail.com')
+EMAIL_HOST = 'mailhog'  # Dockerサービス名
+EMAIL_PORT = 1025       # MailHogのSMTPポート
+EMAIL_USE_TLS = False   # MailHogはTLSを使用しない
+EMAIL_HOST_USER = ''    # MailHogは認証不要
+EMAIL_HOST_PASSWORD = '' # MailHogは認証不要
+DEFAULT_FROM_EMAIL = 'noreply@example.com'
 
 # 開発環境用静的ファイル設定
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
@@ -64,14 +67,14 @@ CACHES = {
     }
 }
 
-# 開発環境用データベース設定（PostgreSQL）
+# Docker環境用データベース設定（PostgreSQL）
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'agri_db',
         'USER': 'agri_user',
         'PASSWORD': 'agri_user',
-        'HOST': 'db',
+        'HOST': 'db',  # Docker環境ではサービス名を使用
         'PORT': '5432',
     }
 }

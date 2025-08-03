@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if announcement %}お知らせ編集{% else %}お知らせ作成{% endif %}{% endblock %}
+
+{% block content %}
+<div class="management-container">
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">{% if announcement %}お知らせ編集{% else %}お知らせ作成{% endif %}</h1>
+            <p class="page-subtitle">{% if announcement %}お知らせの内容を編集します{% else %}新しいお知らせを作成します{% endif %}</p>
+        </div>
+        <div class="header-actions">
+            <a href="{% url 'agri_app:announcement_list' %}" class="btn-secondary">
+                <span class="btn-icon">←</span>
+                戻る
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <form method="post" class="announcement-form">
+            {% csrf_token %}
+            
+            <div class="form-section">
+                <h2 class="section-title">基本情報</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">
+                            タイトル <span class="required">*</span>
+                        </label>
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                            <div class="error-message">{{ form.title.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">
+                            優先度 <span class="required">*</span>
+                        </label>
+                        {{ form.priority }}
+                        {% if form.priority.errors %}
+                            <div class="error-message">{{ form.priority.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title">お知らせ内容</h2>
+                <div class="form-group full-width">
+                    <label class="form-label">
+                        内容 <span class="required">*</span>
+                    </label>
+                    {{ form.content }}
+                    {% if form.content.errors %}
+                        <div class="error-message">{{ form.content.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title">表示期間</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">
+                            開始日時 <span class="required">*</span>
+                        </label>
+                        {{ form.start_date }}
+                        {% if form.start_date.errors %}
+                            <div class="error-message">{{ form.start_date.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">
+                            終了日時 <span class="required">*</span>
+                        </label>
+                        {{ form.end_date }}
+                        {% if form.end_date.errors %}
+                            <div class="error-message">{{ form.end_date.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title">対象グループ</h2>
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" id="is_all_groups" name="is_all_groups" {% if form.is_all_groups.value %}checked{% endif %}>
+                        全てのグループに表示
+                    </label>
+                </div>
+                
+                <div class="form-group" id="target_groups_container">
+                    <label class="form-label">
+                        対象グループ
+                    </label>
+                    {{ form.target_groups }}
+                    {% if form.target_groups.errors %}
+                        <div class="error-message">{{ form.target_groups.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title">表示設定</h2>
+                <div class="form-group">
+                    <label class="form-label">
+                        {{ form.is_active }}
+                        有効にする
+                    </label>
+                    {% if form.is_active.errors %}
+                        <div class="error-message">{{ form.is_active.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">
+                    <span class="btn-icon">💾</span>
+                    {% if announcement %}更新{% else %}作成{% endif %}
+                </button>
+                <a href="{% url 'agri_app:announcement_list' %}" class="btn-secondary">
+                    <span class="btn-icon">❌</span>
+                    キャンセル
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const isAllGroupsCheckbox = document.getElementById('is_all_groups');
+    const targetGroupsContainer = document.getElementById('target_groups_container');
+    const targetGroupsSelect = targetGroupsContainer.querySelector('select');
+
+    function toggleTargetGroups() {
+        if (isAllGroupsCheckbox.checked) {
+            targetGroupsContainer.style.opacity = '0.5';
+            targetGroupsContainer.style.pointerEvents = 'none';
+            // 選択をクリア
+            Array.from(targetGroupsSelect.options).forEach(option => {
+                option.selected = false;
+            });
+        } else {
+            targetGroupsContainer.style.opacity = '1';
+            targetGroupsContainer.style.pointerEvents = 'auto';
+        }
+    }
+
+    isAllGroupsCheckbox.addEventListener('change', toggleTargetGroups);
+    toggleTargetGroups(); // 初期状態を設定
+});
+</script>
+{% endblock %} 

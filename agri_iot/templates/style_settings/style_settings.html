@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+
+{% block title %}スタイル設定管理{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="section">
+        <h1 class="section-title">🎨 スタイル設定管理</h1>
+        
+        <div class="style-info">
+            <h2>現在のスタイル: <span class="current-style">{{ current_style|title }}</span></h2>
+            <p>管理画面でスタイル設定を変更できます。</p>
+        </div>
+        
+        {% if style_settings_list %}
+        <div class="style-settings-list">
+            <h3>利用可能なスタイル設定</h3>
+            <div class="settings-grid">
+                {% for setting in style_settings_list %}
+                <div class="setting-card {% if setting.is_default %}active{% endif %}">
+                    <div class="setting-header">
+                        <h4>{{ setting.name }}</h4>
+                        {% if setting.is_default %}
+                        <span class="default-badge">デフォルト</span>
+                        {% endif %}
+                    </div>
+                    <div class="setting-content">
+                        <p class="style-type">{{ setting.get_active_style_display }}</p>
+                        {% if setting.description %}
+                        <p class="description">{{ setting.description }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="setting-actions">
+                        {% if not setting.is_default %}
+                        <form method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="style_id" value="{{ setting.id }}">
+                            <button type="submit" class="btn-primary">デフォルトに設定</button>
+                        </form>
+                        {% else %}
+                        <span class="current-setting">現在の設定</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <div class="no-settings">
+            <p>スタイル設定が登録されていません。</p>
+            <p>管理画面でスタイル設定を作成してください。</p>
+        </div>
+        {% endif %}
+        
+        <div class="admin-link">
+            <h3>管理画面での設定</h3>
+            <p>より詳細な設定や新しいスタイル設定の作成は管理画面で行えます。</p>
+            <a href="{% url 'admin:agri_app_stylesettings_changelist' %}" class="btn-secondary">管理画面を開く</a>
+        </div>
+    </div>
+</div>
+
+<style>
+.style-info {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.current-style {
+    color: #4a9eff;
+    font-weight: bold;
+}
+
+.style-settings-list {
+    margin-bottom: 40px;
+}
+
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.setting-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.setting-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.setting-card.active {
+    border-color: #4a9eff;
+    background: rgba(74, 158, 255, 0.1);
+}
+
+.setting-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.setting-header h4 {
+    margin: 0;
+    color: #333;
+}
+
+.default-badge {
+    background: #4a9eff;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.style-type {
+    font-weight: bold;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.description {
+    color: #777;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.setting-actions {
+    text-align: center;
+}
+
+.current-setting {
+    color: #4a9eff;
+    font-weight: bold;
+}
+
+.admin-link {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.admin-link h3 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.admin-link p {
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.no-settings {
+    text-align: center;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.no-settings p {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+    .settings-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .setting-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
+</style>
+{% endblock %} 

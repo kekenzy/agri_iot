@@ -14,25 +14,50 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.urls import reverse
+from django.utils import timezone
 
-from .models import UserProfile, GroupProfile
+from .models import UserProfile, GroupProfile, StyleSettings, Announcement
 from .model.form.user_form import UserSearchForm, UserForm
 from .model.form.user_management_form import UserCreateForm, UserEditForm
 from .model.form.group_form import GroupSearchForm, GroupForm, GroupProfileForm, GroupMemberForm
 from .model.form.login_user_form import LoginForm
 from .model.form.profile_form import ProfileEditForm, ProfilePasswordChangeForm
+from .model.form.announcement_form import AnnouncementForm, AnnouncementSearchForm
 from .utils.aws_s3 import list_s3_files, upload_file_to_s3, delete_file_from_s3
 from .model.form.file_form import UploadFileForm
 
 
 def home(request):
-    return render(request, "home.html")
+    # 現在表示すべきお知らせを取得
+    now = timezone.now()
+    announcements = Announcement.objects.filter(
+        is_active=True,
+        start_date__lte=now,
+        end_date__gte=now
+    ).order_by('-priority', '-start_date')
+    
+    # ユーザーが所属するグループのお知らせのみをフィルタリング
+    if request.user.is_authenticated:
+        visible_announcements = []
+        for announcement in announcements:
+            if announcement.is_visible_to_user(request.user):
+                visible_announcements.append(announcement)
+        announcements = visible_announcements
+    else:
+        # 未ログインユーザーには何も表示しない
+        announcements = []
+    
+    # 最新5件まで表示（フィルタリング後にスライス）
+    announcements = announcements[:5]
+    
+    return render(request, "home.html", {
+        'announcements': announcements
+    })
 
 def page_not_found(request, exception):
     return render(request, '404.html', status=404)
 
 def server_error(request):
-    print("server error")
     return render(request, '500.html', status=500)
 
 def user_login(request):
@@ -41,34 +66,24 @@ def user_login(request):
         username_or_email = login_form.cleaned_data.get('username')
         password = login_form.cleaned_data.get('password')
         
-        # デバッグ用：入力値をログ出力
-        print(f"ログイン試行: username_or_email={username_or_email}")
-        
         # まずユーザー名で認証を試行
         user = authenticate(username=username_or_email, password=password)
-        print(f"ユーザー名での認証結果: {user}")
         
         # ユーザー名で認証できない場合、メールアドレスで検索して認証を試行
         if user is None:
             try:
                 user_obj = User.objects.get(email__iexact=username_or_email)
-                print(f"メールアドレスでユーザー発見: {user_obj.username}")
                 user = authenticate(username=user_obj.username, password=password)
-                print(f"メールアドレス経由での認証結果: {user}")
             except User.DoesNotExist:
-                print(f"メールアドレスでユーザーが見つかりません: {username_or_email}")
                 user = None
         
         if user:
             if user.is_active:
                 login(request, user)
-                print(f"ログイン成功: {user.username}")
                 return redirect('agri_app:home')
             else:
-                print(f"アカウントが非アクティブ: {user.username}")
                 messages.error(request, 'アカウントがアクティブではありません。')
         else:
-            print("認証失敗")
             messages.error(request, 'ユーザー名またはパスワードが間違っています。')
 
     return render(request, 'user/login.html', context={
@@ -299,8 +314,6 @@ def password_reset(request):
                 # メール送信エラーの場合
                 if settings.DEBUG:
                     # 開発環境ではコンソールに出力
-                    print(f"メール送信エラー（開発環境）: {e}")
-                    print(f"リセットURL: {reset_url}")
                     messages.success(request, f'開発環境: リセットリンクをコンソールに出力しました。URL: {reset_url}')
                     return redirect('agri_app:password_reset_done')
                 else:
@@ -550,3 +563,186 @@ def group_members(request, group_id):
         'member_form': member_form,
     }
     return render(request, 'group_management/group_members.html', context)
+
+@login_required
+def announcement_list(request):
+    """お知らせ一覧表示"""
+    # 権限チェック: スーパーユーザーのみアクセス可能
+    if not request.user.is_superuser:
+        messages.error(request, 'この機能にアクセスする権限がありません。')
+        return redirect('agri_app:home')
+    
+    search_form = AnnouncementSearchForm(request.GET or None)
+    announcements = Announcement.objects.all()
+    
+    if search_form.is_valid():
+        keyword = search_form.cleaned_data.get('keyword')
+        priority = search_form.cleaned_data.get('priority')
+        status = search_form.cleaned_data.get('status')
+        target_type = search_form.cleaned_data.get('target_type')
+        target_group = search_form.cleaned_data.get('target_group')
+        
+        if keyword:
+            announcements = announcements.filter(
+                Q(title__icontains=keyword) | Q(content__icontains=keyword)
+            )
+        
+        if priority:
+            announcements = announcements.filter(priority=priority)
+        
+        if target_type:
+            if target_type == 'all_groups':
+                announcements = announcements.filter(is_all_groups=True)
+            elif target_type == 'specific_groups':
+                announcements = announcements.filter(is_all_groups=False)
+        
+        if target_group:
+            announcements = announcements.filter(target_groups=target_group)
+        
+        if status:
+            now = timezone.now()
+            if status == 'active':
+                announcements = announcements.filter(
+                    is_active=True,
+                    start_date__lte=now,
+                    end_date__gte=now
+                )
+            elif status == 'inactive':
+                announcements = announcements.filter(is_active=False)
+            elif status == 'expired':
+                announcements = announcements.filter(end_date__lt=now)
+            elif status == 'future':
+                announcements = announcements.filter(start_date__gt=now)
+    
+    # ページネーション
+    paginator = Paginator(announcements, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'announcement/announcement_list.html', {
+        'page_obj': page_obj,
+        'search_form': search_form
+    })
+
+
+@login_required
+def announcement_create(request):
+    """お知らせ作成"""
+    # 権限チェック: スーパーユーザーのみアクセス可能
+    if not request.user.is_superuser:
+        messages.error(request, 'この機能にアクセスする権限がありません。')
+        return redirect('agri_app:home')
+    
+    if request.method == 'POST':
+        form = AnnouncementForm(request.POST)
+        if form.is_valid():
+            announcement = form.save(commit=False)
+            announcement.created_by = request.user
+            announcement.save()
+            form.save_m2m()  # ManyToManyフィールドを保存
+            messages.success(request, 'お知らせが正常に作成されました。')
+            return redirect('agri_app:announcement_list')
+        else:
+            messages.error(request, 'お知らせの作成に失敗しました。')
+    else:
+        form = AnnouncementForm()
+    
+    return render(request, 'announcement/announcement_form.html', {
+        'form': form,
+        'title': 'お知らせ作成'
+    })
+
+
+@login_required
+def announcement_detail(request, announcement_id):
+    """お知らせ詳細表示"""
+    # 権限チェック: スーパーユーザーのみアクセス可能
+    if not request.user.is_superuser:
+        messages.error(request, 'この機能にアクセスする権限がありません。')
+        return redirect('agri_app:home')
+    
+    announcement = get_object_or_404(Announcement, pk=announcement_id)
+    
+    return render(request, 'announcement/announcement_detail.html', {
+        'announcement': announcement
+    })
+
+
+@login_required
+def announcement_edit(request, announcement_id):
+    """お知らせ編集"""
+    # 権限チェック: スーパーユーザーのみアクセス可能
+    if not request.user.is_superuser:
+        messages.error(request, 'この機能にアクセスする権限がありません。')
+        return redirect('agri_app:home')
+    
+    announcement = get_object_or_404(Announcement, pk=announcement_id)
+    
+    if request.method == 'POST':
+        form = AnnouncementForm(request.POST, instance=announcement)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'お知らせが正常に更新されました。')
+            return redirect('agri_app:announcement_list')
+        else:
+            messages.error(request, 'お知らせの更新に失敗しました。')
+    else:
+        form = AnnouncementForm(instance=announcement)
+    
+    return render(request, 'announcement/announcement_form.html', {
+        'form': form,
+        'announcement': announcement,
+        'title': 'お知らせ編集'
+    })
+
+
+@login_required
+def announcement_delete(request, announcement_id):
+    """お知らせ削除"""
+    # 権限チェック: スーパーユーザーのみアクセス可能
+    if not request.user.is_superuser:
+        messages.error(request, 'この機能にアクセスする権限がありません。')
+        return redirect('agri_app:home')
+    
+    announcement = get_object_or_404(Announcement, pk=announcement_id)
+    
+    if request.method == 'POST':
+        announcement.delete()
+        messages.success(request, 'お知らせが正常に削除されました。')
+        return redirect('agri_app:announcement_list')
+    
+    return render(request, 'announcement/announcement_confirm_delete.html', {
+        'announcement': announcement
+    })
+
+
+@login_required
+def style_settings(request):
+    """スタイル設定管理ビュー"""
+    # 権限チェック: スーパーユーザーのみアクセス可能
+    if not request.user.is_superuser:
+        messages.error(request, 'このページにアクセスする権限がありません。')
+        return redirect('agri_app:home')
+    
+    if request.method == 'POST':
+        # スタイル設定の更新
+        style_id = request.POST.get('style_id')
+        if style_id:
+            try:
+                style_setting = StyleSettings.objects.get(id=style_id)
+                style_setting.is_default = True
+                style_setting.save()
+                messages.success(request, f'スタイル設定「{style_setting.name}」をデフォルトに設定しました。')
+            except StyleSettings.DoesNotExist:
+                messages.error(request, '指定されたスタイル設定が見つかりません。')
+        else:
+            messages.error(request, 'スタイル設定が指定されていません。')
+    
+    # 現在のスタイル設定を取得
+    current_style = StyleSettings.get_active_style()
+    style_settings_list = StyleSettings.objects.all().order_by('-is_default', 'name')
+    
+    return render(request, 'style_settings/style_settings.html', {
+        'current_style': current_style,
+        'style_settings_list': style_settings_list
+    })

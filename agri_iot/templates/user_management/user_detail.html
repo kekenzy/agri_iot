@@ -1,650 +1,101 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
+
 {% block title %}ユーザー詳細{% endblock %}
 
 {% block content %}
-<div class="user-detail-container">
-    <div class="detail-card">
-        <div class="detail-header">
+<div class="management-container">
+    <div class="page-header">
+        <div class="header-content">
             <h1 class="page-title">ユーザー詳細</h1>
-            <div class="header-actions">
-                <a href="{% url 'agri_app:user_edit' user_detail.id %}" class="btn-edit">編集</a>
-                <a href="{% url 'agri_app:user_list' %}" class="btn-back">← 一覧に戻る</a>
-            </div>
+            <p class="page-subtitle">ユーザーの詳細情報を表示します</p>
         </div>
+        <div class="header-actions">
+            <a href="{% url 'agri_app:user_edit' user_detail.id %}" class="btn-primary">
+                <span class="btn-icon">✏️</span>
+                編集
+            </a>
+            <a href="{% url 'agri_app:user_list' %}" class="btn-secondary">
+                <span class="btn-icon">←</span>
+                戻る
+            </a>
+        </div>
+    </div>
 
-        <div class="detail-content">
-            <div class="detail-section">
-                <h3 class="section-title">基本情報</h3>
-                <div class="detail-grid">
-                    <div class="detail-item">
-                        <label class="detail-label">ユーザー名</label>
-                        <div class="detail-value">{{ user_detail.username }}</div>
-                    </div>
-                    
-                    <div class="detail-item">
-                        <label class="detail-label">氏名</label>
-                        <div class="detail-value">{{ user_detail.first_name|default:"未設定" }}</div>
-                    </div>
-                    
-                    <div class="detail-item">
-                        <label class="detail-label">メールアドレス</label>
-                        <div class="detail-value">{{ user_detail.email|default:"未設定" }}</div>
-                    </div>
-                    
-                    <div class="detail-item">
-                        <label class="detail-label">登録日</label>
-                        <div class="detail-value">{{ user_detail.date_joined|date:"Y年m月d日 H:i" }}</div>
-                    </div>
-                </div>
+    <div class="card">
+        <div class="card-title">基本情報</div>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <span class="detail-label">ユーザー名</span>
+                <span class="detail-value">{{ user_detail.username }}</span>
             </div>
-
-            <div class="detail-section">
-                <h3 class="section-title">権限・ステータス</h3>
-                <div class="detail-grid">
-                    <div class="detail-item">
-                        <label class="detail-label">権限</label>
-                        <div class="detail-value">
-                            {% if user_detail.is_superuser %}
-                                <span class="badge badge-superuser">スーパーユーザー</span>
-                            {% elif user_detail.is_staff %}
-                                <span class="badge badge-admin">管理者</span>
-                            {% else %}
-                                <span class="badge badge-user">一般</span>
-                            {% endif %}
-                        </div>
-                    </div>
-                    
-                    <div class="detail-item">
-                        <label class="detail-label">ステータス</label>
-                        <div class="detail-value">
-                            {% if user_detail.is_active %}
-                                <span class="badge badge-active">アクティブ</span>
-                            {% else %}
-                                <span class="badge badge-inactive">非アクティブ</span>
-                            {% endif %}
-                        </div>
-                    </div>
-                    
-                    <div class="detail-item">
-                        <label class="detail-label">最終ログイン</label>
-                        <div class="detail-value">
-                            {% if user_detail.last_login %}
-                                {{ user_detail.last_login|date:"Y年m月d日 H:i" }}
-                            {% else %}
-                                未ログイン
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
+            <div class="detail-item">
+                <span class="detail-label">氏名</span>
+                <span class="detail-value">{{ user_detail.first_name|default:"未設定" }}</span>
             </div>
-
-            <div class="detail-section">
-                <h3 class="section-title">権限詳細</h3>
-                <div class="permission-list">
-                    <div class="permission-item">
-                        <span class="permission-label">管理者権限 (is_staff)</span>
-                        <span class="permission-value {% if user_detail.is_staff %}active{% else %}inactive{% endif %}">
-                            {% if user_detail.is_staff %}有効{% else %}無効{% endif %}
-                        </span>
-                    </div>
-                    
-                    <div class="permission-item">
-                        <span class="permission-label">スーパーユーザー権限 (is_superuser)</span>
-                        <span class="permission-value {% if user_detail.is_superuser %}active{% else %}inactive{% endif %}">
-                            {% if user_detail.is_superuser %}有効{% else %}無効{% endif %}
-                        </span>
-                    </div>
-                    
-                    <div class="permission-item">
-                        <span class="permission-label">アカウント有効 (is_active)</span>
-                        <span class="permission-value {% if user_detail.is_active %}active{% else %}inactive{% endif %}">
-                            {% if user_detail.is_active %}有効{% else %}無効{% endif %}
-                        </span>
-                    </div>
-                </div>
+            <div class="detail-item">
+                <span class="detail-label">メールアドレス</span>
+                <span class="detail-value">{{ user_detail.email|default:"未設定" }}</span>
             </div>
-
-            <div class="detail-section">
-                <h3 class="section-title">🏷️ 所属グループ</h3>
-                <div class="group-info">
-                    <div class="group-stats">
-                        <div class="stat-item">
-                            <span class="stat-number">{{ user_detail.groups.count }}</span>
-                            <span class="stat-label">所属グループ数</span>
-                        </div>
-                    </div>
-                    
-                    {% if user_detail.groups.all %}
-                        <div class="group-list">
-                            <h4>グループ一覧</h4>
-                            <div class="group-grid">
-                                {% for group in user_detail.groups.all %}
-                                <div class="group-item">
-                                    <div class="group-header">
-                                        <span class="group-color" style="background-color: {{ group.groupprofile.color|default:'#667eea' }}"></span>
-                                        <div class="group-info">
-                                            <div class="group-name">{{ group.name }}</div>
-                                            {% if group.groupprofile.description %}
-                                                <div class="group-description">{{ group.groupprofile.description|truncatechars:50 }}</div>
-                                            {% endif %}
-                                        </div>
-                                        <div class="group-status">
-                                            {% if group.groupprofile.is_active %}
-                                                <span class="status-badge active">アクティブ</span>
-                                            {% else %}
-                                                <span class="status-badge inactive">非アクティブ</span>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="group-actions">
-                                        <a href="{% url 'agri_app:group_detail' group.id %}" class="group-link">
-                                            <span class="link-icon">👁️</span>
-                                            詳細を見る
-                                        </a>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
+            <div class="detail-item">
+                <span class="detail-label">権限</span>
+                <span class="detail-value">
+                    {% if user_detail.is_superuser %}
+                        <span class="badge badge-superuser">スーパーユーザー</span>
+                    {% elif user_detail.is_staff %}
+                        <span class="badge badge-admin">管理者</span>
                     {% else %}
-                        <div class="no-groups">
-                            <div class="no-groups-icon">🏷️</div>
-                            <h4>所属グループなし</h4>
-                            <p>このユーザーはまだどのグループにも所属していません。</p>
-                            <a href="{% url 'agri_app:group_list' %}" class="btn-link">
-                                <span class="link-icon">➕</span>
-                                グループを作成
-                            </a>
-                        </div>
+                        <span class="badge badge-user">一般</span>
                     {% endif %}
-                </div>
+                </span>
             </div>
         </div>
+    </div>
 
-        <div class="detail-actions">
-            <a href="{% url 'agri_app:user_edit' user_detail.id %}" class="btn-primary">編集</a>
-            <a href="{% url 'agri_app:user_delete' user_detail.id %}" class="btn-danger">削除</a>
-            <a href="{% url 'agri_app:user_list' %}" class="btn-secondary">一覧に戻る</a>
+    <div class="card">
+        <div class="card-title">アカウント情報</div>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <span class="detail-label">登録日</span>
+                <span class="detail-value">{{ user_detail.date_joined|date:"Y年m月d日 H:i" }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">最終ログイン</span>
+                <span class="detail-value">
+                    {% if user_detail.last_login %}
+                        {{ user_detail.last_login|date:"Y年m月d日 H:i" }}
+                    {% else %}
+                        未ログイン
+                    {% endif %}
+                </span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">ステータス</span>
+                <span class="detail-value">
+                    {% if user_detail.is_active %}
+                        <span class="badge badge-active">アクティブ</span>
+                    {% else %}
+                        <span class="badge badge-inactive">非アクティブ</span>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">所属グループ</div>
+        <div class="detail-item">
+            <span class="detail-label">グループ</span>
+            <span class="detail-value">
+                {% if user_detail.groups.all %}
+                    {% for group in user_detail.groups.all %}
+                        <span class="badge badge-group">{{ group.name }}</span>
+                    {% endfor %}
+                {% else %}
+                    <span class="badge badge-inactive">所属グループなし</span>
+                {% endif %}
+            </span>
         </div>
     </div>
 </div>
-
-<style>
-.user-detail-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.detail-card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 40px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-}
-
-.detail-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 40px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #e5e5e5;
-}
-
-.page-title {
-    font-size: 2rem;
-    font-weight: 300;
-    color: #333;
-    margin: 0;
-    letter-spacing: 0.05em;
-}
-
-.header-actions {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-}
-
-.btn-edit {
-    background: #ffc107;
-    color: #212529;
-    text-decoration: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
-}
-
-.btn-edit:hover {
-    background: #e0a800;
-}
-
-.btn-back {
-    color: #666;
-    text-decoration: none;
-    font-size: 14px;
-    transition: color 0.3s ease;
-}
-
-.btn-back:hover {
-    color: #333;
-}
-
-.detail-content {
-    margin-bottom: 40px;
-}
-
-.detail-section {
-    margin-bottom: 40px;
-}
-
-.section-title {
-    font-size: 1.2rem;
-    font-weight: 500;
-    color: #333;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.detail-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-}
-
-.detail-item {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.detail-label {
-    font-weight: 500;
-    color: #666;
-    font-size: 14px;
-}
-
-.detail-value {
-    font-size: 16px;
-    color: #333;
-    padding: 8px 0;
-}
-
-.badge {
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    display: inline-block;
-}
-
-.badge-superuser {
-    background: #dc3545;
-    color: #fff;
-}
-
-.badge-admin {
-    background: #fd7e14;
-    color: #fff;
-}
-
-.badge-user {
-    background: #28a745;
-    color: #fff;
-}
-
-.badge-active {
-    background: #28a745;
-    color: #fff;
-}
-
-.badge-inactive {
-    background: #6c757d;
-    color: #fff;
-}
-
-.permission-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.permission-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    border-left: 4px solid #e5e5e5;
-}
-
-.permission-label {
-    font-weight: 500;
-    color: #333;
-    font-size: 14px;
-}
-
-.permission-value {
-    font-weight: 500;
-    font-size: 14px;
-    padding: 4px 8px;
-    border-radius: 4px;
-}
-
-.permission-value.active {
-    background: #d4edda;
-    color: #155724;
-}
-
-.permission-value.inactive {
-    background: #f8d7da;
-    color: #721c24;
-}
-
-.detail-actions {
-    display: flex;
-    gap: 15px;
-    justify-content: flex-end;
-    padding-top: 30px;
-    border-top: 1px solid #e5e5e5;
-}
-
-.btn-primary {
-    background: #333;
-    color: #fff;
-    text-decoration: none;
-    padding: 12px 24px;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 400;
-    transition: background-color 0.3s ease;
-    letter-spacing: 0.05em;
-}
-
-.btn-primary:hover {
-    background: #555;
-}
-
-.btn-danger {
-    background: #dc3545;
-    color: #fff;
-    text-decoration: none;
-    padding: 12px 24px;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 400;
-    transition: background-color 0.3s ease;
-    letter-spacing: 0.05em;
-}
-
-.btn-danger:hover {
-    background: #c82333;
-}
-
-.btn-secondary {
-    background: #6c757d;
-    color: #fff;
-    text-decoration: none;
-    padding: 12px 24px;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 400;
-    transition: background-color 0.3s ease;
-    letter-spacing: 0.05em;
-}
-
-.btn-secondary:hover {
-    background: #5a6268;
-}
-
-/* グループ情報セクションのスタイル */
-.group-info {
-    margin-top: 20px;
-}
-
-.group-stats {
-    margin-bottom: 25px;
-}
-
-.stat-item {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 12px;
-    color: #fff;
-    min-width: 120px;
-}
-
-.stat-number {
-    font-size: 2rem;
-    font-weight: 700;
-    line-height: 1;
-    margin-bottom: 5px;
-}
-
-.stat-label {
-    font-size: 0.9rem;
-    opacity: 0.9;
-    text-align: center;
-}
-
-.group-list h4 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #333;
-    margin: 0 0 20px 0;
-}
-
-.group-grid {
-    display: grid;
-    gap: 15px;
-}
-
-.group-item {
-    background: #f8f9fa;
-    border-radius: 12px;
-    padding: 20px;
-    border: 1px solid #e9ecef;
-    transition: all 0.3s ease;
-}
-
-.group-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    border-color: #667eea;
-}
-
-.group-header {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 15px;
-}
-
-.group-color {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    border: 2px solid #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.group-info {
-    flex: 1;
-}
-
-.group-name {
-    font-weight: 600;
-    color: #333;
-    font-size: 1.1rem;
-    margin-bottom: 4px;
-}
-
-.group-description {
-    font-size: 0.9rem;
-    color: #666;
-    line-height: 1.4;
-}
-
-.group-status {
-    flex-shrink: 0;
-}
-
-.status-badge {
-    padding: 4px 8px;
-    border-radius: 8px;
-    font-size: 11px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.status-badge.active {
-    background: #28a745;
-    color: #fff;
-}
-
-.status-badge.inactive {
-    background: #6c757d;
-    color: #fff;
-}
-
-.group-actions {
-    display: flex;
-    justify-content: flex-end;
-}
-
-.group-link {
-    color: #667eea;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: color 0.3s ease;
-}
-
-.group-link:hover {
-    color: #5a32a3;
-}
-
-.link-icon {
-    font-size: 12px;
-}
-
-.no-groups {
-    text-align: center;
-    padding: 40px 20px;
-    background: #f8f9fa;
-    border-radius: 12px;
-    border: 2px dashed #dee2e6;
-}
-
-.no-groups-icon {
-    font-size: 3rem;
-    margin-bottom: 15px;
-    opacity: 0.5;
-}
-
-.no-groups h4 {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #333;
-    margin: 0 0 10px 0;
-}
-
-.no-groups p {
-    color: #666;
-    margin: 0 0 20px 0;
-    line-height: 1.5;
-}
-
-.btn-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: #667eea;
-    text-decoration: none;
-    font-weight: 500;
-    padding: 8px 16px;
-    border: 2px solid #667eea;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-}
-
-.btn-link:hover {
-    background: #667eea;
-    color: #fff;
-    transform: translateY(-1px);
-}
-
-@media (max-width: 768px) {
-    .user-detail-container {
-        padding: 10px;
-    }
-    
-    .detail-card {
-        padding: 30px 20px;
-    }
-    
-    .detail-header {
-        flex-direction: column;
-        gap: 15px;
-        align-items: stretch;
-    }
-    
-    .header-actions {
-        justify-content: space-between;
-    }
-    
-    .detail-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .permission-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-    
-    .detail-actions {
-        flex-direction: column;
-    }
-    
-    /* グループ情報のモバイル対応 */
-    .group-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-    
-    .group-status {
-        align-self: flex-end;
-    }
-    
-    .group-actions {
-        justify-content: center;
-        margin-top: 15px;
-    }
-    
-    .stat-item {
-        min-width: 100px;
-        padding: 15px;
-    }
-    
-    .stat-number {
-        font-size: 1.5rem;
-    }
-}
-</style>
 {% endblock %} 

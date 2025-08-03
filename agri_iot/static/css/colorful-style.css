@@ -1,0 +1,568 @@
+/* カラフルテーマ固有スタイル - 鮮やかで楽しいデザイン */
+
+/* ベース設定 */
+body {
+    color: #2d3748;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+/* ナビゲーション */
+.navbar {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link {
+    color: #2d3748;
+}
+
+.nav-link:hover {
+    color: #667eea;
+}
+
+.nav-link::after {
+    background: linear-gradient(90deg, #667eea, #764ba2);
+}
+
+/* プロフィールドロップダウン */
+.profile-toggle {
+    color: #2d3748;
+}
+
+/* プロファイルメニューアイコンの統一 */
+.profile-menu-item .menu-icon {
+    font-size: 14px !important;
+    width: 16px !important;
+    height: 16px !important;
+    line-height: 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+}
+
+.profile-toggle:hover {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    border-color: rgba(102, 126, 234, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+}
+
+.profile-avatar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.profile-toggle:hover .profile-avatar {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.profile-name {
+    color: #2d3748;
+}
+
+.dropdown-arrow {
+    color: #2d3748;
+}
+
+.profile-toggle:hover .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.profile-menu {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.profile-menu-item {
+    color: #2d3748;
+    border-bottom-color: rgba(102, 126, 234, 0.1);
+}
+
+.profile-menu-item::before {
+    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+}
+
+.profile-menu-item:hover {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    color: #2d3748;
+    transform: translateX(4px);
+}
+
+.profile-menu-item.active {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+    color: #667eea;
+}
+
+.profile-menu-item.active .menu-icon {
+    color: #667eea;
+}
+
+.profile-menu-divider {
+    background: rgba(102, 126, 234, 0.2);
+}
+
+/* メッセージ表示 */
+.alert-success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+.alert-error {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+    border-color: #bee5eb;
+    color: #0c5460;
+}
+
+/* お知らせエリア */
+.announcements-section {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.announcements-title {
+    color: #2d3748;
+    text-shadow: 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.announcement-card {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.announcement-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.announcement-card.priority-urgent {
+    border-left: 5px solid #dc3545;
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.1), rgba(255, 255, 255, 0.95));
+}
+
+.announcement-card.priority-high {
+    border-left: 5px solid #fd7e14;
+    background: linear-gradient(135deg, rgba(253, 126, 20, 0.1), rgba(255, 255, 255, 0.95));
+}
+
+.announcement-card.priority-normal {
+    border-left: 5px solid #17a2b8;
+    background: linear-gradient(135deg, rgba(23, 162, 184, 0.1), rgba(255, 255, 255, 0.95));
+}
+
+.announcement-card.priority-low {
+    border-left: 5px solid #6c757d;
+    background: linear-gradient(135deg, rgba(108, 117, 125, 0.1), rgba(255, 255, 255, 0.95));
+}
+
+.announcement-title {
+    color: #2d3748;
+}
+
+.announcement-priority {
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea;
+}
+
+.announcement-content {
+    color: #4a5568;
+}
+
+.announcement-date {
+    color: #718096;
+}
+
+/* スクロールバー */
+.announcements-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.announcements-container::-webkit-scrollbar-thumb {
+    background: rgba(102, 126, 234, 0.3);
+}
+
+.announcements-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(102, 126, 234, 0.5);
+}
+
+/* ホーム画面 */
+.fullscreen-menu {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.welcome-title {
+    color: #fff;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.welcome-subtitle {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.menu-item {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.menu-item::before {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+}
+
+.menu-item:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.menu-item:active {
+    transform: translateY(-8px) scale(1.01);
+}
+
+.menu-item.disabled {
+    background: rgba(255, 255, 255, 0.7);
+    color: #718096;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.menu-item.disabled .coming-soon {
+    background: rgba(102, 126, 234, 0.2);
+    color: #667eea;
+}
+
+.footer-text {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* 写真一覧ページのテーマ固有スタイル */
+.page-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.page-title {
+    color: #fff;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.page-subtitle {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.section {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.section:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.section-title {
+    color: #2d3748;
+}
+
+.file-input {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(102, 126, 234, 0.2);
+    color: #2d3748;
+}
+
+.file-input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.file-input.readonly {
+    background: rgba(255, 255, 255, 0.7);
+    color: #718096;
+}
+
+.file-input.readonly:focus {
+    border-color: rgba(102, 126, 234, 0.2);
+    box-shadow: none;
+}
+
+.upload-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.upload-btn:hover {
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.files-table {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.files-table th {
+    background: rgba(102, 126, 234, 0.1);
+    color: #2d3748;
+    border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+}
+
+.files-table td {
+    border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+    color: #2d3748;
+}
+
+.files-table tbody tr:hover {
+    background: rgba(102, 126, 234, 0.05);
+}
+
+.thumbnail {
+    border: 2px solid rgba(102, 126, 234, 0.2);
+}
+
+.thumbnail:hover {
+    border-color: #667eea;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.file-name {
+    color: #2d3748;
+}
+
+.file-name:hover {
+    color: #667eea;
+}
+
+.file-size {
+    color: #4a5568;
+}
+
+.file-date {
+    color: #718096;
+}
+
+.delete-btn {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.delete-btn:hover {
+    box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4);
+}
+
+/* プロフィール編集ページ */
+.profile-edit-container {
+    padding-top: 40px;
+}
+
+.edit-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.edit-card:hover {
+    transform: translateY(-4px);
+}
+
+.edit-header {
+    border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+}
+
+.btn-back {
+    background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+
+.btn-back:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(108, 117, 125, 0.4);
+}
+
+.profile-edit-form {
+    max-width: 600px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-label {
+    color: #2d3748;
+}
+
+.help-text {
+    color: #4a5568;
+}
+
+.error-message {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    color: #721c24;
+    border-left: 4px solid #dc3545;
+}
+
+.form-actions {
+    border-top: 2px solid rgba(102, 126, 234, 0.2);
+}
+
+.btn-primary, .btn-secondary {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+
+.btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(108, 117, 125, 0.4);
+}
+
+.btn-icon {
+    font-size: 16px;
+}
+
+/* DataTables カスタマイズ */
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    color: #4a5568;
+}
+
+.dataTables_wrapper .dataTables_length select,
+.dataTables_wrapper .dataTables_filter input {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    color: #2d3748;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    color: #2d3748;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: rgba(102, 126, 234, 0.1);
+    border-color: #667eea;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: #667eea;
+    color: #fff;
+}
+
+/* フォーム要素 */
+.form-input {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(102, 126, 234, 0.2);
+    color: #2d3748;
+}
+
+.form-input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.form-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+/* カード */
+.card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.card-title {
+    color: #2d3748;
+}
+
+/* 優先度表示 */
+.priority-urgent {
+    color: #e53e3e;
+}
+
+.priority-high {
+    color: #dd6b20;
+}
+
+.priority-normal {
+    color: #3182ce;
+}
+
+.priority-low {
+    color: #718096;
+} 

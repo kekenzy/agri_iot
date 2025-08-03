@@ -8,6 +8,34 @@
             <p class="welcome-subtitle">にようこそ！！</p>
         </div>
         
+        <!-- お知らせエリア -->
+        {% if announcements %}
+        <div class="announcements-section">
+            <h3 class="announcements-title">
+                <i class="fas fa-bullhorn"></i> お知らせ
+            </h3>
+            <div class="announcements-container">
+                {% for announcement in announcements %}
+                <div class="announcement-card {{ announcement.get_priority_class }}">
+                    <div class="announcement-header">
+                        <span class="announcement-icon">{{ announcement.get_priority_icon }}</span>
+                        <span class="announcement-title">{{ announcement.title }}</span>
+                        <span class="announcement-priority">{{ announcement.get_priority_display }}</span>
+                    </div>
+                    <div class="announcement-content">
+                        {{ announcement.content|truncatewords:30 }}
+                    </div>
+                    <div class="announcement-footer">
+                        <small class="announcement-date">
+                            {{ announcement.start_date|date:"Y/m/d H:i" }} ～ {{ announcement.end_date|date:"Y/m/d H:i" }}
+                        </small>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
         <div class="menu-grid">
             <a href="{% url 'agri_app:s3_file_list' %}" class="menu-item-link">
                 <div class="menu-item">
@@ -23,6 +51,22 @@
                     <div class="menu-icon">⚙️</div>
                     <h3 class="menu-title">管理画面</h3>
                     <p class="menu-description">システムの管理と設定</p>
+                </div>
+            </a>
+            
+            <a href="{% url 'agri_app:announcement_list' %}" class="menu-item-link">
+                <div class="menu-item">
+                    <div class="menu-icon">📢</div>
+                    <h3 class="menu-title">お知らせ管理</h3>
+                    <p class="menu-description">お知らせの作成と管理</p>
+                </div>
+            </a>
+            
+            <a href="{% url 'agri_app:style_settings' %}" class="menu-item-link">
+                <div class="menu-item">
+                    <div class="menu-icon">🎨</div>
+                    <h3 class="menu-title">スタイル設定</h3>
+                    <p class="menu-description">テーマとスタイルの変更</p>
                 </div>
             </a>
             {% endif %}
@@ -58,6 +102,7 @@
         </div>
     </div>
 </div>
+
 
 
 {% endblock %}
