@@ -198,7 +198,7 @@ LOGGING = {
 # メール設定
 # 開発環境ではコンソールに出力、本番環境ではSMTPを使用
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # 開発用
-DEFAULT_FROM_EMAIL = 'noreply@agri-iot.com'
+DEFAULT_FROM_EMAIL = 'kekenzy@gmail.com'
 
 # 本番環境用のSMTP設定（必要に応じて有効化）
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

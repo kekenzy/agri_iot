@@ -36,6 +36,8 @@ django-redis==5.4.0
     # via -r requirements.in
 django-storages==1.14.2
     # via -r requirements.in
+django-ses==3.5.0
+    # via -r requirements.in
 gunicorn==23.0.0
     # via -r requirements.in
 jmespath==1.0.1
