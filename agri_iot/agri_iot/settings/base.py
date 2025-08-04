@@ -12,12 +12,10 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 
 import os
 from pathlib import Path
-# from agri_app.utils.debug_toolbar_util import show_debug_toolbar
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
@@ -26,22 +24,16 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
 SECRET_KEY = 'j=d@d-i=^d4$e%1p50lk529i5nr80dv)3)wycowclea2t)1vy3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
 DEBUG = False
 
-
 ALLOWED_HOSTS = ['*']
-# ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # 4.0以上の場合は、以下指定しないとCSRFでエラーが出る
 CSRF_TRUSTED_ORIGINS = [
-    'https://localhost', 'https://0.0.0.0'
+    'https://localhost', 'https://0.0.0.0', 'http://localhost', 'http://0.0.0.0'
 ]
 
-
-
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',      # ユーザ認証
@@ -56,7 +48,6 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfVjkkiewMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -86,20 +77,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'agri_iot.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'agri_db',
-        'USER': 'agri_user',
-        'PASSWORD': 'agri_user',
-        'HOST': 'db',
-        'PORT': '5432',
-    }
-}
-
+# データベース設定は各環境設定ファイル（local.py, production.py）で定義
+DATABASES = {}
 
 # Password validation
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-password-validators
@@ -109,7 +90,6 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
     "django.contrib.auth.hashers.PBKDF2PasswordHasher",
     "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
-
 ]
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -133,7 +113,6 @@ AUTH_PASSWORD_VALIDATORS = [
     }
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/dev/topics/i18n/
 
@@ -145,13 +124,13 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = '/var/www/static/'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/dev/ref/settings/#default-auto-field
 
@@ -163,11 +142,9 @@ FIXTURE_DIRS = {os.path.join(BASE_DIR, "agri_app/model/yaml")}
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 # ログ
-LOG_LEVEL = "DEBUG"
-LOG_DIR = os.environ.get('LOG_DIR', "/var/log/customer_portal")
+LOG_LEVEL = "INFO"
+LOG_DIR = os.environ.get('LOG_DIR', "/var/log/agri_iot")
 if not os.path.isdir(LOG_DIR):
     try:
         os.makedirs(LOG_DIR)
@@ -179,35 +156,38 @@ if not os.path.isdir(LOG_DIR):
 
 LOGGING = {
     "version": 1,
-    "filters": {
-        "session_id": {"()": "agri_app.utils.logging_util.SessionIdFilter"},
-        "request_id": {"()": "agri_app.utils.logging_util.RequestIdFilter"},
-    },
+    "disable_existing_loggers": False,
     "formatters": {
         "verbose": {
-            "()": "agri_app.utils.logging_util.CustomFormatter",
-            "format": "[%(asctime)s][sid:%(session_id)s][rid:%(request_id)s][%(levelname)s][%(filename)s:%(lineno)d] %(message)s",
+            "format": "[%(asctime)s][%(levelname)s][%(filename)s:%(lineno)d] %(message)s",
+        },
+        "simple": {
+            "format": "[%(levelname)s] %(message)s",
         },
     },
     "handlers": {
         "console": {
-            "filters": ["session_id", "request_id"],
             "class": "logging.StreamHandler",
             "formatter": "verbose",
         },
         "file": {
-            "filters": ["session_id", "request_id"],
             "class": "logging.FileHandler",
             "formatter": "verbose",
-            "filename": LOG_DIR + "/customer_portal.log",
+            "filename": LOG_DIR + "/agri_iot.log",
         },
     },
     "loggers": {
+        "django": {
+            "handlers": ["console", "file"],
+            "level": LOG_LEVEL,
+            "propagate": False,
+        },
         "django.db.backends": {
             "handlers": ["console"],
-            "level": LOG_LEVEL,
+            "level": "WARNING",
+            "propagate": False,
         },
-        "application": {
+        "agri_app": {
             "handlers": ["console", "file"],
             "level": LOG_LEVEL,
             "propagate": True,

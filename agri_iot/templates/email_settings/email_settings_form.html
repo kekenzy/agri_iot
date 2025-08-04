@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="management-container">
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">{{ title }}</h1>
+            <p class="page-subtitle">メール送信設定を{% if email_setting %}編集{% else %}作成{% endif %}します</p>
+        </div>
+        <div class="header-actions">
+            <a href="{% url 'agri_app:email_settings_list' %}" class="btn-secondary">
+                <span class="btn-icon">←</span>
+                戻る
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <form method="post" class="email-settings-form">
+            {% csrf_token %}
+            
+            <div class="form-section">
+                <h2 class="section-title">基本情報</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">
+                            設定名 <span class="required">*</span>
+                        </label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <div class="error-message">{{ form.name.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">
+                            デフォルト設定
+                        </label>
+                        <div class="checkbox-group">
+                            {{ form.is_default }}
+                            <span class="checkbox-label">この設定をデフォルトにする</span>
+                        </div>
+                        {% if form.is_default.errors %}
+                            <div class="error-message">{{ form.is_default.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title">メール送信設定</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">
+                            デフォルト送信設定
+                        </label>
+                        <div class="checkbox-group">
+                            {{ form.default_send_email }}
+                            <span class="checkbox-label">新規お知らせ作成時にメール送信を有効にする</span>
+                        </div>
+                        <div class="help-text">
+                            <span class="help-icon">💡</span>
+                            この設定を有効にすると、新しいお知らせを作成する際に自動的にメール送信が有効になります
+                        </div>
+                        {% if form.default_send_email.errors %}
+                            <div class="error-message">{{ form.default_send_email.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">
+                            送信者名
+                        </label>
+                        {{ form.email_from_name }}
+                        {% if form.email_from_name.errors %}
+                            <div class="error-message">{{ form.email_from_name.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title">メール件名テンプレート</h2>
+                <div class="form-group full-width">
+                    <label class="form-label">
+                        件名テンプレート <span class="required">*</span>
+                    </label>
+                    {{ form.email_template_subject }}
+                    <div class="help-text">
+                        <span class="help-icon">💡</span>
+                        使用可能なプレースホルダー: {title} (お知らせタイトル), {priority} (優先度), {date} (作成日)
+                    </div>
+                    {% if form.email_template_subject.errors %}
+                        <div class="error-message">{{ form.email_template_subject.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title">説明</h2>
+                <div class="form-group full-width">
+                    <label class="form-label">
+                        説明
+                    </label>
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                        <div class="error-message">{{ form.description.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">
+                    <span class="btn-icon">💾</span>
+                    {% if email_setting %}更新{% else %}作成{% endif %}
+                </button>
+                <a href="{% url 'agri_app:email_settings_list' %}" class="btn-secondary">
+                    <span class="btn-icon">❌</span>
+                    キャンセル
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %} 

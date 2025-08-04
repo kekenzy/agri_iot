@@ -63,26 +63,66 @@
     <div class="card">
         <div class="card-title">ユーザー一覧</div>
         {% if users %}
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>ユーザー名</th>
-                    <th>氏名</th>
-                    <th>メールアドレス</th>
-                    <th>権限</th>
-                    <th>登録日</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                <tr>
-                    <td>
-                        <strong>{{ user.username }}</strong>
-                    </td>
-                    <td>{{ user.first_name|default:"未設定" }}</td>
-                    <td>{{ user.email|default:"未設定" }}</td>
-                    <td>
+        <!-- デスクトップ用テーブル -->
+        <div class="data-table-container desktop-only">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ユーザー名</th>
+                        <th>氏名</th>
+                        <th>メールアドレス</th>
+                        <th>権限</th>
+                        <th>登録日</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>
+                            <strong>{{ user.username }}</strong>
+                        </td>
+                        <td>{{ user.first_name|default:"未設定" }}</td>
+                        <td>{{ user.email|default:"未設定" }}</td>
+                        <td>
+                            {% if user.is_superuser %}
+                                <span class="badge badge-superuser">スーパーユーザー</span>
+                            {% elif user.is_staff %}
+                                <span class="badge badge-admin">管理者</span>
+                            {% else %}
+                                <span class="badge badge-user">一般</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ user.date_joined|date:"Y/m/d" }}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{% url 'agri_app:user_detail' user.id %}" class="btn-detail">
+                                    <span class="btn-icon">👁️</span>
+                                    詳細
+                                </a>
+                                <a href="{% url 'agri_app:user_edit' user.id %}" class="btn-edit">
+                                    <span class="btn-icon">✏️</span>
+                                    編集
+                                </a>
+                                <a href="{% url 'agri_app:user_delete' user.id %}" class="btn-delete">
+                                    <span class="btn-icon">🗑️</span>
+                                    削除
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- モバイル用カード -->
+        <div class="mobile-cards mobile-only">
+            {% for user in users %}
+            <div class="list-card">
+                <div class="card-header">
+                    <h3 class="card-title">{{ user.username }}</h3>
+                    <div class="card-badges">
                         {% if user.is_superuser %}
                             <span class="badge badge-superuser">スーパーユーザー</span>
                         {% elif user.is_staff %}
@@ -90,28 +130,41 @@
                         {% else %}
                             <span class="badge badge-user">一般</span>
                         {% endif %}
-                    </td>
-                    <td>{{ user.date_joined|date:"Y/m/d" }}</td>
-                    <td>
-                        <div class="action-buttons">
-                            <a href="{% url 'agri_app:user_detail' user.id %}" class="btn-detail">
-                                <span class="btn-icon">👁️</span>
-                                詳細
-                            </a>
-                            <a href="{% url 'agri_app:user_edit' user.id %}" class="btn-edit">
-                                <span class="btn-icon">✏️</span>
-                                編集
-                            </a>
-                            <a href="{% url 'agri_app:user_delete' user.id %}" class="btn-delete">
-                                <span class="btn-icon">🗑️</span>
-                                削除
-                            </a>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">氏名</span>
+                            <span class="info-value">{{ user.first_name|default:"未設定" }}</span>
                         </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                        <div class="info-item">
+                            <span class="info-label">メールアドレス</span>
+                            <span class="info-value">{{ user.email|default:"未設定" }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">登録日</span>
+                            <span class="info-value">{{ user.date_joined|date:"Y/m/d" }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <a href="{% url 'agri_app:user_detail' user.id %}" class="btn-detail">
+                        <span class="btn-icon">👁️</span>
+                        詳細
+                    </a>
+                    <a href="{% url 'agri_app:user_edit' user.id %}" class="btn-edit">
+                        <span class="btn-icon">✏️</span>
+                        編集
+                    </a>
+                    <a href="{% url 'agri_app:user_delete' user.id %}" class="btn-delete">
+                        <span class="btn-icon">🗑️</span>
+                        削除
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
         {% else %}
         <div class="no-data">
             <p>ユーザーがありません。</p>

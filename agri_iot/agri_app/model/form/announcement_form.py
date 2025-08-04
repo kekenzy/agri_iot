@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import Group
-from agri_app.models import Announcement
+from agri_app.models import Announcement, EmailSettings
 
 
 class AnnouncementForm(forms.ModelForm):
@@ -8,7 +8,7 @@ class AnnouncementForm(forms.ModelForm):
     
     class Meta:
         model = Announcement
-        fields = ['title', 'content', 'priority', 'start_date', 'end_date', 'target_groups', 'is_all_groups', 'is_active']
+        fields = ['title', 'content', 'priority', 'start_date', 'end_date', 'target_groups', 'is_all_groups', 'is_active', 'send_email']
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -39,6 +39,9 @@ class AnnouncementForm(forms.ModelForm):
             }),
             'is_active': forms.CheckboxInput(attrs={
                 'class': 'form-check-input'
+            }),
+            'send_email': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
             })
         }
     
@@ -48,6 +51,11 @@ class AnnouncementForm(forms.ModelForm):
         self.fields['target_groups'].queryset = Group.objects.all()
         self.fields['target_groups'].required = False
         self.fields['is_all_groups'].required = False
+        
+        # 新規作成時はデフォルトのメール送信設定を使用
+        if not self.instance.pk:
+            default_send_email = EmailSettings.get_default_send_email()
+            self.fields['send_email'].initial = default_send_email
         
         # 全てのグループが選択されている場合、グループ選択を無効化
         if self.instance.pk and self.instance.is_all_groups:
@@ -72,6 +80,48 @@ class AnnouncementForm(forms.ModelForm):
             raise forms.ValidationError('「全てのグループに通知」を選択するか、少なくとも1つのグループを選択してください。')
         
         return cleaned_data
+
+
+class EmailSettingsForm(forms.ModelForm):
+    """メール送信設定用フォーム"""
+    
+    class Meta:
+        model = EmailSettings
+        fields = ['name', 'default_send_email', 'email_template_subject', 'email_from_name', 'is_default', 'description']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '設定名を入力してください'
+            }),
+            'default_send_email': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'email_template_subject': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '例: [{priority}] {title}'
+            }),
+            'email_from_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '送信者名を入力してください'
+            }),
+            'is_default': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': '設定の説明を入力してください'
+            })
+        }
+    
+    def clean_email_template_subject(self):
+        """メール件名テンプレートのバリデーション"""
+        subject = self.cleaned_data.get('email_template_subject')
+        if subject:
+            # 必須のプレースホルダーが含まれているかチェック
+            if '{title}' not in subject:
+                raise forms.ValidationError('メール件名テンプレートには {title} を含める必要があります。')
+        return subject
 
 
 class AnnouncementSearchForm(forms.Form):

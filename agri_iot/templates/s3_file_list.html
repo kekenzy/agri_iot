@@ -1,30 +1,46 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}S3 ファイル一覧{% endblock %}
+{% block title %}写真一覧{% endblock %}
 
 {% block content %}
-<div class="s3-file-list-container">
-    <header class="page-header fade-in">
-        <h1 class="page-title">S3 ファイル一覧</h1>
-        <p class="page-subtitle">クラウドストレージのファイルを管理</p>
-    </header>
+<div class="management-container">
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">写真一覧</h1>
+            <p class="page-subtitle">クラウドストレージの写真を管理します</p>
+        </div>
+        <div class="header-actions">
+            <button type="button" class="btn-primary" onclick="document.getElementById('file-upload').click();">
+                <span class="btn-icon">📁</span>
+                写真アップロード
+            </button>
+        </div>
+    </div>
 
-    <main class="main-content">
-        <section class="section upload-section fade-in">
-            <h2 class="section-title">ファイルアップロード</h2>
-            <form method="post" enctype="multipart/form-data" class="upload-form">
-                {% csrf_token %}
+    <div class="card">
+        <div class="card-title">アップロード</div>
+        <form method="post" enctype="multipart/form-data" class="upload-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="label-icon">📷</span>
+                    写真ファイル
+                </label>
+                <input type="file" id="file-upload" name="file" accept="image/*" style="display: none;" onchange="this.form.submit()">
                 <div class="file-input-wrapper">
                     {{ form.file }}
                 </div>
-                <button type="submit" name="upload" class="upload-btn">アップロード</button>
-            </form>
-        </section>
+            </div>
+        </form>
+    </div>
 
-        <section class="section files-section fade-in">
-            <h2 class="section-title">ファイル一覧</h2>
-            <table id="s3-files-table" class="files-table display">
+    <div class="card">
+        <div class="card-title">写真一覧</div>
+        {% if files %}
+        <!-- デスクトップ用テーブル -->
+        <div class="data-table-container desktop-only">
+            <table class="data-table">
                 <thead>
                     <tr>
                         <th>サムネイル</th>
@@ -36,28 +52,76 @@
                 </thead>
                 <tbody>
                     {% for file in files %}
-                        <tr>
-                            <td>
-                                <a href="{{ file.url }}" target="_blank">
-                                    <img src="{{ file.url }}" alt="{{ file.key }}" class="thumbnail" />
+                    <tr>
+                        <td>
+                            <a href="{{ file.url }}" target="_blank">
+                                <img src="{{ file.url }}" alt="{{ file.key }}" class="thumbnail" />
+                            </a>
+                        </td>
+                        <td>
+                            <strong>{{ file.key }}</strong>
+                        </td>
+                        <td>{{ file.size|floatformat:-2 }}</td>
+                        <td>{{ file.last_modified|date:"Y/m/d H:i" }}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{{ file.url }}" target="_blank" class="btn-detail">
+                                    <span class="btn-icon">👁️</span>
+                                    表示
                                 </a>
-                            </td>
-                            <td class="file-name">{{ file.key }}</td>
-                            <td class="file-size">{{ file.size|floatformat:-2 }}</td>
-                            <td class="file-date">{{ file.last_modified|date:"Y-m-d H:i:s" }}</td>
-                            <td>
                                 <form method="post" style="display: inline;">
                                     {% csrf_token %}
                                     <input type="hidden" name="file_key" value="{{ file.key }}">
-                                    <button type="submit" name="delete" class="delete-btn">削除</button>
+                                    <button type="submit" name="delete" class="btn-delete">
+                                        <span class="btn-icon">🗑️</span>
+                                        削除
+                                    </button>
                                 </form>
-                            </td>
-                        </tr>
+                            </div>
+                        </td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
-        </section>
-    </main>
+        </div>
+
+        <!-- モバイル用カード -->
+        <div class="mobile-cards mobile-only">
+            {% for file in files %}
+            <div class="list-card">
+                <div class="card-header">
+                    <h3 class="card-title">{{ file.key }}</h3>
+                </div>
+                <div class="card-content">
+                    <div class="thumbnail-container">
+                        <a href="{{ file.url }}" target="_blank">
+                            <img src="{{ file.url }}" alt="{{ file.key }}" class="thumbnail" />
+                        </a>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <a href="{{ file.url }}" target="_blank" class="btn-detail">
+                        <span class="btn-icon">👁️</span>
+                        表示
+                    </a>
+                    <form method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="file_key" value="{{ file.key }}">
+                        <button type="submit" name="delete" class="btn-delete">
+                            <span class="btn-icon">🗑️</span>
+                            削除
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="no-data">
+            <p>写真がありません。</p>
+        </div>
+        {% endif %}
+    </div>
 </div>
 
 <!-- DataTables CSS and JS -->
@@ -67,7 +131,7 @@
 
 <script>
 $(document).ready(function () {
-    $('#s3-files-table').DataTable({
+    $('.data-table').DataTable({
         language: {
             url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/ja.json"
         },

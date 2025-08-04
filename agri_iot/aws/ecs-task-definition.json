@@ -1,0 +1,98 @@
+{
+  "family": "agri-iot-app",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::440707461121:role/agri-iot-ecs-task-execution-role",
+  "taskRoleArn": "arn:aws:iam::440707461121:role/agri-iot-ecs-task-role",
+  "containerDefinitions": [
+    {
+      "name": "agri-iot-app",
+      "image": "440707461121.dkr.ecr.ap-northeast-1.amazonaws.com/agri-iot:latest",
+      "portMappings": [
+        {
+          "containerPort": 8000,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "environment": [
+        {
+          "name": "DJANGO_SETTINGS_MODULE",
+          "value": "agri_iot.settings.production"
+        },
+        {
+          "name": "AWS_DEFAULT_REGION",
+          "value": "ap-northeast-1"
+        },
+        {
+          "name": "AWS_STORAGE_BUCKET_NAME",
+          "value": "agri-capture"
+        },
+        {
+          "name": "AWS_S3_REGION_NAME",
+          "value": "ap-northeast-1"
+        },
+        {
+          "name": "DATABASE_URL",
+          "value": "postgresql://agri_user:agri_password@agri-iot-db.ceswvgqkwv57.ap-northeast-1.rds.amazonaws.com:5432/agri_db"
+        },
+        {
+          "name": "SECRET_KEY",
+          "value": "j=d@d-i=^d4$e%1p50lk529i5nr80dv)3)wycowclea2t)1vy3"
+        },
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "value": "AKIAWNHBWGAAVHMPGRL5"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "value": "TGygY7OjUcesN0WEDutX0yTF4ZJGaxZUXTtiO6TH"
+        },
+        {
+          "name": "EMAIL_HOST",
+          "value": "email-smtp.ap-northeast-1.amazonaws.com"
+        },
+        {
+          "name": "EMAIL_PORT",
+          "value": "587"
+        },
+        {
+          "name": "EMAIL_USE_TLS",
+          "value": "True"
+        },
+        {
+          "name": "EMAIL_HOST_USER",
+          "value": "AKIAWNHBWGAAVHMPGRL5"
+        },
+        {
+          "name": "EMAIL_HOST_PASSWORD",
+          "value": "TGygY7OjUcesN0WEDutX0yTF4ZJGaxZUXTtiO6TH"
+        },
+        {
+          "name": "DEFAULT_FROM_EMAIL",
+          "value": "noreply@agri-iot.com"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/agri-iot-app",
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "healthCheck": {
+        "command": [
+          "CMD-SHELL",
+          "curl -f http://localhost:8000/health/ || exit 1"
+        ],
+        "interval": 60,
+        "timeout": 10,
+        "retries": 3,
+        "startPeriod": 120
+      }
+    }
+  ]
+} 

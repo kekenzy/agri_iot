@@ -1,51 +1,54 @@
 {% extends "base.html" %}
-{% block title %}お知らせ削除確認{{ block.super }}{% endblock %}
+{% block title %}お知らせ削除確認{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="mb-0 text-danger">
-                        <i class="fas fa-exclamation-triangle"></i> お知らせ削除確認
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="alert alert-warning">
-                        <h5>以下のお知らせを削除しますか？</h5>
-                        <p class="mb-0">この操作は取り消すことができません。</p>
-                    </div>
+<div class="management-container">
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">お知らせ削除確認</h1>
+            <p class="page-subtitle">お知らせを削除します</p>
+        </div>
+        <div class="header-actions">
+            <a href="{% url 'agri_app:announcement_detail' announcement.id %}" class="btn-secondary">
+                <span class="btn-icon">←</span>
+                戻る
+            </a>
+        </div>
+    </div>
 
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ announcement.title }}</h5>
-                            <p class="card-text text-muted">{{ announcement.content|truncatewords:30 }}</p>
-                            <div class="d-flex justify-content-between">
-                                <span class="badge {{ announcement.get_priority_class }}">
-                                    {{ announcement.get_priority_icon }} {{ announcement.get_priority_display }}
-                                </span>
-                                <small class="text-muted">
-                                    {{ announcement.start_date|date:"Y/m/d H:i" }} ～ {{ announcement.end_date|date:"Y/m/d H:i" }}
-                                </small>
-                            </div>
-                        </div>
-                    </div>
+    <div class="card">
+        <div class="card-title">削除確認</div>
+        <div class="alert-warning">
+            <h3>⚠️ お知らせを削除しますか？</h3>
+            <p>この操作は取り消すことができません。</p>
+        </div>
 
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="d-flex justify-content-between">
-                            <a href="{% url 'agri_app:announcement_detail' announcement.id %}" class="btn btn-secondary">
-                                <i class="fas fa-arrow-left"></i> キャンセル
-                            </a>
-                            <button type="submit" class="btn btn-danger">
-                                <i class="fas fa-trash"></i> 削除する
-                            </button>
-                        </div>
-                    </form>
-                </div>
+        <div class="detail-card">
+            <h4>{{ announcement.title }}</h4>
+            <p class="content-preview">{{ announcement.content|truncatewords:30 }}</p>
+            <div class="badge-container">
+                <span class="badge {{ announcement.get_priority_class }}">
+                    {{ announcement.get_priority_icon }} {{ announcement.get_priority_display }}
+                </span>
+                <span class="date-range">
+                    {{ announcement.start_date|date:"Y/m/d H:i" }} ～ {{ announcement.end_date|date:"Y/m/d H:i" }}
+                </span>
             </div>
         </div>
+
+        <form method="post" class="delete-form">
+            {% csrf_token %}
+            <div class="form-actions">
+                <a href="{% url 'agri_app:announcement_detail' announcement.id %}" class="btn-secondary">
+                    <span class="btn-icon">❌</span>
+                    キャンセル
+                </a>
+                <button type="submit" class="btn-danger">
+                    <span class="btn-icon">🗑️</span>
+                    削除する
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock %} 

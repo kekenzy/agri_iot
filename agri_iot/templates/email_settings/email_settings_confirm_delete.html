@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}メール送信設定削除{% endblock %}
+
+{% block content %}
+<div class="management-container">
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">メール送信設定削除</h1>
+            <p class="page-subtitle">メール送信設定を削除します</p>
+        </div>
+        <div class="header-actions">
+            <a href="{% url 'agri_app:email_settings_list' %}" class="btn-secondary">
+                <span class="btn-icon">←</span>
+                戻る
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">削除確認</div>
+        <div class="delete-confirmation">
+            <div class="warning-message">
+                <span class="warning-icon">⚠️</span>
+                <p>以下のメール送信設定を削除しますか？</p>
+            </div>
+            
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <span class="detail-label">設定名</span>
+                    <span class="detail-value">{{ email_setting.name }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">デフォルト設定</span>
+                    <span class="detail-value">
+                        {% if email_setting.is_default %}
+                            <span class="badge badge-primary">デフォルト</span>
+                        {% else %}
+                            <span class="badge badge-inactive">-</span>
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">デフォルト送信</span>
+                    <span class="detail-value">
+                        {% if email_setting.default_send_email %}
+                            <span class="badge badge-success">有効</span>
+                        {% else %}
+                            <span class="badge badge-inactive">無効</span>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+
+            {% if email_setting.description %}
+            <div class="detail-item">
+                <span class="detail-label">説明</span>
+                <div class="detail-content">
+                    {{ email_setting.description|linebreaks }}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="warning-note">
+                <p><strong>注意:</strong> この操作は取り消すことができません。</p>
+                {% if email_setting.is_default %}
+                <p><strong>重要:</strong> デフォルト設定を削除すると、他の設定がデフォルトに設定されるか、デフォルト設定が存在しなくなります。</p>
+                {% endif %}
+            </div>
+
+            <form method="post" class="delete-form">
+                {% csrf_token %}
+                <div class="form-actions">
+                    <button type="submit" class="btn-danger">
+                        <span class="btn-icon">🗑️</span>
+                        削除する
+                    </button>
+                    <a href="{% url 'agri_app:email_settings_list' %}" class="btn-secondary">
+                        <span class="btn-icon">❌</span>
+                        キャンセル
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

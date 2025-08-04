@@ -1,0 +1,22 @@
+{
+  "LoadBalancerName": "agri-iot-alb",
+  "Scheme": "internet-facing",
+  "Type": "application",
+  "Subnets": [
+    "subnet-xxxxxxxxx",
+    "subnet-yyyyyyyyy"
+  ],
+  "SecurityGroups": [
+    "sg-xxxxxxxxx"
+  ],
+  "Tags": [
+    {
+      "Key": "Name",
+      "Value": "agri-iot-alb"
+    },
+    {
+      "Key": "Environment",
+      "Value": "production"
+    }
+  ]
+} 

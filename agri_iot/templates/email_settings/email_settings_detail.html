@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}メール送信設定詳細{% endblock %}
+
+{% block content %}
+<div class="management-container">
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">メール送信設定詳細</h1>
+            <p class="page-subtitle">メール送信設定の詳細情報を表示します</p>
+        </div>
+        <div class="header-actions">
+            <a href="{% url 'agri_app:email_settings_edit' email_setting.id %}" class="btn-primary">
+                <span class="btn-icon">✏️</span>
+                編集
+            </a>
+            <a href="{% url 'agri_app:email_settings_list' %}" class="btn-secondary">
+                <span class="btn-icon">←</span>
+                戻る
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">基本情報</div>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <span class="detail-label">設定名</span>
+                <span class="detail-value">{{ email_setting.name }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">デフォルト設定</span>
+                <span class="detail-value">
+                    {% if email_setting.is_default %}
+                        <span class="badge badge-primary">デフォルト</span>
+                    {% else %}
+                        <span class="badge badge-inactive">-</span>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">メール送信設定</div>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <span class="detail-label">デフォルト送信</span>
+                <span class="detail-value">
+                    {% if email_setting.default_send_email %}
+                        <span class="badge badge-success">有効</span>
+                    {% else %}
+                        <span class="badge badge-inactive">無効</span>
+                    {% endif %}
+                </span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">送信者名</span>
+                <span class="detail-value">{{ email_setting.email_from_name }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">メール件名テンプレート</div>
+        <div class="detail-item">
+            <span class="detail-label">テンプレート</span>
+            <div class="detail-content">
+                <code>{{ email_setting.email_template_subject }}</code>
+            </div>
+        </div>
+    </div>
+
+    {% if email_setting.description %}
+    <div class="card">
+        <div class="card-title">説明</div>
+        <div class="detail-item">
+            <span class="detail-label">説明</span>
+            <div class="detail-content">
+                {{ email_setting.description|linebreaks }}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="card">
+        <div class="card-title">作成情報</div>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <span class="detail-label">作成日時</span>
+                <span class="detail-value">{{ email_setting.create_at|date:"Y年m月d日 H:i" }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">更新日時</span>
+                <span class="detail-value">{{ email_setting.update_at|date:"Y年m月d日 H:i" }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

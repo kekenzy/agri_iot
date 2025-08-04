@@ -1,12 +1,10 @@
 from .base import *
 
-# DEBUG = False
+# 開発環境設定
 DEBUG = True
 
-
-# 以下有効にすると、500エラーなる
+# 開発環境用のホスト設定
 ALLOWED_HOSTS = ['*']
-# ALLOWED_HOSTS += ['127.0.0.1', 'localhost']
 
 # Debug Toolbar設定
 import sys
@@ -16,7 +14,6 @@ if 'test' not in sys.argv:
         'debug_toolbar',
     ]
 
-    # 以下有効にすると、500エラーなる
     MIDDLEWARE += [
         'debug_toolbar.middleware.DebugToolbarMiddleware',
     ]
@@ -32,9 +29,9 @@ else:
         'IS_RUNNING_TESTS': True,
     }
 
-# 追加
+# 開発環境用のIP設定
 if DEBUG and 'test' not in sys.argv:
-  INTERNAL_IPS = ['127.0.0.1', 'localhost']
+    INTERNAL_IPS = ['127.0.0.1', 'localhost', '0.0.0.0']
 
 # 開発環境用メール設定（MailHog）
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -71,10 +68,47 @@ CACHES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'agri_db',
-        'USER': 'agri_user',
-        'PASSWORD': 'agri_user',
-        'HOST': 'db',  # Docker環境ではサービス名を使用
-        'PORT': '5432',
+        'NAME': os.environ.get('DB_NAME', 'agri_db'),
+        'USER': os.environ.get('DB_USER', 'agri_user'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'agri_password'),
+        'HOST': os.environ.get('DB_HOST', 'db'),  # Docker環境ではサービス名を使用
+        'PORT': os.environ.get('DB_PORT', '5432'),
     }
+}
+
+# 開発環境用ログ設定
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "[%(asctime)s][%(levelname)s][%(filename)s:%(lineno)d] %(message)s",
+        },
+        "simple": {
+            "format": "[%(levelname)s] %(message)s",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+        "django.db.backends": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "agri_app": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+    },
 }

@@ -16,21 +16,35 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from agri_app import views
 from django.conf import settings
-import debug_toolbar
+from django.conf.urls.static import static
+from django.http import JsonResponse
+
+def health_check(request):
+    """ヘルスチェック用エンドポイント"""
+    return JsonResponse({
+        'status': 'healthy',
+        'service': 'agri-iot',
+        'version': '1.0.0'
+    })
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("agri_app/", include("agri_app.urls")),
+    path('', include('agri_app.urls')),
+    path('health/', health_check, name='health_check'),
 ]
 
-urlpatterns += staticfiles_urlpatterns()
-
-handler404 = views.page_not_found
-handler500 = views.server_error
-
-# デバッグツールバー
+# 開発環境での静的ファイル配信
 if settings.DEBUG:
-    urlpatterns += [path('__debug__/', include(debug_toolbar.urls))]
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    # デバッグツールバー
+    try:
+        import debug_toolbar
+        urlpatterns += [path('__debug__/', include(debug_toolbar.urls))]
+    except ImportError:
+        pass
+else:
+    # 本番環境でも静的ファイルを配信（開発用）
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

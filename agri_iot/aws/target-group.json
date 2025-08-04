@@ -1,0 +1,27 @@
+{
+  "TargetGroupName": "agri-iot-tg",
+  "Protocol": "HTTP",
+  "Port": 8000,
+  "VpcId": "vpc-xxxxxxxxx",
+  "HealthCheckProtocol": "HTTP",
+  "HealthCheckPath": "/health/",
+  "HealthCheckEnabled": true,
+  "HealthCheckIntervalSeconds": 30,
+  "HealthCheckTimeoutSeconds": 5,
+  "HealthyThresholdCount": 2,
+  "UnhealthyThresholdCount": 2,
+  "Matcher": {
+    "HttpCode": "200"
+  },
+  "TargetType": "ip",
+  "Tags": [
+    {
+      "Key": "Name",
+      "Value": "agri-iot-tg"
+    },
+    {
+      "Key": "Environment",
+      "Value": "production"
+    }
+  ]
+} 

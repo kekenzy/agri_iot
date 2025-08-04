@@ -1,0 +1,23 @@
+- model: agri_app.EmailSettings
+  pk: 1
+  fields:
+    name: "デフォルト設定"
+    default_send_email: false
+    email_template_subject: "[{priority}] {title}"
+    email_from_name: "お知らせシステム"
+    is_default: true
+    description: "システムのデフォルトメール送信設定です。"
+    create_at: 2025-01-04T12:00:00+09:00
+    update_at: 2025-01-04T12:00:00+09:00
+
+- model: agri_app.EmailSettings
+  pk: 2
+  fields:
+    name: "メール送信有効設定"
+    default_send_email: true
+    email_template_subject: "[{priority}] {title} - お知らせ"
+    email_from_name: "農業IoTシステム"
+    is_default: false
+    description: "新規お知らせ作成時に自動的にメール送信を有効にする設定です。"
+    create_at: 2025-01-04T12:00:00+09:00
+    update_at: 2025-01-04T12:00:00+09:00 

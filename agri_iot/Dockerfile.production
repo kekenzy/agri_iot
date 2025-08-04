@@ -1,0 +1,50 @@
+FROM python:3.11-slim
+
+# 環境変数設定
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV DJANGO_SETTINGS_MODULE=agri_iot.settings.production
+
+# 作業ディレクトリ設定
+WORKDIR /app
+
+# システムパッケージのインストール
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libpq-dev \
+    curl \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Python依存関係のインストール
+COPY requirements.txt .
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
+# 本番環境用の追加パッケージ
+RUN pip install gunicorn whitenoise django-redis dj-database-url
+
+# ログディレクトリの作成
+RUN mkdir -p /var/log/django
+
+# アプリケーションコードのコピー
+COPY . .
+
+# 静的ファイルの収集
+RUN python manage.py collectstatic --noinput
+
+# ヘルスチェック用のエンドポイントを追加
+RUN echo 'from django.http import HttpResponse\n\
+def health_check(request):\n\
+    return HttpResponse("OK", content_type="text/plain")' > agri_app/health.py
+
+# 非rootユーザーの作成
+RUN useradd --create-home --shell /bin/bash app
+RUN chown -R app:app /app /var/log/django
+USER app
+
+# ポート設定
+EXPOSE 8000
+
+# 起動コマンド
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "--timeout", "120", "--access-logfile", "-", "--error-logfile", "-", "agri_iot.wsgi:application"] 

@@ -16,13 +16,13 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils import timezone
 
-from .models import UserProfile, GroupProfile, StyleSettings, Announcement
+from .models import UserProfile, GroupProfile, StyleSettings, Announcement, EmailSettings
 from .model.form.user_form import UserSearchForm, UserForm
 from .model.form.user_management_form import UserCreateForm, UserEditForm
 from .model.form.group_form import GroupSearchForm, GroupForm, GroupProfileForm, GroupMemberForm
 from .model.form.login_user_form import LoginForm
 from .model.form.profile_form import ProfileEditForm, ProfilePasswordChangeForm
-from .model.form.announcement_form import AnnouncementForm, AnnouncementSearchForm
+from .model.form.announcement_form import AnnouncementForm, AnnouncementSearchForm, EmailSettingsForm
 from .utils.aws_s3 import list_s3_files, upload_file_to_s3, delete_file_from_s3
 from .model.form.file_form import UploadFileForm
 
@@ -59,6 +59,10 @@ def page_not_found(request, exception):
 
 def server_error(request):
     return render(request, '500.html', status=500)
+
+def health_check(request):
+    """ヘルスチェック用エンドポイント"""
+    return HttpResponse("OK", content_type="text/plain")
 
 def user_login(request):
     login_form = LoginForm(request.POST or None)
@@ -614,13 +618,11 @@ def announcement_list(request):
             elif status == 'future':
                 announcements = announcements.filter(start_date__gt=now)
     
-    # ページネーション
-    paginator = Paginator(announcements, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    # 日付順でソート
+    announcements = announcements.order_by('-start_date')
     
     return render(request, 'announcement/announcement_list.html', {
-        'page_obj': page_obj,
+        'announcements': announcements,
         'search_form': search_form
     })
 
@@ -717,6 +719,43 @@ def announcement_delete(request, announcement_id):
 
 
 @login_required
+def announcement_send_email(request, announcement_id):
+    """お知らせの手動メール送信"""
+    # 権限チェック: スーパーユーザーのみアクセス可能
+    if not request.user.is_superuser:
+        messages.error(request, 'この機能にアクセスする権限がありません。')
+        return redirect('agri_app:home')
+    
+    announcement = get_object_or_404(Announcement, pk=announcement_id)
+    
+    if request.method == 'POST':
+        if announcement.can_send_email():
+            result = announcement.send_manual_email()
+            
+            if result.get('error'):
+                messages.error(request, f'メール送信に失敗しました: {result["error"]}')
+            elif result['success_count'] > 0:
+                success_message = f'メール送信が完了しました。成功: {result["success_count"]}件'
+                if result['failed_users']:
+                    failed_count = len(result['failed_users'])
+                    success_message += f', 失敗: {failed_count}件'
+                messages.success(request, success_message)
+                
+                # 失敗したユーザーがいる場合は警告メッセージを表示
+                if result['failed_users']:
+                    failed_users_text = ', '.join([f'{user["user"]}({user["email"]})' for user in result['failed_users'][:5]])
+                    if len(result['failed_users']) > 5:
+                        failed_users_text += f' 他{len(result["failed_users"]) - 5}名'
+                    messages.warning(request, f'送信失敗ユーザー: {failed_users_text}')
+            else:
+                messages.warning(request, '送信対象ユーザーが見つかりませんでした。')
+        else:
+            messages.error(request, 'メール送信の条件を満たしていません。')
+    
+    return redirect('agri_app:announcement_detail', announcement_id=announcement_id)
+
+
+@login_required
 def style_settings(request):
     """スタイル設定管理ビュー"""
     # 権限チェック: スーパーユーザーのみアクセス可能
@@ -745,4 +784,118 @@ def style_settings(request):
     return render(request, 'style_settings/style_settings.html', {
         'current_style': current_style,
         'style_settings_list': style_settings_list
+    })
+
+@login_required
+def email_settings_list(request):
+    """メール送信設定一覧表示"""
+    # 権限チェック: 管理者またはスーパーユーザーのみアクセス可能
+    if not request.user.is_authenticated or (not request.user.is_staff and not request.user.is_superuser):
+        messages.error(request, 'このページにアクセスする権限がありません。')
+        return redirect('agri_app:home')
+    
+    search_form = EmailSettingsForm(request.GET)
+    email_settings = EmailSettings.objects.all()
+    
+    if search_form.is_valid():
+        name = search_form.cleaned_data.get('name')
+        is_active = search_form.cleaned_data.get('is_active')
+        
+        if name:
+            email_settings = email_settings.filter(name__icontains=name)
+        
+        if is_active:
+            if is_active == 'True':
+                email_settings = email_settings.filter(is_active=True)
+            elif is_active == 'False':
+                email_settings = email_settings.filter(is_active=False)
+    
+    # ページネーション
+    paginator = Paginator(email_settings, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    context = {
+        'email_settings': page_obj,
+        'search_form': search_form,
+    }
+    return render(request, 'email_settings/email_settings_list.html', context)
+
+@login_required
+def email_settings_create(request):
+    """メール送信設定作成"""
+    # 権限チェック: 管理者またはスーパーユーザーのみアクセス可能
+    if not request.user.is_authenticated or (not request.user.is_staff and not request.user.is_superuser):
+        messages.error(request, 'このページにアクセスする権限がありません。')
+        return redirect('agri_app:home')
+    
+    if request.method == 'POST':
+        form = EmailSettingsForm(request.POST)
+        if form.is_valid():
+            email_setting = form.save()
+            messages.success(request, f'メール送信設定「{email_setting.name}」を作成しました。')
+            return redirect('agri_app:email_settings_list')
+    else:
+        form = EmailSettingsForm()
+    
+    return render(request, 'email_settings/email_settings_form.html', {
+        'form': form,
+        'title': 'メール送信設定作成'
+    })
+
+@login_required
+def email_settings_detail(request, email_setting_id):
+    """メール送信設定詳細表示"""
+    # 権限チェック: 管理者またはスーパーユーザーのみアクセス可能
+    if not request.user.is_authenticated or (not request.user.is_staff and not request.user.is_superuser):
+        messages.error(request, 'このページにアクセスする権限がありません。')
+        return redirect('agri_app:home')
+    
+    email_setting = get_object_or_404(EmailSettings, pk=email_setting_id)
+    return render(request, 'email_settings/email_settings_detail.html', {
+        'email_setting': email_setting
+    })
+
+@login_required
+def email_settings_edit(request, email_setting_id):
+    """メール送信設定編集"""
+    # 権限チェック: 管理者またはスーパーユーザーのみアクセス可能
+    if not request.user.is_authenticated or (not request.user.is_staff and not request.user.is_superuser):
+        messages.error(request, 'このページにアクセスする権限がありません。')
+        return redirect('agri_app:home')
+    
+    email_setting = get_object_or_404(EmailSettings, pk=email_setting_id)
+    
+    if request.method == 'POST':
+        form = EmailSettingsForm(request.POST, instance=email_setting)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'メール送信設定「{email_setting.name}」を更新しました。')
+            return redirect('agri_app:email_settings_detail', email_setting_id=email_setting.id)
+    else:
+        form = EmailSettingsForm(instance=email_setting)
+    
+    return render(request, 'email_settings/email_settings_form.html', {
+        'form': form,
+        'title': 'メール送信設定編集'
+    })
+
+@login_required
+def email_settings_delete(request, email_setting_id):
+    """メール送信設定削除"""
+    # 権限チェック: 管理者またはスーパーユーザーのみアクセス可能
+    if not request.user.is_authenticated or (not request.user.is_staff and not request.user.is_superuser):
+        messages.error(request, 'このページにアクセスする権限がありません。')
+        return redirect('agri_app:home')
+    
+    email_setting = get_object_or_404(EmailSettings, pk=email_setting_id)
+    
+    if request.method == 'POST':
+        email_setting_name = email_setting.name
+        email_setting.delete()
+        messages.success(request, f'メール送信設定「{email_setting_name}」が削除されました。')
+        return redirect('agri_app:email_settings_list')
+    
+    return render(request, 'email_settings/email_settings_confirm_delete.html', {
+        'email_setting': email_setting
     })

@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}メール送信設定管理{% endblock %}
+
+{% block content %}
+<div class="management-container">
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">メール送信設定管理</h1>
+            <p class="page-subtitle">お知らせのメール送信設定を管理します</p>
+        </div>
+        <div class="header-actions">
+            <a href="{% url 'agri_app:email_settings_create' %}" class="btn-primary">
+                <span class="btn-icon">➕</span>
+                新規作成
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">メール送信設定一覧</div>
+        {% if email_settings %}
+        <div class="data-table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>設定名</th>
+                        <th>デフォルト送信</th>
+                        <th>件名テンプレート</th>
+                        <th>送信者名</th>
+                        <th>デフォルト設定</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for email_setting in email_settings %}
+                    <tr>
+                        <td>
+                            <strong>{{ email_setting.name }}</strong>
+                            {% if email_setting.description %}
+                                <br><small>{{ email_setting.description|truncatechars:50 }}</small>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if email_setting.default_send_email %}
+                                <span class="badge badge-success">有効</span>
+                            {% else %}
+                                <span class="badge badge-inactive">無効</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <code>{{ email_setting.email_template_subject }}</code>
+                        </td>
+                        <td>
+                            {{ email_setting.email_from_name }}
+                        </td>
+                        <td>
+                            {% if email_setting.is_default %}
+                                <span class="badge badge-primary">デフォルト</span>
+                            {% else %}
+                                <span class="badge badge-inactive">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{% url 'agri_app:email_settings_detail' email_setting.id %}" class="btn-detail">
+                                    <span class="btn-icon">👁️</span>
+                                    詳細
+                                </a>
+                                <a href="{% url 'agri_app:email_settings_edit' email_setting.id %}" class="btn-edit">
+                                    <span class="btn-icon">✏️</span>
+                                    編集
+                                </a>
+                                <a href="{% url 'agri_app:email_settings_delete' email_setting.id %}" class="btn-delete">
+                                    <span class="btn-icon">🗑️</span>
+                                    削除
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if is_paginated %}
+        <div class="pagination-section">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">« 最初</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">‹ 前へ</a>
+                    </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <li class="page-item">
+                            <span class="page-link current">{{ num }}</span>
+                        </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">次へ ›</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">最後 »</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+        {% endif %}
+        {% else %}
+        <div class="no-data">
+            <p>メール送信設定がありません。</p>
+            <a href="{% url 'agri_app:email_settings_create' %}" class="btn-primary">
+                <span class="btn-icon">➕</span>
+                最初の設定を作成
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

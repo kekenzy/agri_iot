@@ -1,32 +1,38 @@
-FROM python:3.11.3-bullseye
+FROM --platform=linux/amd64 python:3.11.3-slim-bullseye
 
 WORKDIR /usr/src/agri_iot
 
-# .pyc 生成しない
-ENV PYTHONDONTWRITEBYTECODE 1
-# 標準出力・標準エラーのストリームバッファリングしない
-ENV PYTHONUNBUFFERED 1
+# 環境変数設定
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    TZ=Asia/Tokyo \
+    DJANGO_SETTINGS_MODULE=agri_iot.settings.production
 
-# モジュールインストール
-RUN apt-get update
-RUN apt-get install -y gettext
-RUN apt-get install -y vim
-RUN apt-get install -y iputils-ping net-tools
+# ログディレクトリと静的ファイルディレクトリの作成
+RUN mkdir -p /var/log/django /var/www/static /usr/src/agri_iot/staticfiles
 
+# Pythonパッケージのインストール
+RUN pip install --upgrade pip pip-tools
 
-RUN apt-get install -y xmlsec1 poppler-utils
+# requirements.inをコピーしてrequirements.txtを生成
+COPY requirements.in .
+RUN pip-compile --output-file=requirements.txt requirements.in
 
-# python モジュールインストール
-RUN pip install --upgrade pip
-# requiremnts.ini のコンパイル
-RUN pip install pip-tools
-# RUN pip install django-cors-headers
-COPY ./requirements.in .
-# requiremnts.txt の生成
-RUN pip-compile
-# requiremnts.txt のコンパイル
+# requirements.txtからパッケージをインストール
 RUN pip install -r requirements.txt
 
-ENV TZ Asia/Tokyo
-
+# アプリケーションコードをコピー
 COPY . .
+
+# 静的ファイルを収集
+RUN python manage.py collectstatic --noinput
+
+# ポート8000を公開
+EXPOSE 8000
+
+# ヘルスチェック用のエンドポイント（Pythonを使用）
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD python -c "import requests; requests.get('http://localhost:8000/health/')" || exit 1
+
+# 本番環境用のコマンド
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "--timeout", "120", "agri_iot.wsgi:application"]

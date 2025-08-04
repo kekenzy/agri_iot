@@ -9,6 +9,7 @@ urlpatterns = [
     path("user_login", views.user_login, name="user_login"),
     path("user_logout", views.user_logout, name="user_logout"),
     path("home", views.home, name="home"),
+    path("health/", views.health_check, name="health_check"),
     path("s3_file_list", views.s3_file_list_view, name="s3_file_list"),
     
     # ユーザー管理機能
@@ -43,7 +44,15 @@ urlpatterns = [
     path("announcements/<int:announcement_id>", views.announcement_detail, name="announcement_detail"),
     path("announcements/<int:announcement_id>/edit", views.announcement_edit, name="announcement_edit"),
     path("announcements/<int:announcement_id>/delete", views.announcement_delete, name="announcement_delete"),
+    path("announcements/<int:announcement_id>/send_email", views.announcement_send_email, name="announcement_send_email"),
     
     # スタイル設定管理機能
     path("style_settings", views.style_settings, name="style_settings"),
+    
+    # メール送信設定管理機能
+    path("email_settings", views.email_settings_list, name="email_settings_list"),
+    path("email_settings/create", views.email_settings_create, name="email_settings_create"),
+    path("email_settings/<int:email_setting_id>", views.email_settings_detail, name="email_settings_detail"),
+    path("email_settings/<int:email_setting_id>/edit", views.email_settings_edit, name="email_settings_edit"),
+    path("email_settings/<int:email_setting_id>/delete", views.email_settings_delete, name="email_settings_delete"),
 ]

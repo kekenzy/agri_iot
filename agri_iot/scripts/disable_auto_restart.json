@@ -1,0 +1,8 @@
+{
+  "maximumPercent": 100,
+  "minimumHealthyPercent": 0,
+  "deploymentCircuitBreaker": {
+    "enable": true,
+    "rollback": true
+  }
+} 

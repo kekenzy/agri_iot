@@ -39,12 +39,15 @@
                 <a class="nav-link" href="{% url 'agri_app:s3_file_list' %}">写真一覧</a>
                 <a class="nav-link" href="{% url 'agri_app:user_list' %}">ユーザー管理</a>
                 <a class="nav-link" href="{% url 'agri_app:group_list' %}">グループ管理</a>
+                <a class="nav-link" href="{% url 'agri_app:announcement_list' %}">お知らせ管理</a>
+                <a class="nav-link" href="{% url 'agri_app:email_settings_list' %}">メール設定</a>
               {% elif user.is_staff %}
                 <!-- 管理者: 管理画面以外のメニューを表示 -->
                 <a class="nav-link" href="{% url 'agri_app:home' %}">ホーム</a>
                 <a class="nav-link" href="{% url 'agri_app:s3_file_list' %}">写真一覧</a>
                 <a class="nav-link" href="{% url 'agri_app:user_list' %}">ユーザー管理</a>
                 <a class="nav-link" href="{% url 'agri_app:group_list' %}">グループ管理</a>
+                <a class="nav-link" href="{% url 'agri_app:announcement_list' %}">お知らせ管理</a>
               {% else %}
                 <!-- 一般ユーザー: ホームと写真一覧のみ表示 -->
                 <a class="nav-link" href="{% url 'agri_app:home' %}">ホーム</a>
@@ -86,12 +89,20 @@
                   <span class="menu-icon">🏷️</span>
                   グループ管理
                 </a>
+                <a href="{% url 'agri_app:announcement_list' %}" class="profile-menu-item {% if request.resolver_match.url_name in 'announcement_list,announcement_create,announcement_detail,announcement_edit,announcement_delete,announcement_send_email' %}active{% endif %}">
+                  <span class="menu-icon">📢</span>
+                  お知らせ管理
+                </a>
                 {% endif %}
                 
                 {% if user.is_authenticated and user.is_superuser %}
                 <a href="{% url 'agri_app:style_settings' %}" class="profile-menu-item {% if request.resolver_match.url_name == 'style_settings' %}active{% endif %}">
                   <span class="menu-icon">🎨</span>
                   スタイル設定
+                </a>
+                <a href="{% url 'agri_app:email_settings_list' %}" class="profile-menu-item {% if request.resolver_match.url_name in 'email_settings_list,email_settings_create,email_settings_detail,email_settings_edit,email_settings_delete' %}active{% endif %}">
+                  <span class="menu-icon">📧</span>
+                  メール設定
                 </a>
                 {% endif %}
                 <div class="profile-menu-divider"></div>

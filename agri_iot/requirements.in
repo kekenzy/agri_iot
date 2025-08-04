@@ -1,19 +1,37 @@
-black
-coverage
-cryptography
-django>=4.2,<4.3
-django[argon2]
-django-debug-toolbar
-boto3>=1.34
-gunicorn
-jsonschema
-pdf2image
-psycopg2-binary
-pycryptodome
-PyJWT
-pysaml2
-python-json-logger
-pyyaml
-redis
-tzdata
-woothee
+# Django
+Django==4.2.23
+django-cors-headers==4.3.1
+
+# データベース
+psycopg2-binary==2.9.9
+dj-database-url==2.1.0
+
+# AWS
+boto3==1.40.1
+django-storages==1.14.2
+
+# 画像処理
+Pillow==11.3.0
+pdf2image==1.17.0
+
+# セキュリティ
+cryptography==43.0.3
+PyJWT==2.10.1
+argon2-cffi==23.1.0
+
+# メール（SAML2認証は削除）
+# django-saml2-auth==0.20.0
+
+# 開発・デバッグ
+django-debug-toolbar==6.0.0
+
+# 本番環境用
+gunicorn==23.0.0
+whitenoise==6.6.0
+django-redis==5.4.0
+redis==5.0.1
+
+# その他
+python-dateutil==2.9.0
+python-json-logger==3.3.0
+PyYAML==6.0.1
