@@ -46,11 +46,11 @@
       "secrets": [
         {
           "name": "DATABASE_URL",
-          "valueFrom": "arn:aws:secretsmanager:ap-northeast-1:440707461121:secret:agri-iot/database-url"
+          "valueFrom": "arn:aws:secretsmanager:ap-northeast-1:440707461121:secret:agri-iot/database-url-new"
         },
         {
           "name": "SECRET_KEY",
-          "valueFrom": "arn:aws:secretsmanager:ap-northeast-1:440707461121:secret:agri-iot/secret-key"
+          "valueFrom": "arn:aws:secretsmanager:ap-northeast-1:440707461121:secret:agri-iot/secret-key-new"
         },
         {
           "name": "AWS_ACCESS_KEY_ID",
