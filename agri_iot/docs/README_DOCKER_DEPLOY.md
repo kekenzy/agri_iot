@@ -71,12 +71,41 @@ agri_iot/
 
 本番環境では以下の環境変数が設定されます：
 
+#### 必須環境変数
 - `DJANGO_SETTINGS_MODULE`: `agri_iot.settings.production`
 - `DATABASE_URL`: RDS接続情報
 - `AWS_ACCESS_KEY_ID`: S3アクセスキー
 - `AWS_SECRET_ACCESS_KEY`: S3シークレットキー
 - `AWS_STORAGE_BUCKET_NAME`: S3バケット名
 - `SECRET_KEY`: Django秘密鍵
+
+#### 開発環境用環境変数
+プロジェクトルートに`.env`ファイルを作成して以下の環境変数を設定してください：
+
+```bash
+# AWS Configuration
+AWS_ACCESS_KEY_ID=your_aws_access_key_id
+AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
+AWS_STORAGE_BUCKET_NAME=agri-capture
+AWS_S3_REGION_NAME=ap-northeast-1
+
+# Database Configuration
+DB_PASSWORD=your_database_password
+DATABASE_URL=postgresql://agri_user:your_database_password@agri-iot-db.xxxxx.ap-northeast-1.rds.amazonaws.com:5432/agri_db
+
+# Django Configuration
+SECRET_KEY=your_django_secret_key_here
+
+# Email Configuration
+EMAIL_HOST_USER=your-email@gmail.com
+EMAIL_HOST_PASSWORD=your-app-password
+DEFAULT_FROM_EMAIL=your-email@gmail.com
+
+# pgAdmin Configuration
+PGADMIN_PASSWORD=your_pgadmin_password
+```
+
+**注意**: `.env`ファイルはGitにコミットしないでください。機密情報が含まれています。
 
 ### ヘルスチェック
 

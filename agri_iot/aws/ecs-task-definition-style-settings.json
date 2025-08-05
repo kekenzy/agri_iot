@@ -1,0 +1,65 @@
+{
+  "family": "agri-iot-style-settings",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::440707461121:role/agri-iot-ecs-task-execution-role",
+  "taskRoleArn": "arn:aws:iam::440707461121:role/agri-iot-ecs-task-role",
+  "containerDefinitions": [
+    {
+      "name": "agri-iot-style-settings",
+      "image": "440707461121.dkr.ecr.ap-northeast-1.amazonaws.com/agri-iot:latest",
+      "essential": true,
+      "environment": [
+        {
+          "name": "DJANGO_SETTINGS_MODULE",
+          "value": "agri_iot.settings.production"
+        },
+        {
+          "name": "AWS_DEFAULT_REGION",
+          "value": "ap-northeast-1"
+        },
+        {
+          "name": "AWS_STORAGE_BUCKET_NAME",
+          "value": "agri-capture"
+        },
+        {
+          "name": "AWS_S3_REGION_NAME",
+          "value": "ap-northeast-1"
+        },
+        {
+          "name": "DATABASE_URL",
+          "value": "${DATABASE_URL}"
+        },
+        {
+          "name": "SECRET_KEY",
+          "value": "${SECRET_KEY}"
+        },
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "value": "${AWS_ACCESS_KEY_ID}"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "value": "${AWS_SECRET_ACCESS_KEY}"
+        }
+      ],
+      "command": [
+        "python",
+        "manage.py",
+        "shell",
+        "-c",
+        "from agri_app.models import StyleSettings; StyleSettings.objects.get_or_create(defaults={'primary_color': '#007bff', 'secondary_color': '#6c757d', 'font_family': 'Arial, sans-serif'}); print('Style settings initialized')"
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/agri-iot-style-settings",
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+} 
