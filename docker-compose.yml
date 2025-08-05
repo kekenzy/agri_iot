@@ -1,0 +1,73 @@
+services:
+  agri_iot:
+    restart: always
+    build: ./agri_iot
+    command: gunicorn --bind 0.0.0.0:8000 --workers 3 --timeout 120 agri_iot.wsgi:application
+    volumes:
+      - ./agri_iot/:/usr/src/agri_iot/
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - mailhog
+    environment:
+      - DJANGO_SETTINGS_MODULE=agri_iot.settings.local
+      - DB_NAME=agri_db
+      - DB_USER=agri_user
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=db
+      - DB_PORT=5432
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_STORAGE_BUCKET_NAME=agri-capture
+      - AWS_S3_REGION_NAME=ap-northeast-1
+      - EMAIL_HOST_USER=${EMAIL_HOST_USER}
+      - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
+      - DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL}
+
+  service_pgadmin:
+    image: dpage/pgadmin4:6.11
+    container_name: agri_pgadmin
+    ports:
+      - 8080:80
+    volumes:
+      - volume_pgadmin:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: example@example.com
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    depends_on:
+      - db
+
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=agri_user
+      - POSTGRES_DB=agri_db
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+
+  agri_iot_www:
+    tty: true
+    build: ./agri_iot_www
+    volumes:
+      - ./agri_iot/static/:/var/www/static/
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - agri_iot
+
+  # 開発用メールサーバー（MailHog）
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+    container_name: agri_mailhog
+
+volumes:
+  postgres_data:
+  volume_pgadmin: 
