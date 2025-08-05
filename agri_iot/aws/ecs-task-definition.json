@@ -35,28 +35,30 @@
           "value": "ap-northeast-1"
         },
         {
-          "name": "DATABASE_URL",
-          "value": "postgresql://agri_user:agri_password@agri-iot-db.ceswvgqkwv57.ap-northeast-1.rds.amazonaws.com:5432/agri_db"
-        },
-        {
-          "name": "SECRET_KEY",
-          "value": "j=d@d-i=^d4$e%1p50lk529i5nr80dv)3)wycowclea2t)1vy3"
-        },
-        {
-          "name": "AWS_ACCESS_KEY_ID",
-          "value": "AKIAWNHBWGAAVHMPGRL5"
-        },
-        {
-          "name": "AWS_SECRET_ACCESS_KEY",
-          "value": "TGygY7OjUcesN0WEDutX0yTF4ZJGaxZUXTtiO6TH"
-        },
-        {
           "name": "AWS_SES_REGION_NAME",
           "value": "ap-northeast-1"
         },
         {
           "name": "DEFAULT_FROM_EMAIL",
           "value": "kekenzy@gmail.com"
+        }
+      ],
+      "secrets": [
+        {
+          "name": "DATABASE_URL",
+          "valueFrom": "arn:aws:secretsmanager:ap-northeast-1:440707461121:secret:agri-iot/database-url"
+        },
+        {
+          "name": "SECRET_KEY",
+          "valueFrom": "arn:aws:secretsmanager:ap-northeast-1:440707461121:secret:agri-iot/secret-key"
+        },
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "valueFrom": "arn:aws:secretsmanager:ap-northeast-1:440707461121:secret:agri-iot/aws-access-key"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "valueFrom": "arn:aws:secretsmanager:ap-northeast-1:440707461121:secret:agri-iot/aws-secret-key"
         }
       ],
       "logConfiguration": {
