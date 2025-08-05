@@ -50,8 +50,10 @@ ENV/
 *~
 
 # AWS
+.terraform/
 *.pem
 *.key
+
 
 # Environment variables
 .env
