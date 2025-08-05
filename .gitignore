@@ -50,7 +50,7 @@ ENV/
 *~
 
 # AWS
-.terraform/
+agri_iot/aws/terraform/
 *.pem
 *.key
 
