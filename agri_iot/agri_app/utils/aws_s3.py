@@ -67,12 +67,46 @@ def list_s3_files():
         raise Exception(f"S3ファイルリストの取得中にエラーが発生しました: {str(e)}")
 
 def upload_file_to_s3(file):
-    s3 = boto3.client('s3',
-        aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
-        aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
-        region_name=os.environ.get('AWS_S3_REGION_NAME'),
-    )
-    s3.upload_fileobj(file, os.environ.get('AWS_STORAGE_BUCKET_NAME'), file.name)
+    try:
+        print(f"S3アップロード開始: {file.name}")
+        
+        # AWS認証情報の確認
+        aws_access_key = os.environ.get('AWS_ACCESS_KEY_ID')
+        aws_secret_key = os.environ.get('AWS_SECRET_ACCESS_KEY')
+        aws_region = os.environ.get('AWS_S3_REGION_NAME')
+        aws_bucket = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+        
+        print(f"AWS設定確認: リージョン={aws_region}, バケット={aws_bucket}")
+        
+        if not all([aws_access_key, aws_secret_key, aws_region, aws_bucket]):
+            raise ValueError("AWS認証情報が設定されていません。環境変数を確認してください。")
+        
+        s3 = boto3.client('s3',
+            aws_access_key_id=aws_access_key,
+            aws_secret_access_key=aws_secret_key,
+            region_name=aws_region,
+        )
+        
+        # ファイル名を安全にする（スペースや特殊文字を処理）
+        safe_filename = file.name.replace(' ', '_').replace('/', '_').replace('\\', '_')
+        print(f"安全なファイル名: {safe_filename}")
+        
+        s3.upload_fileobj(file, aws_bucket, safe_filename)
+        print(f"S3アップロード完了: {safe_filename}")
+        return True
+        
+    except NoCredentialsError:
+        raise Exception("AWS認証情報が見つかりません。AWS_ACCESS_KEY_IDとAWS_SECRET_ACCESS_KEYを設定してください。")
+    except ClientError as e:
+        error_code = e.response['Error']['Code']
+        if error_code == 'NoSuchBucket':
+            raise Exception(f"S3バケット '{aws_bucket}' が見つかりません。")
+        elif error_code == 'AccessDenied':
+            raise Exception("S3バケットへのアクセスが拒否されました。権限を確認してください。")
+        else:
+            raise Exception(f"AWS S3アップロードエラー: {error_code}")
+    except Exception as e:
+        raise Exception(f"ファイルアップロード中にエラーが発生しました: {str(e)}")
 
 def delete_file_from_s3(key):
     s3 = boto3.client('s3',

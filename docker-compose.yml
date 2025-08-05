@@ -5,6 +5,7 @@ services:
     command: gunicorn --bind 0.0.0.0:8000 --workers 3 --timeout 120 agri_iot.wsgi:application
     volumes:
       - ./agri_iot/:/usr/src/agri_iot/
+      - agri_iot_static:/var/www/static/
     ports:
       - "8000:8000"
     depends_on:
@@ -53,7 +54,7 @@ services:
     tty: true
     build: ./agri_iot_www
     volumes:
-      - ./agri_iot/static/:/var/www/static/
+      - agri_iot_static:/var/www/static/
     ports:
       - "80:80"
       - "443:443"
@@ -70,4 +71,5 @@ services:
 
 volumes:
   postgres_data:
-  volume_pgadmin: 
+  volume_pgadmin:
+  agri_iot_static: 

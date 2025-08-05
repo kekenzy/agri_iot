@@ -10,27 +10,20 @@
             <h1 class="page-title">写真一覧</h1>
             <p class="page-subtitle">クラウドストレージの写真を管理します</p>
         </div>
-        <div class="header-actions">
-            <button type="button" class="btn-primary" onclick="document.getElementById('file-upload').click();">
-                <span class="btn-icon">📁</span>
-                写真アップロード
-            </button>
-        </div>
     </div>
 
-    <div class="card">
-        <div class="card-title">アップロード</div>
-        <form method="post" enctype="multipart/form-data" class="upload-form">
+    <div class="compact-upload-section">
+        <form method="post" enctype="multipart/form-data" class="compact-upload-form" id="upload-form" action="{% url 'agri_app:s3_file_list' %}">
             {% csrf_token %}
-            <div class="form-group">
-                <label class="form-label">
-                    <span class="label-icon">📷</span>
-                    写真ファイル
-                </label>
-                <input type="file" id="file-upload" name="file" accept="image/*" style="display: none;" onchange="this.form.submit()">
-                <div class="file-input-wrapper">
-                    {{ form.file }}
-                </div>
+            <input type="file" id="file-upload" name="file" accept="image/*" style="display: none;">
+            <div class="compact-upload-controls">
+                <button type="button" class="btn-compact" onclick="document.getElementById('file-upload').click();">
+                    📁 選択
+                </button>
+                <span id="selected-file-name" class="compact-file-name">ファイルを選択してください</span>
+                <button type="submit" name="upload" class="btn-compact-primary" id="upload-btn">
+                    📤 アップロード
+                </button>
             </div>
         </form>
     </div>
@@ -138,6 +131,94 @@ $(document).ready(function () {
         pageLength: 10,
         order: [[3, 'desc']], // 更新日時（4列目、0から数えて3）を降順でソート
         responsive: true
+    });
+
+    // ファイル選択時の処理
+    $('#file-upload').on('change', function() {
+        console.log('=== ファイル選択デバッグ開始 ===');
+        console.log('ファイル選択イベント発生');
+        const file = this.files[0];
+        console.log('選択されたファイル:', file);
+        console.log('ファイル名:', file ? file.name : 'なし');
+        console.log('ファイルサイズ:', file ? file.size : 'なし');
+        console.log('ファイルタイプ:', file ? file.type : 'なし');
+        
+        const fileName = file ? file.name : 'ファイルを選択してください';
+        const uploadBtn = $('#upload-btn');
+        
+        console.log('表示ファイル名:', fileName);
+        $('#selected-file-name').text(fileName);
+        
+        if (file) {
+            uploadBtn.prop('disabled', false);
+            console.log('アップロードボタンを有効化');
+            console.log('ボタンの状態:', uploadBtn.prop('disabled'));
+        } else {
+            uploadBtn.prop('disabled', true);
+            console.log('アップロードボタンを無効化');
+        }
+        console.log('=== ファイル選択デバッグ終了 ===');
+    });
+
+    // フォーム送信時の処理（一時的に無効化）
+    /*
+    $('#upload-form').on('submit', function(e) {
+        console.log('=== フォーム送信デバッグ開始 ===');
+        console.log('フォーム送信イベント発生');
+        
+        const file = $('#file-upload')[0].files[0];
+        console.log('送信時のファイル:', file);
+        console.log('ファイル名:', file ? file.name : 'なし');
+        console.log('ファイルサイズ:', file ? file.size : 'なし');
+        
+        if (!file) {
+            e.preventDefault();
+            alert('ファイルを選択してください。');
+            console.log('ファイルが選択されていないため送信をキャンセル');
+            return false;
+        }
+        
+        console.log('ファイル送信開始:', file.name);
+        console.log('フォームデータ確認:');
+        console.log('- method:', this.method);
+        console.log('- action:', this.action);
+        console.log('- enctype:', this.enctype);
+        
+        // フォームデータを手動で作成して確認
+        const formData = new FormData(this);
+        console.log('FormData内容:');
+        for (let [key, value] of formData.entries()) {
+            console.log(`- ${key}:`, value);
+        }
+        
+        // アップロードボタンを無効化して重複送信を防ぐ
+        $('#upload-btn').prop('disabled', true).text('アップロード中...');
+        
+        // フォーム送信を確実に実行
+        console.log('フォーム送信を実行します...');
+        console.log('=== フォーム送信デバッグ終了 ===');
+        
+        // フォーム送信を手動で実行（preventDefaultを呼ばない）
+        return true;
+    });
+    */
+
+    // アップロードボタンのクリックイベント
+    $('#upload-btn').on('click', function(e) {
+        console.log('=== アップロードボタンクリックデバッグ ===');
+        console.log('ボタンクリックイベント発生');
+        console.log('ボタンのdisabled状態:', $(this).prop('disabled'));
+        console.log('ボタンのテキスト:', $(this).text());
+        console.log('イベントターゲット:', e.target);
+        
+        // ボタンが無効化されている場合はクリックを阻止
+        if ($(this).prop('disabled')) {
+            console.log('ボタンが無効化されているため、クリックを阻止');
+            e.preventDefault();
+            return false;
+        }
+        
+        console.log('=== アップロードボタンクリックデバッグ終了 ===');
     });
 });
 </script>

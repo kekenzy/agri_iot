@@ -489,6 +489,11 @@ body {
     display: flex;
     gap: 12px;
     align-items: center;
+    margin-top: 15px;
+}
+
+.form-actions .btn-primary {
+    margin-top: 0;
 }
 
 /* フォームセクション */
@@ -843,8 +848,113 @@ body {
     margin-bottom: 30px;
 }
 
+.simple-upload-form {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    margin-bottom: 0;
+}
+
+.upload-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.upload-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.upload-controls .file-name {
+    flex: 1;
+    min-width: 150px;
+    max-width: 300px;
+}
+
+/* コンパクトアップロードセクション */
+.compact-upload-section {
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.compact-upload-form {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    margin-bottom: 0;
+}
+
+.compact-upload-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn-compact {
+    background: #6c757d;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-compact:hover {
+    background: #5a6268;
+}
+
+.btn-compact-primary {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-compact-primary:hover {
+    background: #0056b3;
+}
+
+.btn-compact-primary:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+}
+
+.compact-file-name {
+    flex: 1;
+    min-width: 120px;
+    max-width: 250px;
+    font-size: 12px;
+    color: #666;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
 .file-input-wrapper {
     margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .file-input {
@@ -940,6 +1050,12 @@ body {
     color: #333;
     text-decoration: none;
     transition: color 0.3s ease;
+    display: inline-block;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
 }
 
 .file-name:hover {

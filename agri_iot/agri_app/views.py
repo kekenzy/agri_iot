@@ -101,15 +101,27 @@ def user_logout(request):
 
 @login_required
 def s3_file_list_view(request):
+    # form変数を関数の最初で初期化
+    form = UploadFileForm()
+    
     try:
         if request.method == 'POST':
             if 'upload' in request.POST:
+                print(f"アップロードリクエスト受信: {request.FILES}")
                 form = UploadFileForm(request.POST, request.FILES)
+                print(f"フォーム有効性: {form.is_valid()}")
                 if form.is_valid():
-                    upload_file_to_s3(request.FILES['file'])
-                    messages.success(request, 'ファイルが正常にアップロードされました。')
-                    return redirect('agri_app:s3_file_list')
+                    try:
+                        print(f"アップロード開始: {request.FILES['file'].name}")
+                        upload_file_to_s3(request.FILES['file'])
+                        print("アップロード成功")
+                        messages.success(request, 'ファイルが正常にアップロードされました。')
+                        return redirect('agri_app:s3_file_list')
+                    except Exception as e:
+                        print(f"アップロードエラー: {str(e)}")
+                        messages.error(request, f'ファイルのアップロードに失敗しました: {str(e)}')
                 else:
+                    print(f"フォームエラー: {form.errors}")
                     messages.error(request, 'ファイルのアップロードに失敗しました。')
             elif 'delete' in request.POST:
                 key_to_delete = request.POST.get('file_key')
@@ -126,7 +138,7 @@ def s3_file_list_view(request):
         return render(request, 's3_file_list.html', {'files': files, 'form': form})
     except Exception as e:
         messages.error(request, f'S3ファイルリストの取得中にエラーが発生しました: {str(e)}')
-        return render(request, 's3_file_list.html', {'files': [], 'form': UploadFileForm()})
+        return render(request, 's3_file_list.html', {'files': [], 'form': form})
 
 # ユーザー管理機能
 @login_required
