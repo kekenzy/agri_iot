@@ -41,24 +41,22 @@
         {
           "name": "DEFAULT_FROM_EMAIL",
           "value": "kekenzy@gmail.com"
-        }
-      ],
-      "secrets": [
+        },
         {
           "name": "DATABASE_URL",
-          "valueFrom": "arn:aws:secretsmanager:ap-northeast-1:440707461121:secret:agri-iot/database-url-new"
+          "value": "${DATABASE_URL}"
         },
         {
           "name": "SECRET_KEY",
-          "valueFrom": "arn:aws:secretsmanager:ap-northeast-1:440707461121:secret:agri-iot/secret-key-new"
+          "value": "${SECRET_KEY}"
         },
         {
           "name": "AWS_ACCESS_KEY_ID",
-          "valueFrom": "arn:aws:secretsmanager:ap-northeast-1:440707461121:secret:agri-iot/aws-access-key"
+          "value": "${AWS_ACCESS_KEY_ID}"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
-          "valueFrom": "arn:aws:secretsmanager:ap-northeast-1:440707461121:secret:agri-iot/aws-secret-key"
+          "value": "${AWS_SECRET_ACCESS_KEY}"
         }
       ],
       "logConfiguration": {
